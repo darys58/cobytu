@@ -1,0 +1,13 @@
+INSTALACJA PAKIETU
+
+1. na stonie pub.dev wyszukać pakiet
+2. przejść do zakładki "Installing"
+3. skopiować "wpis zaleności" (dependiencies) np. http: ^0.12.0+2
+4. wkleić do pliku pubspec.yami w sekcji "dependiencies" np:
+    dependencies:
+        flutter:
+            sdk: flutter
+        http: ^0.12.0+4     - wymiana danych przez sieć
+        provider: ^3.2.0    - dostawca danych
+
+5. uwaga na wcięcia!

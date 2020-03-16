@@ -1,0 +1,36 @@
+createState (): Gdy Framework otrzyma polecenie zbudowania StatefulWidget, 
+natychmiast wywołuje metodę createState ()
+
+zamontowane jest prawdziwe: kiedy createState tworzy twoją klasę stanu, buildContext 
+jest przypisywany do tego stanu. BuildContext to nadmiernie uproszczone miejsce w drzewie widżetów, 
+w którym ten widget jest umieszczony. Oto dłuższe wyjaśnienie. 
+Wszystkie widżety mają właściwość bool this.mounted. 
+Staje się prawdziwe, gdy przypisany jest build buildext. 
+Błędem jest wywoływanie setState, gdy widżet jest odmontowany.
+
+initState (): Jest to pierwsza metoda wywoływana podczas tworzenia widżetu (oczywiście po konstruktorze 
+klas). initState jest wywoływana tylko raz. Musi on nazywać super.initState ().
+
+didChangeDependencies (): Ta metoda jest wywoływana natychmiast po initState przy pierwszym 
+budowaniu widgetu.
+
+build (): Ta metoda jest często wywoływana. Jest to wymagane i musi zwrócić widżet.
+
+didUpdateWidget (Widget oldWidget): Jeśli widget nadrzędny zmieni się i musi go odbudować 
+(ponieważ musi podać inne dane), ale jest on przebudowywany przy użyciu tego samego typu runtimeType, 
+wówczas wywoływana jest ta metoda. Wynika to z faktu, że Flutter ponownie wykorzystuje stan, 
+który ma długi okres życia. W takim przypadku możesz chcieć ponownie zainicjować niektóre dane, 
+tak jak w initState.
+
+setState (): Ta metoda jest często wywoływana z samego frameworka i od programisty. 
+Służy do powiadamiania środowiska o zmianie danych
+
+deactivate() - dezaktywuj (): Deaktywacja jest wywoływana, gdy Stan jest usuwany z drzewa, ale może być 
+ponownie wstawiony przed zakończeniem bieżącej zmiany ramki. Ta metoda istnieje zasadniczo dlatego, 
+że obiekty stanu można przenosić z jednego punktu drzewa do drugiego.
+
+dispose (): Dispose jest wywoływane, gdy obiekt State jest usuwany, co jest trwałe. 
+W tej metodzie należy anulować subskrypcję i anulować wszystkie animacje, strumienie itp.
+
+zamontowane jest fałszywe: Obiekt stanu nigdy nie może zostać ponownie zamontowany, 
+a zgłaszany jest błąd, ustawiany jest setState.

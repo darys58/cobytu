@@ -1,0 +1,92 @@
+
+
+*** układ poziomy ***  
+
+                Card( child: Row( 
+                  children: <Widget>[ 
+                    Expanded( 
+                      flex: 7, 
+                      child: Padding( 
+                        padding: EdgeInsets.all(20.0), 
+                        child: Column( 
+                          mainAxisSize:MainAxisSize.min, 
+                          crossAxisAlignment: CrossAxisAlignment.start, 
+                          children:<Widget>[ 
+                            getTitle("UEC607"), 
+                            getSubName("Data Communication & Protocol"),
+                            getVenue("E-204"), 
+                          ], 
+                        ), 
+                      ), 
+                    ), 
+                    Expanded( 
+                      flex: 3, child: 
+                      Container( 
+                        color: Colors.blue, 
+                        child: Column( 
+                          mainAxisSize: MainAxisSize.max, 
+                          children:<Widget>[ 
+                            getType("L"), 
+                            getTime("10:00"), 
+                          ], 
+                        ), 
+                      ), 
+                    ) 
+                  ], 
+                ), 
+                ) 
+              ], 
+
+*** tytuł dania na przezroczystym tle - mozna umieścić np. na zdjęciu ***
+
+                Positioned(
+                  //pozwala w stosie umieścić widget w absolutnej przestrzeni współrzędnych
+                  bottom: 20, //od dołu obrazka
+                  right: 10, //od prawej obrazka
+                  child: Container(
+                    //pojemnik ograniczający tytuł
+                    width: 300, //serokość pojemnika
+                    color: Colors.black54, //kolor tła z przeźroczystością
+                    padding: EdgeInsets.symmetric(
+                      //odstępy wewnątrz pojenmika
+                      vertical: 5,
+                      horizontal: 20,
+                    ),
+                    child: Text(
+                      nazwa,
+                      style: TextStyle(
+                        fontSize: 26,
+                        color: Colors.white,
+                      ),
+                      softWrap: true, //zawijanie tekstu
+                      overflow: TextOverflow
+                          .fade, //skracanie tekstu zeby zmieścił sie
+                    ),
+                  ),
+                )
+ 
+ *** pętla for
+ count = data.length;
+ for (var i = 0; i < count; i++) {
+    myListData.add(MyList.fromObject(data[i]));
+  }
+
+  setState(() {
+    myList = myListData;
+    count = count;  
+  });  
+   
+   var count = _pom.length; //ilość województw
+     // for (var i = 0; i < count; i++) {
+     //   _wojew.add(_pom[i].woj);  //utworzenie listy województw    
+     // } 
+
+  **** pojedyncze wartości z listy          
+
+  /*Use toSet and then toList  
+  https://stackoverflow.com/questions/12030613/how-to-delete-duplicates-in-a-dart-list-list-distinct
+
+  var ids = [1, 4, 4, 4, 5, 6, 6];
+  var distinctIds = ids.toSet().toList();
+[1, 4, 5, 6]
+*/

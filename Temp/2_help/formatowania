@@ -1,0 +1,7 @@
+FOTO
+child: Image.network(
+    product.imageUrl,  //foto z sieci
+    fit: BoxFit.cover, //zdjęcie dopasowane do dostępnej powierzchni
+),
+
+ClipRRect - powoduje zaokrąglanie naroników

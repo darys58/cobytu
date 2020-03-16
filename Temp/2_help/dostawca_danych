@@ -1,0 +1,98 @@
+
+implamentacja dostawcy danych
+
+1. zainstalowanie pakietu dostwcy provider: ^3.2.0 w pubspec.yami
+2. przygotowanie klasy zawierającej dane
+
+import 'package:flutter/material.dart';
+import 'meal.dart';
+
+class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeNotifier która pozwala ustalać tunele komunikacyjne przy pomocy obiektu context
+  List<Meal> _items = []; //lista dań, dostępna tylko wewnątrz tej klasy, będzie się zmieniać, podkreślenie oznacza ze jest to wartość prywatna klasy
+    
+  List<Meal> get items{ //getter który zwraca kopię zmiennej _items
+    return [..._items]; //... - operator rozprzestrzeniania
+  }
+
+  void addProduct(){
+      //....
+      notifyListeners(); //wysłanie informacji za nastapiła zmiana
+  }
+}
+
+3. zainstalowanie pakietu w klasie, w której zamontowany będzie dostawca - najwyzszy w hierarchi widzet z widzetów potrzebujących/nasłuchujących tych danych np. w klasie MyApp
+
+import 'package:provider/provider.dart'; //zaimportowanie pakietu dostawcy
+import './models/meals.dart'; //zaimportowanie klasy dostawcy
+
+4. zarejestowanie dostawcy, który zapewnia instancję - tą samą instancję (!) tej klasy (np Meals) dla wszystkichwidzetów podrzędnych więc dla MaterialApp (bo na niej jest zawinięty) i wszystkich jej elementach potomnych, które są zainteresowane, czyli które bedą nmiały zaistalowany detektor i będą nasłuchiwać i jeśli nastąpi zmiana danych - zostana odbudowane.
+
+Widget build(BuildContext context) {  
+    return ChangeNotifierProvider( //zarejestrowanie dostawcy !!!!!!!!
+      builder: (ctx) => Meals(),
+      .......
+      //jest to metoda konstruktora dostawcy, otrzyma kontekst i zwróci nową instancję podanej klasy np klasy Meals. 
+      Jezeli te dane (Meals) nie są zalene od kontekstu to taki zapis jest nadmiarowy troche. 
+      Mona wtedy uzyć konstruktora wartości:
+
+    return ChangeNotifierProvider.value(
+      value: Meals(),
+      ..........
+
+
+
+5. przeniesienie danych z meals_screen.dart do meals.dart
+
+6. wydzielenie widzetów potrzebującycy danych do oddzielnych widzetów
+
+7. zamieszczenie dostawcy i słuchacza w widzetach potrzebujących danych
+  
+  Widget build(BuildContext context){
+    final mealsData = Provider.of<Meals>(context); //dostarcza dane i nasłuchuje zmian
+    final meals = mealsData.items; 
+      return ClipRRect(
+        ..........
+    
+    lub
+
+   Widget build(BuildContext context){
+    final meal = Provider.of<Meal>(context, listening:false); //dostarcza dane i nie nałuchuje zmian
+      return ClipRRect(
+        ..........
+    
+    !!!!!!!!!
+    Jezeli stosuje się dostawcę danych jak wyzej, to cała metoda kompilacji uruchomi się ponownie za kadym razem gdy zmienią się dane. 
+    
+    Mozna tez zamontować słuchacza tylko na zmieniającej się części widzetu:
+
+    Widget build(BuildContext context){
+      final meal = Provider.of<Meal>(context, listening:false); //tylko dostawca danych
+        return ClipRRect(
+        ..........
+
+        Consumer<Meal>( // słuchacz na wybranym widzecie (kurs sklep  197)
+          builder: (context, meal, _) => IconButton(  //"_" mozna zamienieć na "child" (kurs j.w.) 
+            icon: Icon(meal.fav ? Icons.favorite : Icons.favorite_border), //zmiana ikony
+            onPressed: (){
+              meal.toggleFavoriteStatus();
+            },
+          ),
+        ),
+
+
+
+
+
+//--------------------------
+Dla pojedynczego meal:
+    
+    ChangeNotifierProvider(  //słuchacz pojedynczego  dania dla zmian "ulubione"
+      builder:  (c) => meals[index], //dane dania określonego przez indeks w liście dań
+      child: ......
+
+
+
+WAZNE! ChangeNotifierProvider czyści dane w pamięci po przejscui do innego ekranu.
+
+Dostawcę danych uzywa sie gdy zmiana w widzecie jest wazna równiez dla innych widetów. 
+Jezeli zmiana nie jest nigdzie więcej uzywana - obsłuzyć ją naley przez setState((){}) - stan lokalny.
