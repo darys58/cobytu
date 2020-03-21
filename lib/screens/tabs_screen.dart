@@ -10,7 +10,6 @@ import '../models/meals.dart';
 import 'dart:convert'; //obsługa json'a
 import 'package:http/http.dart' as http;
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
-import '../models/http_exception.dart';
 import '../models/meal.dart';
 
 

@@ -8,8 +8,8 @@ class Rest{
   final String adres;          //re_adres
   final String miaId;          //re_mia_id
   final String miasto;         //re_miasto
-  final String wojId;          //re_woj_id
-  final String woj;            //re_woj
+  String wojId;          //re_woj_id
+  String woj;            //re_woj
   final String dostawy;        //re_dostawy
   final String opakowanie;     //re_opakowanie
   final String doStolika;      //re_do_stolika

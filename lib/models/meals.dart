@@ -3,7 +3,6 @@ import 'dart:convert'; //obsługa json'a
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
-import '../models/http_exception.dart';
 import './meal.dart';
 
 class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeNotifier która pozwala ustalać tunele komunikacyjne przy pomocy obiektu context
@@ -80,8 +79,8 @@ class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeN
   }
 
   //pobranie bazy dań z serwera www
-  static Future<void> fetchMealsFromSerwer() async {
-    const url = 'https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=pl';
+  static Future<void> fetchMealsFromSerwer(String url) async {
+    //const url = 'https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=pl';
     try {
       final response = await http.get(url);
       print(json.decode(response.body));

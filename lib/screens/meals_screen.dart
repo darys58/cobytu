@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../models/mems.dart';
 import '../models/rests.dart';
 import '../models/meals.dart';
 import '../widgets/main_drawer.dart';
@@ -46,9 +46,10 @@ class _MealsScreenState extends State<MealsScreen> {
       print('wejscie do Dependencies - Init meals_screen');
       
       if(false){
+        Mems.insertMemory('memLok', '14','wielkopolskie','1', 'Konin','27','Borówka');//dane startowe
         Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
           Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
-            Meals.fetchMealsFromSerwer().then((_) { 
+            Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=pl').then((_) { 
               Rests.fetchRestsFromSerwer().then((_) { 
                 Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                   setState(() {
@@ -80,6 +81,7 @@ class _MealsScreenState extends State<MealsScreen> {
     super.didChangeDependencies();
   }
 
+  
   //usuwanie przepisu z listy
   void _removeMeal(String mealId) {
     //meals.removeWhere((meal) => meal.id == mealId);

@@ -37,7 +37,7 @@ class DBHelper {
 
   static Future<Database> database() async {
     final dbPath = await sql.getDatabasesPath();
-    return sql.openDatabase(path.join(dbPath, 'cobytu1.db'), //ściekzka do bazy i nazwa bazy
+    return sql.openDatabase(path.join(dbPath, 'cobytu4.db'), //ściekzka do bazy i nazwa bazy
         onCreate: (db, version) async{
           print('tworzenie tabeli');
       await db.execute(
@@ -45,7 +45,13 @@ class DBHelper {
           );
       await db.execute(
           'CREATE TABLE restauracje(id TEXT PRIMARY KEY, nazwa TEXT, obiekt TEXT, adres TEXT, miaId TEXT, miasto TEXT, wojId TEXT, woj TEXT, dostawy TEXT, opakowanie TEXT, doStolika TEXT, rezerwacje TEXT, mogeJesc TEXT, modMenu TEXT)'
-          );        
+          );  
+      await db.execute(
+          'CREATE TABLE memory(nazwa TEXT PRIMARY KEY, a TEXT, b TEXT, c TEXT, d TEXT, e TEXT, f TEXT)'
+          ); 
+      await db.execute(
+          'CREATE TABLE podkategorie(id TEXT PRIMARY KEY, kolejnosc TEXT, kaId TEXT, nazwa TEXT)'
+          );       
     }, version: 1);
   }
 
@@ -99,10 +105,17 @@ class DBHelper {
   }
 
   //odczyt z bazy restauracji dla danego miasta - dla location
-  static Future<List<Map<String, dynamic>>> getRests(String miaId) async {
+  static Future<List<Map<String, dynamic>>> getRests(String miasto) async {
     final db = await DBHelper.database();
-    print('pobieranie restauracji dla $miaId');
-    return db.rawQuery('SELECT  * FROM restauracje WHERE miaId = ? ORDER BY nazwa ASC',[miaId]);
+    print('pobieranie restauracji dla $miasto');
+    return db.rawQuery('SELECT  * FROM restauracje WHERE miasto = ? ORDER BY nazwa ASC',[miasto]);
+  }
+
+  //odczyt rekordu z bazy memory
+  static Future<List<Map<String, dynamic>>> getMemory(String nazwa) async {
+    final db = await DBHelper.database();
+    print('pobieranie memory dla $nazwa');
+    return db.rawQuery('SELECT  * FROM memory WHERE nazwa = ?',[nazwa]);
   }
 
 }

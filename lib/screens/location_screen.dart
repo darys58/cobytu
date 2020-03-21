@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/rest.dart';
 import '../models/rests.dart';
+import '../models/mem.dart';
+import '../models/mems.dart';
 import 'package:provider/provider.dart';
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../widgets/main_drawer.dart';
@@ -24,13 +26,14 @@ class _LocationScreenState extends State<LocationScreen> {
   List<DropdownMenuItem<Rest>> _dropdownMenuItemsMia;
   Rest _selectedWoj; //wybrane województwo
   Rest _selectedMiasto; //wybrane miasto
+  List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
   List<Rest> _wojRest = []; //lista restauracji z nazwami województw dla buttona 1
   List<Rest> _miaRest = []; //lista restauracji z nazwami miast dla buttona 2
   List<Rest> _restsRest = []; //lista restauracji dla wybranego miasta
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
-  
-
+  String _currentValue;
+ //Rest aaa = new Rest(id: '27', nazwa: 'Borówka', obiekt: 'Stary Konin', adres: '3 Maja 35', miaId: '1', miasto: 'Konin', wojId: '14', woj: 'wielkopolskie', dostawy: '0', opakowanie: '0', doStolika: '0', rezerwacje: '0', mogeJesc: '0', modMenu: '0');
 
 
   SingingCharacter _character = SingingCharacter.lafayette;
@@ -38,6 +41,7 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState(){
     print('location initState');
+    
     //_dropdownMenuItems = buildDropdownMenuItem(_wojRest);
     //_selectedCompany = _dropdownMenuItems[0].value;
     super.initState();
@@ -45,31 +49,48 @@ class _LocationScreenState extends State<LocationScreen> {
 
    @override
   void didChangeDependencies() {
-    print('location didChangeDependencies');
-    if (_isInit) {
+
+    if (_isInit) { //wejście inicjalizujące - przy kadzym wejściu do ekranu
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania dań
       });
-      print('wejscie do Dependencies - Init location_screen');
-   
-      getWojewodztwa().then((_) {  //pobranie województw z bazy lokalnej
-        _dropdownMenuItemsWoj = buildDropdownMenuItemWoj(_wojRest);
-        _selectedWoj = _dropdownMenuItemsWoj[2].value;
-        getMiasta().then((_) { //pobranie miast z bazy
-          _dropdownMenuItemsMia = buildDropdownMenuItemMia(_miaRest);
-          _selectedMiasto = _dropdownMenuItemsMia[0].value;
-          Provider.of<Rests>(context).fetchAndSetRests(_selectedMiasto.miaId).then((_) {  //z bazy lokalnej
+      print('location_screen didChangeDependencies ');
+      fetchMemory('memLok').then((_) {  //pobranie ustawień z memLok z "memory"
+        
+        getWojewodztwa().then((_) {  //pobranie województw z bazy lokalnej
+          _dropdownMenuItemsWoj = buildDropdownMenuItemWoj(_wojRest);     
+          //ustawienie województwa domyślnego pobranego z tabeli "memory" - rekord memLok
+          var countWoj = _dropdownMenuItemsWoj.length;
+          for (var i = 0; i < countWoj; i++) {
+            if(_dropdownMenuItemsWoj[i].value.woj == _memLok[0].b){  //b:woj
+              _selectedWoj = _dropdownMenuItemsWoj[i].value;  //domyślny woj  
+            }  
+          }
 
+          getMiasta().then((_) { //pobranie miast z bazy
+            _dropdownMenuItemsMia = buildDropdownMenuItemMia(_miaRest);
+            //ustawienie miasta domyślnego pobranego z tabeli "memory" - rekord memLok
+            var countMia = _dropdownMenuItemsMia.length;
+            for (var i = 0; i < countMia; i++) {
+              if(_dropdownMenuItemsMia[i].value.miasto == _memLok[0].d){  //d:miasto
+                _selectedMiasto = _dropdownMenuItemsMia[i].value;
+              }
+            }
+            _currentValue = _memLok[0].e;  //e:restId  domyślna restauracja
+            Provider.of<Rests>(context).fetchAndSetRests(_selectedMiasto.miasto).then((_) {  //z bazy lokalnej
+
+              setState(() {
+                _isLoading = false; //zatrzymanie wskaznika ładowania dań
+              });
+            }); //dostawca restauracji
             setState(() {
               _isLoading = false; //zatrzymanie wskaznika ładowania dań
             });
-          }); //dostawca restauracji
-          setState(() {
-            _isLoading = false; //zatrzymanie wskaznika ładowania dań
-          });
-        }); 
+          }); 
+        });
       });
     }
+    
     _isInit = false;
     //Provider.of<Rests>(context, listen: false).fetchAndSetRests(); //dostawca restauracji
     super.didChangeDependencies();
@@ -120,10 +141,11 @@ class _LocationScreenState extends State<LocationScreen> {
         //_isLoading = false; //zatrzymanie wskaznika ładowania dań
       });
 
-      Provider.of<Rests>(context).fetchAndSetRests(_selectedMiasto.miaId).then((_) {  //z bazy lokalnej
+      Provider.of<Rests>(context).fetchAndSetRests(_selectedMiasto.miasto).then((_) {  //z bazy lokalnej
 
       setState(() {
         _isLoading = false; //zatrzymanie wskaznika ładowania dań
+        _currentValue = '0'; //ustawienie "Wszystkie" restauracje
       });
     }); //dostawca restauracji
 
@@ -137,10 +159,11 @@ class _LocationScreenState extends State<LocationScreen> {
       _isLoading = true;    
     });
     
-    Provider.of<Rests>(context).fetchAndSetRests(_selectedMiasto.miaId).then((_) {  //z bazy lokalnej
+    Provider.of<Rests>(context).fetchAndSetRests(_selectedMiasto.miasto).then((_) {  //z bazy lokalnej
 
       setState(() {
         _isLoading = false; //zatrzymanie wskaznika ładowania dań
+        _currentValue = '0'; //ustawienie "Wszystkie" restauracje
       });
     }); //dostawca restauracji
 
@@ -156,7 +179,7 @@ class _LocationScreenState extends State<LocationScreen> {
           id: item['id'],          
           nazwa: item['nazwa'], 
           obiekt: item['obiekt'],     
-          adres: item['obiekt'],        
+          adres: item['adres'],        
           miaId: item['miaId'],       
           miasto: item['miasto'],          
           wojId: item['wojId'],        
@@ -181,7 +204,7 @@ class _LocationScreenState extends State<LocationScreen> {
           id: item['id'],          
           nazwa: item['nazwa'], 
           obiekt: item['obiekt'],     
-          adres: item['obiekt'],        
+          adres: item['adres'],        
           miaId: item['miaId'],       
           miasto: item['miasto'],          
           wojId: item['wojId'],        
@@ -198,23 +221,63 @@ class _LocationScreenState extends State<LocationScreen> {
     return _miaRest;      
   }
 
-  
+  //pobranie memory z bazy lokalnej
+   Future<void> fetchMemory(name)async{
+    final data = await DBHelper.getMemory(name);
+    _memLok = data.map(
+        (item) => Mem(
+          nazwa: item['nazwa'],          
+          a: item['a'], 
+          b: item['b'],     
+          c: item['c'],        
+          d: item['d'],       
+          e: item['e'],          
+          f: item['f'],                               
+        ),  
+      ).toList();
+      print('items w Mem ${_memLok[0].b}');
+      return _memLok;
+  }
+
 
   @override
   Widget build(BuildContext context) {
     print ('location budowanie ekranu');
   final restsData = Provider.of<Rests>(context);
   //final wojData = restsData.items.where((rest) {return rest.woj.contains('9');}).toList();
-  
-  final rests = restsData.items.toList(); 
+  //List<Rest> rests = [];
+
+  List<Rest> rests = restsData.items.toList();
+  rests.add(Rest(id:'0',nazwa:'Wszystkie',obiekt:'0',adres:'0',miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
+
+ 
   print('restsR $rests'); 
-  print('rests.nazwa ${rests[0].nazwa}'); 
-  String _currentValue = '27';
+  print('rests.nazwa ${rests[0]}'); 
+  
 
     return Scaffold(
       appBar :AppBar( 
-        title: Text('Wybierz lokal')
+        title: Text('Wybierz lokal'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () {
+              Mems.insertMemory(
+                'memLok',                 //nazwa
+                _selectedWoj.wojId,       //a
+                _selectedWoj.woj,         //b
+                _selectedMiasto.miaId,    //c
+                _selectedMiasto.miasto,   //d
+                _currentValue,            //e
+                'nieuzywane'              //f - nieuzywane bo "Wszystkie" dopisane do "restauracje" i nazwy restauracji brane są tez z tabeli "restauracje"
+              );            
+            
+              //widget.saveFilters(selectedFilters);
+            },
+          ),
+        ],
       ),
+      
       body: _isLoading  //jezeli dane są ładowane
       ? Center(
           child: CircularProgressIndicator(), //kółko ładowania danych
@@ -224,7 +287,7 @@ class _LocationScreenState extends State<LocationScreen> {
         child: Center(
           child: Column(
             children: <Widget>[
-              SizedBox(height: 10.0),
+              //SizedBox(height: 10.0),
               Row( //całą zawatość kolmny stanowi wiersz
                 mainAxisAlignment: MainAxisAlignment.spaceBetween, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
                 children: <Widget>[
@@ -239,7 +302,7 @@ class _LocationScreenState extends State<LocationScreen> {
                           //SizedBox(height: 5.0),
                           DropdownButton(
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               color: Colors.black,
                             ),
                             value: _selectedWoj,
@@ -264,7 +327,7 @@ class _LocationScreenState extends State<LocationScreen> {
                           //SizedBox(height: 5.0),
                           DropdownButton(
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               color: Colors.black,
                             ),
                             value: _selectedMiasto,
@@ -285,19 +348,24 @@ class _LocationScreenState extends State<LocationScreen> {
              //  Column(
               //   children: <Widget>[
 
-                  ListView( 
-                    padding: EdgeInsets.all(8.0),
-                    children: rests.map((item) => RadioListTile(
-                        groupValue: _currentValue,
-                        title: Text(item.nazwa),
-                        value: item.id,
-                        onChanged: (val) {
-                            setState(() {
-                                //debugPrint('VAL = $val');
-                                //_currentValue = val;
-                            });
-                        },
-                    )).toList(),
+                  Expanded(
+                    child: ListView( 
+                      //padding: EdgeInsets.all(8.0),
+                      children: 
+                      rests.map((item) => RadioListTile(
+                          groupValue: _currentValue,
+                          title: Text(item.nazwa),
+                          subtitle: Text(item.nazwa),
+                          value: item.id,
+                          onChanged: (val) {
+                              setState(() {
+                                  debugPrint('VAL = $val');
+                                  _currentValue = val;
+                              });
+                          },
+                      )).toList(),
+                      scrollDirection: Axis.vertical,
+                    ),
                   ),
 /*
                  RadioListTile<SingingCharacter>(
