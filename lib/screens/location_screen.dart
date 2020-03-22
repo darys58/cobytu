@@ -7,7 +7,7 @@ import '../models/rests.dart';
 import '../models/mem.dart';
 import '../models/mems.dart';
 
-import '../widgets/main_drawer.dart';
+//import '../widgets/main_drawer.dart';
 
 class LocationScreen extends StatefulWidget {
   //nazwa trasy do nawigacji przez routeNamed
@@ -246,7 +246,7 @@ class _LocationScreenState extends State<LocationScreen> {
     print ('location budowanie ekranu');
   final restsData = Provider.of<Rests>(context);
   List<Rest> rests = restsData.items.toList();
-  rests.add(Rest(id:'0',nazwa:'Wszystkie',obiekt:'0',adres:'0',miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
+  rests.add(Rest(id:'0',nazwa:'Wszystkie',obiekt:'0', adres: _selectedMiasto.miasto, miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
 
     return Scaffold(
       appBar :AppBar( 
@@ -265,8 +265,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 _currentValue,            //e - '0' lub id restauracji
                 _rest[0].nazwa,           //f - "Wszystkie" lub nazwa restauracji
               ); 
-              _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera  
-              //_setPrefers('selectedRest', 'true');  //konieczne załadowanie danych z serwera        
+              _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera         
             },
           ),
         ],
@@ -339,7 +338,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   rests.map((item) => RadioListTile(
                       groupValue: _currentValue,
                       title: Text(item.nazwa),
-                      subtitle: Text(item.nazwa),
+                      subtitle: Text(item.adres),
                       value: item.id,
                       onChanged: (val) {
                         setState(() {

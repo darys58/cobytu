@@ -147,11 +147,6 @@ class _MealsScreenState extends State<MealsScreen> {
       ).toList();
       return _memLok;
   }
-  
-  //usuwanie przepisu z listy
-  void _removeMeal(String mealId) {
-    //meals.removeWhere((meal) => meal.id == mealId);
-  }
 
   @override
   Widget build(BuildContext context) {

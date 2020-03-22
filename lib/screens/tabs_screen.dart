@@ -5,12 +5,7 @@ import 'package:flutter/material.dart';
 import './favorites_screen.dart';
 import './location_screen.dart';
 import './meals_screen.dart';
-import '../models/meals.dart';
 
-import 'dart:convert'; //obsługa json'a
-import 'package:http/http.dart' as http;
-import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
-import '../models/meal.dart';
 
 
 class TabsScreen extends StatefulWidget {

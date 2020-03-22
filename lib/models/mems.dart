@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart'; //zeby mozna było ustawić ze argumenty są wymagane (dekorator @required)
+//import 'package:flutter/foundation.dart'; //zeby mozna było ustawić ze argumenty są wymagane (dekorator @required)
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import './mem.dart';
 

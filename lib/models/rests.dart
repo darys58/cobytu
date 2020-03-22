@@ -63,7 +63,7 @@ class Rests with ChangeNotifier{
           id: item['id'],          
           nazwa: item['nazwa'], 
           obiekt: item['obiekt'],     
-          adres: item['obiekt'],        
+          adres: item['adres'],        
           miaId: item['miaId'],       
           miasto: item['miasto'],          
           wojId: item['wojId'],        
