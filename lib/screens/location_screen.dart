@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../models/rest.dart';
 import '../models/rests.dart';
 import '../models/mem.dart';
 import '../models/mems.dart';
-import 'package:provider/provider.dart';
-import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
+
 import '../widgets/main_drawer.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -29,14 +31,10 @@ class _LocationScreenState extends State<LocationScreen> {
   List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
   List<Rest> _wojRest = []; //lista restauracji z nazwami województw dla buttona 1
   List<Rest> _miaRest = []; //lista restauracji z nazwami miast dla buttona 2
-  List<Rest> _restsRest = []; //lista restauracji dla wybranego miasta
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
   String _currentValue;
- //Rest aaa = new Rest(id: '27', nazwa: 'Borówka', obiekt: 'Stary Konin', adres: '3 Maja 35', miaId: '1', miasto: 'Konin', wojId: '14', woj: 'wielkopolskie', dostawy: '0', opakowanie: '0', doStolika: '0', rezerwacje: '0', mogeJesc: '0', modMenu: '0');
 
-
-  SingingCharacter _character = SingingCharacter.lafayette;
   
   @override
   void initState(){
@@ -55,7 +53,7 @@ class _LocationScreenState extends State<LocationScreen> {
         _isLoading = true; //uruchomienie wskaznika ładowania dań
       });
       print('location_screen didChangeDependencies ');
-      fetchMemory('memLok').then((_) {  //pobranie ustawień z memLok z "memory"
+      fetchMemoryLok().then((_) {  //pobranie ustawień  memLok z "memory"
         
         getWojewodztwa().then((_) {  //pobranie województw z bazy lokalnej
           _dropdownMenuItemsWoj = buildDropdownMenuItemWoj(_wojRest);     
@@ -94,6 +92,12 @@ class _LocationScreenState extends State<LocationScreen> {
     _isInit = false;
     //Provider.of<Rests>(context, listen: false).fetchAndSetRests(); //dostawca restauracji
     super.didChangeDependencies();
+  }
+
+  _setPrefers(String key, String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+    print('set $key = $value');
   }
 
   //tworzenie buttona wyboru województwa
@@ -138,7 +142,6 @@ class _LocationScreenState extends State<LocationScreen> {
       setState(() {
         _dropdownMenuItemsMia = buildDropdownMenuItemMia(_miaRest);//tworzenie buttona z miastami
         _selectedMiasto = _dropdownMenuItemsMia[0].value; //ustawienie pierwszego miasta
-        //_isLoading = false; //zatrzymanie wskaznika ładowania dań
       });
 
       Provider.of<Rests>(context).fetchAndSetRests(_selectedMiasto.miasto).then((_) {  //z bazy lokalnej
@@ -217,13 +220,12 @@ class _LocationScreenState extends State<LocationScreen> {
           modMenu: item['modMenu'],         
         ),  
       ).toList();
-      print('miaRest $_miaRest');
     return _miaRest;      
   }
 
   //pobranie memory z bazy lokalnej
-   Future<void> fetchMemory(name)async{
-    final data = await DBHelper.getMemory(name);
+   Future<void> fetchMemoryLok()async{
+    final data = await DBHelper.getMemory('memLok');
     _memLok = data.map(
         (item) => Mem(
           nazwa: item['nazwa'],          
@@ -235,7 +237,6 @@ class _LocationScreenState extends State<LocationScreen> {
           f: item['f'],                               
         ),  
       ).toList();
-      print('items w Mem ${_memLok[0].b}');
       return _memLok;
   }
 
@@ -244,16 +245,8 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     print ('location budowanie ekranu');
   final restsData = Provider.of<Rests>(context);
-  //final wojData = restsData.items.where((rest) {return rest.woj.contains('9');}).toList();
-  //List<Rest> rests = [];
-
   List<Rest> rests = restsData.items.toList();
   rests.add(Rest(id:'0',nazwa:'Wszystkie',obiekt:'0',adres:'0',miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
-
- 
-  print('restsR $rests'); 
-  print('rests.nazwa ${rests[0]}'); 
-  
 
     return Scaffold(
       appBar :AppBar( 
@@ -262,17 +255,18 @@ class _LocationScreenState extends State<LocationScreen> {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
+              final _rest = rests.where((re) {return re.id.contains(_currentValue);}).toList();//wybrana restauracja
               Mems.insertMemory(
                 'memLok',                 //nazwa
                 _selectedWoj.wojId,       //a
                 _selectedWoj.woj,         //b
                 _selectedMiasto.miaId,    //c
                 _selectedMiasto.miasto,   //d
-                _currentValue,            //e
-                'nieuzywane'              //f - nieuzywane bo "Wszystkie" dopisane do "restauracje" i nazwy restauracji brane są tez z tabeli "restauracje"
-              );            
-            
-              //widget.saveFilters(selectedFilters);
+                _currentValue,            //e - '0' lub id restauracji
+                _rest[0].nazwa,           //f - "Wszystkie" lub nazwa restauracji
+              ); 
+              _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera  
+              //_setPrefers('selectedRest', 'true');  //konieczne załadowanie danych z serwera        
             },
           ),
         ],
@@ -309,9 +303,6 @@ class _LocationScreenState extends State<LocationScreen> {
                             items: _dropdownMenuItemsWoj,
                             onChanged:  onChangeDropdownItemWoj,
                           ),
-                        
-                        
-                        
                         ],
                       ),
                     ),
@@ -334,90 +325,33 @@ class _LocationScreenState extends State<LocationScreen> {
                             items: _dropdownMenuItemsMia,
                             onChanged:  onChangeDropdownItemMia,
                           ),
-                        
-                        
-                        
                         ],
                       ),
                     ),
                   ),
-                
                 ]
               ),
-               SizedBox(height: 10.0),
-             //  Column(
-              //   children: <Widget>[
-
-                  Expanded(
-                    child: ListView( 
-                      //padding: EdgeInsets.all(8.0),
-                      children: 
-                      rests.map((item) => RadioListTile(
-                          groupValue: _currentValue,
-                          title: Text(item.nazwa),
-                          subtitle: Text(item.nazwa),
-                          value: item.id,
-                          onChanged: (val) {
-                              setState(() {
-                                  debugPrint('VAL = $val');
-                                  _currentValue = val;
-                              });
-                          },
-                      )).toList(),
-                      scrollDirection: Axis.vertical,
-                    ),
-                  ),
-/*
-                 RadioListTile<SingingCharacter>(
-                    title: const Text('Lafayette'),
-                    value: SingingCharacter.lafayette,
-                    groupValue: _character,
-                    onChanged: (SingingCharacter value) { setState(() { _character = value; }); },
-                  ),
-                  RadioListTile<SingingCharacter>(
-                    title: const Text('Thomas Jefferson'),
-                    value: SingingCharacter.jefferson,
-                    groupValue: _character,
-                    onChanged: (SingingCharacter value) { setState(() { _character = value; }); },
-                  ),
-*/
-
-             //    ],
-            //   ),
-                /*
-              Text('Województwo'),
-              SizedBox(height: 20.0),
-              DropdownButton(
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
+              SizedBox(height: 10.0),
+              Expanded(
+                child: ListView( 
+                  //padding: EdgeInsets.all(8.0),
+                  children: 
+                  rests.map((item) => RadioListTile(
+                      groupValue: _currentValue,
+                      title: Text(item.nazwa),
+                      subtitle: Text(item.nazwa),
+                      value: item.id,
+                      onChanged: (val) {
+                        setState(() {
+                            _currentValue = val;
+                        });
+                      },
+                  )).toList(),
+                  scrollDirection: Axis.vertical,
                 ),
-                value: _selectedWoj,
-                items: _dropdownMenuItemsWoj,
-                onChanged:  onChangeDropdownItemWoj,
               ),
-              SizedBox(height: 20.0),
-              //Text ('wybrwłeś: ${_selectedWoj.wojId}'),
-              SizedBox(height: 20.0),
-              
-              
-              DropdownButton(
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
-                value: _selectedMiasto,
-                items: _dropdownMenuItemsMia,
-                onChanged:  onChangeDropdownItemMia,
-              ),
-              SizedBox(height: 20.0),
-              //Text ('wybrwłeś: ${_selectedMiasto.miaId}'),
-             */ 
             ],
           ) ,
-
-          
-          
         ),
       ),
     );

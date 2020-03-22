@@ -57,7 +57,7 @@ class MealItem extends StatelessWidget {
       MealDetailScreen.routeName, //tzn. MealDetailScreen to strona po wykonaniu pushNamed. Przyszły zwrot przez pushNamed pozwla wiedzieć kiedy strona na którą sie przełaczyłeś nie jest juz wyświetlana.
       arguments: id,
     ).then((result) { //result - id usuwanego przepisu (ikoną kosza). Funkca then wykonywana jest po powrocie z opusczanej strony (po wykonaniu pop).
-      print(result);
+      print(result); 
       if(result != null){
         //removeItem(result); //funkcja usuwania przepisu z listy
       }
@@ -67,45 +67,28 @@ class MealItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final meal = Provider.of<Meal>(context, listen: false); //dostawca danych dostarcza danie z słuchaczem zmian. Zmiana nastąpi jezeli naciśniemy serce polubienie dania. Z listen: false zmieniony na tylko dostawcę danych a słuchacz lokalny "Consumer" zainstalowany  nizej
-    
-    return InkWell( //element klikalny
+  print(meal.foto.substring(27));
+  return InkWell( //element klikalny
       onTap: () {
-            Navigator.of(context).pushNamed(MealDetailScreen.routeName, arguments: meal.id,);
-          },//() => selectMeal(context),
+        Navigator.of(context).pushNamed(MealDetailScreen.routeName, arguments: meal.id,);
+      },//() => selectMeal(context),
       child: Card( //karta z daniem
         shape: RoundedRectangleBorder( //kształt karty
           borderRadius: BorderRadius.circular(15),
         ),
         elevation: 4, //cień za kartą
-        margin: EdgeInsets.all(7), //margines wokół karty
-        
+        margin: EdgeInsets.all(7), //margines wokół karty     
         child: Column( //zawartość karty - kolumna z widzetami
-          children: <Widget>[
-            
-              Row( //całą zawatość kolmny stanowi wiersz
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
-                children: <Widget>[
-
-                   /* 
-                  ClipRRect( //belka po lewej - element opakowania obrazka zeby zaokrąglić rogi
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      topLeft: Radius.circular(15),
-                    ),
-                    child: Container( 
-                      width: 10,
-                      height: 110,
-                      color: Colors.red, 
-                    ),
-                  ), */
-
-
-                  Expanded( //rozszerzona kolumna z tekstami  - cała dostępna przestrzeń (poza zdjęciem)
-                    child: Container( //zeby zrobić margines wokół części tekstowej
-                      padding: EdgeInsets.all(8.00),
-                      child: Column( //ustawienie elementów jeden pod drugim
-                        mainAxisSize:MainAxisSize.min, 
-                        crossAxisAlignment: CrossAxisAlignment.start, 
+          children: <Widget>[         
+            Row( //całą zawatość kolmny stanowi wiersz
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
+              children: <Widget>[
+                Expanded( //rozszerzona kolumna z tekstami  - cała dostępna przestrzeń (poza zdjęciem)
+                  child: Container( //zeby zrobić margines wokół części tekstowej
+                    padding: EdgeInsets.all(8.00), //margines wokół części tekstowej
+                    child: Column( //ustawienie elementów jeden pod drugim - tytuł i opis
+                      mainAxisSize:MainAxisSize.min, 
+                      crossAxisAlignment: CrossAxisAlignment.start, 
                       children: <Widget>[
                         Text( //nazwa dania
                           meal.nazwa,
@@ -117,7 +100,7 @@ class MealItem extends StatelessWidget {
                           overflow: TextOverflow.fade, //skracanie tekstu zeby zmieścił sie
                           ),
                         Container( //pojemnik na opis
-                        padding: EdgeInsets.only(top: 2),
+                          padding: EdgeInsets.only(top: 2),
                           height: 38,
                           child: Text( //opis dania
                             meal.opis,
@@ -128,20 +111,16 @@ class MealItem extends StatelessWidget {
                             softWrap: true, //zawijanie tekstu
                             maxLines: 2, //ilość wierszy opisu
                             overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
-                           ),
+                          ),
                         ),
                         Padding(//odstępy dla wiersza z ikonami
                           padding: EdgeInsets.only(top: 5),
                           child: Row( //rząd z informacjami o posiłku
                             mainAxisAlignment:
-                                MainAxisAlignment.spaceAround, //główna oś wyrównywania
+                              MainAxisAlignment.spaceAround, //główna oś wyrównywania
                             children: <Widget>[ //elementy rzędu które sa widzetami
-                              Row(
-                                //Kzdy element wiersz jest wierszemonym z ikony i tekstu
+                              Row( //cena dania
                                 children: <Widget>[
-                                  //Icon(
-                                  //  Icons.schedule,
-                                  //),
                                   Text(
                                     meal.cena, //interpolacja ciągu znaków
                                     style: TextStyle(
@@ -151,7 +130,7 @@ class MealItem extends StatelessWidget {
                                   ),
                                   SizedBox(
                                     width: 5,
-                                  ), //odległość miedzy ikoną i tekstem
+                                  ), //odległość miedzy ceną a PLN
                                   Text(
                                     'PLN', //interpolacja ciągu znaków
                                     style: TextStyle(
@@ -161,70 +140,65 @@ class MealItem extends StatelessWidget {
                                   ),  
                                 ],
                               ),
-                              Row(
-                                //Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
+                              Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                                 children: <Widget>[
                                   Icon(
-                                    Icons.schedule, color: Theme.of(context).primaryColor,
+                                    Icons.hourglass_empty, color: Theme.of(context).primaryColor, //schedule
                                   ),
                                   SizedBox(
-                                    width: 1,
+                                    width: 2,
                                   ), //odległość miedzy ikoną i tekstem
                                   Text(
                                     meal.czas + ' min',
                                   ), //interpolacja ciągu znaków
                                 ],
                               ),
-                              Row(
-                                //Kazdy element wiersz jest wierszemonym z ikony i tekstu
+                    /*          if(meal.foto.substring(27) == '/co.jpg')
+                              Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                                 children: <Widget>[
-                                  
+                                  Icon(
+                                    Icons.battery_alert, color: Theme.of(context).primaryColor,
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ), //odległość miedzy ikoną i tekstem
+                                  Text(
+                                    meal.kcal + ' kcal',
+                                  ), //interpolacja ciągu znaków
+                                ],
+                              ),
+                       */       Row(//polubienie - Kazdy element wiersz jest wierszemonym z ikony i tekstu                            
+                                children: <Widget>[ 
                                   Consumer<Meal>( // słuchacz na wybranym widzecie (kurs sklep  197)
                                     builder: (context, meal, child) => GestureDetector(
                                       child: Icon(meal.fav == '1' ? Icons.favorite : Icons.favorite_border, color: Theme.of(context).primaryColor,), //zmiana ikony
                                       onTap: (){
                                         meal.toggleFavoriteStatus(meal.id); //przekazane id dania
-                                      },
-                                      
+                                      },                 
                                     ),
                                   ),
-                                  
-                                  
-                                  /*
-                                  IconButton(
-                                     icon: Icon(
-                                      meal.fav == '1' ? Icons.favorite : Icons.favorite_border
-                                    ),
-                                    onPressed: (){
-                                      meal.toggleFavoriteStatus();
-                                    },
-                                  ),
-                                  
-                                  */
-                                  //SizedBox(
-                                  //  width: 6,
-                                  //), //odległość miedzy ikoną i tekstem
-                                  //Text(
-                                   // kcal,
-                                  //), //interpolacja ciągu znaków
                                 ],
                               ),
+                              //zamiast zaślepki foto
+                              if(meal.foto.substring(27) == '/co.jpg') //jezeli zaślepka
+                                SizedBox(
+                                  width: 115,
+                                ), 
                             ],
                           ),
                         ),
                       ],
-                      ),
-                     
                     ),
                   ),
-                  Container(
+                ),
+                if(meal.foto.substring(27) != '/co.jpg') //jezeli jest foto
+                  Container( //pojemnik na zdjęcie
                     //padding: EdgeInsets.only(right: 1.00),
                     child: ClipRRect( //element opakowania obrazka zeby zaokrąglić rogi
                       borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(15),
                         topRight: Radius.circular(15),
                       ),
-              
                       child: Image.network(//obrazek dania pobierany z neta
                         meal.foto, //adres internetowy
                         height: 110, //wysokość obrazka
@@ -233,8 +207,9 @@ class MealItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
+                
+              ],
+            ),
           ],
         ),
       ),

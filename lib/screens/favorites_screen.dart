@@ -15,7 +15,17 @@ class FavoritesScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Ulubione'), //const jezeli nie będzie aktualizowany tytul
         ),
-        body: favorites.isEmpty ? Text('Brak ulubionych') : ListView.builder(//ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+        body: favorites.isEmpty 
+        ? Center( 
+            child:Text(
+              'Brak ulubionych',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey,
+              ),
+            ),
+          ) 
+        : ListView.builder(//ładowane są te elementy listy które widać na ekranie - lepsza wydajność
             itemBuilder: (ctx, index) => ChangeNotifierProvider.value( //dostawca (wersja bez kontekstu)
             value: favorites[index],
             child: MealItem(),
