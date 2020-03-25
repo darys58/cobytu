@@ -3,60 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; //pakiet dostawcy
 
-import '../screens/meal_detail_screen.dart';
+import '../screens/tabs_detail_screen.dart';
 import '../models/meal.dart';
+import '../models/mems.dart';
+import '../models/mealRest.dart';
+import '../models/mealRests.dart';
 
 class MealItem extends StatelessWidget {
- /* final String id;          
-  final String  nazwa; 
-  final String  opis; //'Pier\u015b z kurczaka w sosie \u015bmietanowym z zielonym pieprzem',      
-  //final String  idwer: '0',        
-  //final String  wersja: '',       
-  final String  foto;        
-  //final String  gdzie;       
-  final String  kategoria;    
-  //final List<String>  podkat;  
-  //final String  srednia;     
-  //final String  alergeny;      
-  final String  cena;           
-  final String  czas;        
-  final String  waga;       
-  final String  kcal;         
-  //final String  lubi;          
-  //final String  fav;           
-  //final String  stolik;
-  
-  //final String id;
-  //final String title;
-  //final String imageUrl;
-  //final int duration;
-  //final Complexity complexity;
-  //final Affordability affordability;
-  //final Function removeItem;
 
-
-  MealItem({
-    @required this.id,
-    @required this.nazwa,
-    @required this.opis,
-    @required this.foto,
-    @required this.kategoria,
-    @required this.cena,
-    @required this.czas,
-    @required this.waga,
-    @required this.kcal,
-   // @required this.fav,
-    //@required this.removeItem,
-  });
-*/
 /*
 //funkcja przejścia do ekranu ze szczegółami dania
   void selectMeal(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed( //pushNamed zwraca Future - obiekt który pozwala okreslić funkcję która powinna być wykonana po wykonaniu pewnej operacji np. wyświetlić strone na która chcesz się udać.
-      MealDetailScreen.routeName, //tzn. MealDetailScreen to strona po wykonaniu pushNamed. Przyszły zwrot przez pushNamed pozwla wiedzieć kiedy strona na którą sie przełaczyłeś nie jest juz wyświetlana.
-      arguments: id,
-    ).then((result) { //result - id usuwanego przepisu (ikoną kosza). Funkca then wykonywana jest po powrocie z opusczanej strony (po wykonaniu pop).
+    Navigator.of(context).pushNamed(MealDetailScreen.routeName, arguments: id,).then((result) { //result - id usuwanego przepisu (ikoną kosza). Funkca then wykonywana jest po powrocie z opusczanej strony (po wykonaniu pop).
       print(result); 
       if(result != null){
         //removeItem(result); //funkcja usuwania przepisu z listy
@@ -67,10 +25,27 @@ class MealItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final meal = Provider.of<Meal>(context, listen: false); //dostawca danych dostarcza danie z słuchaczem zmian. Zmiana nastąpi jezeli naciśniemy serce polubienie dania. Z listen: false zmieniony na tylko dostawcę danych a słuchacz lokalny "Consumer" zainstalowany  nizej
-  print(meal.foto.substring(27));
+  //print(meal.foto.substring(27));
+
   return InkWell( //element klikalny
       onTap: () {
-        Navigator.of(context).pushNamed(MealDetailScreen.routeName, arguments: meal.id,);
+        Mems.insertMemory( //zapisanie danych wybranego dania przed przejściem do jego szczegółów               
+          'memDanie',        //nazwa
+          meal.id,           //a - daId
+          meal.foto,         //b - foto
+          meal.alergeny,     //c - alergeny
+          meal.nazwa,        //d - nazwa dania
+          'nieuzywane',      //e - nieuzywane    (w iOS - index row)
+          meal.fav,          //f - fav - polubienie
+        );
+        //pobranie danych restauracji z serwera (potrzebne modMenu - info kiedy była modyfikacja menu)
+        //!!!@!!!!  jeeli ok to przejście do szczegółów
+
+          Navigator.of(context).pushNamed(TabsDetailScreen.routeName, arguments: meal.id,);
+       
+
+
+        
       },//() => selectMeal(context),
       child: Card( //karta z daniem
         shape: RoundedRectangleBorder( //kształt karty

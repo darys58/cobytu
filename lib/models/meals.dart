@@ -6,69 +6,8 @@ import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import './meal.dart';
 
 class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeNotifier która pozwala ustalać tunele komunikacyjne przy pomocy obiektu context
-  List<Meal> _items = [ //lista dań, dostępna tylko wewnątrz tej klasy, będzie się zmieniać, podkreślenie oznacza ze jest to wartość prywatna klasy
-  /*  Meal(
-      id: '2160',            
-      nazwa: 'Kurczak z zielonym pieprzem',   
-      opis: 'Pier\u015b z kurczaka w sosie \u015bmietanowym z zielonym pieprzem',      
-      idwer: '0',        
-      wersja: '',       
-      foto: 'https://www.cobytu.com/foto/124/filet_z_pieprzem1_4026_m.jpg',         
-      gdzie: 'Siesta',        
-      kategoria: '4',     
-      podkat: ['106','110'],  
-      srednia: '0.00',       
-      alergeny: ' mleko',      
-      cena:'25.00',           
-      czas: '25',         
-      waga: '500',        
-      kcal: '675',         
-      lubi: '83',          
-      fav: '0',           
-      stolik: '0',
-    ),
-    Meal(
-      id: '2341',            
-      nazwa: 'Awokado Kaburamaki',   
-      opis: 'Pier\u015b z kurczaka w sosie \u015bmietanowym z zielonym pieprzem',      
-      idwer: '0',        
-      wersja: '',       
-      foto: 'https://www.cobytu.com/foto/124/filet_z_pieprzem1_4026_m.jpg',         
-      gdzie: 'Siesta',        
-      kategoria: '4',     
-      podkat: ['106','110'],  
-      srednia: '0.00',       
-      alergeny: ' mleko',      
-      cena:'25.00',           
-      czas: '25',         
-      waga: '500',        
-      kcal: '675',         
-      lubi: '83',          
-      fav: '0',           
-      stolik: '0',
-    ),
-    Meal(
-      id: '374',            
-      nazwa: '\u0141oso\u015b z grilla',   
-      opis: 'Pier\u015b z kurczaka w sosie \u015bmietanowym z zielonym pieprzem',      
-      idwer: '0',        
-      wersja: '',       
-      foto: 'https://www.cobytu.com/foto/15/losos_grillowany_0809_1_m.jpg',         
-      gdzie: 'Siesta',        
-      kategoria: '4',     
-      podkat: ['106','107'],  
-      srednia: '0.00',       
-      alergeny: ' mleko',      
-      cena:'25.00',           
-      czas: '25',         
-      waga: '500',        
-      kcal: '675',         
-      lubi: '83',          
-      fav: '0',           
-      stolik: '0',
-    ),
-    */
-  ];  
+  List<Meal> _items = []; //lista dań, dostępna tylko wewnątrz tej klasy, będzie się zmieniać, podkreślenie oznacza ze jest to wartość prywatna klasy
+    
   List<Meal> get items{ //getter który zwraca kopię zmiennej _items
     return [..._items]; //... - operator rozprzestrzeniania
   }
@@ -93,24 +32,24 @@ class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeN
       extractedData.forEach((mealId, mealData) {
         //zapis dania do bazy
         DBHelper.insert('dania', {
-        'id': mealId,
-        'nazwa': mealData['da_nazwa'], 
-        'opis': mealData['da_opis'],     
-        'idwer': mealData['da_id_wer'],        
-        'wersja': mealData['da_wersja'],       
-        'foto': mealData['da_foto'],    //'https://www.cobytu.com/foto/' +       
-        'gdzie': mealData['da_gdzie'],        
-        'kategoria': mealData['da_kategoria'],     
-        'podkat': mealData['da_podkategoria'],    //  ['106','107'],  
-        'srednia': mealData['da_srednia'],      
-        'alergeny': mealData['alergeny'],      
-        'cena': mealData['cena'],            
-        'czas': mealData['da_czas'],          
-        'waga': mealData['waga'],         
-        'kcal': mealData['kcal'],         
-        'lubi': mealData['ud0_da_lubi'],           
-        'fav': mealData['fav'],           
-        'stolik': mealData['na_stoliku'], 
+        'id': mealId,                         //'2160'
+        'nazwa': mealData['da_nazwa'],        //'Kurczak z zielonym pieprzem'
+        'opis': mealData['da_opis'],          //'Pier\u015b z kurczaka w sosie \u015bmietanowym z zielonym pieprzem'
+        'idwer': mealData['da_id_wer'],       //'0'
+        'wersja': mealData['da_wersja'],      //''
+        'foto': mealData['da_foto'],          //'https://www.cobytu.com/foto/' + 124/filet_z_pieprzem1_4026_m.jpg'      
+        'gdzie': mealData['da_gdzie'],        //'Siesta'
+        'kategoria': mealData['da_kategoria'],//'4'    
+        'podkat': mealData['da_podkategoria'],//['106','107'],  
+        'srednia': mealData['da_srednia'],    //'0.00' 
+        'alergeny': mealData['alergeny'],     //'mleko'
+        'cena': mealData['cena'],             //'25.00' 
+        'czas': mealData['da_czas'],          //'25'  
+        'waga': mealData['waga'],             //'500'
+        'kcal': mealData['kcal'],             //'675'
+        'lubi': mealData['ud0_da_lubi'],      //'83'        
+        'fav': mealData['fav'],               //'0'
+        'stolik': mealData['na_stoliku'],     //'0'
         });
       });
       
@@ -143,8 +82,7 @@ class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeN
           lubi: item['lubi'],           
           fav: item['fav'],           
           stolik: item['stolik'], 
-           ),
-      
+        ),
       ).toList();
       notifyListeners();
   }

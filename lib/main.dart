@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; //zarejestrowanie dostawcy
 
 import './screens/tabs_screen.dart';
-import './screens/meal_detail_screen.dart';
+import './screens/detail_meal_screen.dart';
 import './screens/favorites_screen.dart';
+import './screens/tabs_detail_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
-
+import './models/MealRests.dart'; //zaimportowanie klasy dostawcy
 
 
 void main() => runApp(MyApp());
@@ -17,10 +18,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  final MealRests mel = MealRests();
+
   // główna konstrukcja aplikacji
   @override
-  Widget build(BuildContext context) {
-      
+  Widget build(BuildContext context) { 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value( //zarejestrowanie dostawcy danych (bez kontekstu)
@@ -60,8 +63,9 @@ class _MyAppState extends State<MyApp> {
         routes: { //tabela tras (kurs 161)
           //rejestrowanie trasy/drogi do poszczególnych ekranów
           '/': (ctx) => TabsScreen(),  //zastępuje home: (kurs 162)
-          MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+          DetailMealScreen.routeName: (ctx) => DetailMealScreen(),
           FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
+          TabsDetailScreen.routeName: (ctx) => TabsDetailScreen(),
           //FiltersScreen.routeName: (ctx) => FiltersScreen(_filters, _setFilters),
         },
         //onGenerateRoute:  - (kure 168) - jezeli brak zdefiniowanej trasy, wyświetla argumenty, dynamiczne trasy

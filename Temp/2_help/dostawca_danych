@@ -43,7 +43,7 @@ Widget build(BuildContext context) {
 
 5. przeniesienie danych z meals_screen.dart do meals.dart
 
-6. wydzielenie widzetów potrzebującycy danych do oddzielnych widzetów
+6. wydzielenie widzetów potrzebujących danych do oddzielnych widzetów
 
 7. zamieszczenie dostawcy i słuchacza w widzetach potrzebujących danych
   

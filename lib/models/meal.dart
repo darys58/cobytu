@@ -12,7 +12,7 @@ class Meal with ChangeNotifier{ //dzięki ChangeNotifier dania mogą powiadamia�
   final String foto;           //da_foto   - adres w sieci
   final String gdzie;          //da_gdzie
   final String kategoria;      //da_kategoria
-  final String podkat;   //da_podkategoria
+  final String podkat;         //da_podkategoria
   final String srednia;        //da_srednia
   final String alergeny;       //alergeny
   final String cena;           //cena

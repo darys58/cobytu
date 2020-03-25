@@ -12,7 +12,36 @@ class Rests with ChangeNotifier{
     return [..._items]; //... - operator rozprzestrzeniania
   }
 
-   //pobranie bazy restauracji z serwera www
+  //pobranie restauracji dla wybranego miasta z bazy lokalnej
+  Future<void> fetchAndSetRests(String miasto)async{
+    final dataList = await DBHelper.getRests(miasto);
+    _items = dataList
+      .map(
+        (item) => Rest(
+          id: item['id'],          
+          nazwa: item['nazwa'], 
+          obiekt: item['obiekt'],     
+          adres: item['adres'],        
+          miaId: item['miaId'],       
+          miasto: item['miasto'],          
+          wojId: item['wojId'],        
+          woj: item['woj'],     
+          dostawy: item['dostawy'],   
+          opakowanie: item['opakowanie'],      
+          doStolika: item['doStolika'],      
+          rezerwacje: item['rezerwacje'],            
+          mogeJesc: item['mogeJesc'],          
+          modMenu: item['modMenu'],         
+        ),  
+      ).toList();
+      notifyListeners();
+
+      //print('items w Rests $_items');
+  }
+  
+  
+  
+  //pobranie bazy restauracji z serwera www
   static Future<void> fetchRestsFromSerwer() async {
     const url = 'https://www.cobytu.com/cbt.php?d=f_restauracje';
     try {
@@ -54,78 +83,9 @@ class Rests with ChangeNotifier{
      await DBHelper.deleteTable('restauracje');
   }
 
-  //pobranie restauracji dla wybranego miasta z bazy lokalnej
-  Future<void> fetchAndSetRests(String miasto)async{
-    final dataList = await DBHelper.getRests(miasto);
-    _items = dataList
-      .map(
-        (item) => Rest(
-          id: item['id'],          
-          nazwa: item['nazwa'], 
-          obiekt: item['obiekt'],     
-          adres: item['adres'],        
-          miaId: item['miaId'],       
-          miasto: item['miasto'],          
-          wojId: item['wojId'],        
-          woj: item['woj'],     
-          dostawy: item['dostawy'],   
-          opakowanie: item['opakowanie'],      
-          doStolika: item['doStolika'],      
-          rezerwacje: item['rezerwacje'],            
-          mogeJesc: item['mogeJesc'],          
-          modMenu: item['modMenu'],         
-        ),  
-      ).toList();
-      notifyListeners();
-
-      //print('items w Rests $_items');
-  }
-
-  
-
-
- /* 
-  //pobranie restauracji z bazy lokalnej
-  Future<void> getWojewodztwo()async{
-    final dataList = await DBHelper.getWoj('restauracje');
-    List<Rest> _pom = [];
-    _pom = dataList
-      .map(
-        (item) => Rest(
-          id: item['id'],          
-          nazwa: item['nazwa'], 
-          obiekt: item['obiekt'],     
-          adres: item['obiekt'],        
-          miaId: item['miaId'],       
-          miasto: item['miasto'],          
-          wojId: item['wojId'],        
-          woj: item['woj'],     
-          dostawy: item['dostawy'],   
-          opakowanie: item['opakowanie'],      
-          doStolika: item['doStolika'],      
-          rezerwacje: item['rezerwacje'],            
-          mogeJesc: item['mogeJesc'],          
-          modMenu: item['modMenu'],         
-        ),  
-      ).toList();
-      //notifyListeners();
-      
-      _wojew = [];
-      var count = _pom.length;
-      for (var i = 0; i < count; i++) {
-        _wojew.add(_pom[i].woj);
-      } 
- 
-    
-    print(_wojew);
-
-      
-  }
-*/
-
 
 } 
-
+// JSON odbierany z 'https://www.cobytu.com/cbt.php?d=f_restauracje';
 // {11: {re_nazwa: Bazylia, re_obiekt: Stare Miasto, re_adres: Stradomska 13, re_mia_id: 3, re_miasto: Kraków, re_woj_id: 7, re_woj: małopolskie, re_dostawy: 0, re_opakowanie: 0.00, re_do_stolika: 0, re_rezerwacje: 0, re_moge_jesc: 0, re_mod_menu: 0}, 
 //  27: {re_nazwa: Borówka, re_obiekt: Stary Konin, re_adres: 3 Maja 35, re_mia_id: 1, re_miasto: Konin, re_woj_id: 14, re_woj: wielkopolskie, re_dostawy: 1, re_opakowanie: 1.00, re_do_stolika: 0, re_rezerwacje: 1, re_moge_jesc: 0, re_mod_menu: 1583967600}, 
 //  17: {re_nazwa: Czarny Staw, re_obiekt: Centrum, re_adres: Krupówki 2, re_mia_id: 4, re_miasto: Zakopane, re_woj_id: 7, re_woj: małopolskie, re_dostawy: 0, re_opakowanie: 0.00, re_do_stolika: 0, re_rezerwacje: 0, re_moge_jesc: 0, re_mod_menu: 1580979201}, 

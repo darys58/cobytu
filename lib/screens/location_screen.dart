@@ -21,7 +21,6 @@ class LocationScreen extends StatefulWidget {
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
-enum SingingCharacter { lafayette, jefferson }
 
 class _LocationScreenState extends State<LocationScreen> {
   List<DropdownMenuItem<Rest>> _dropdownMenuItemsWoj;
@@ -34,7 +33,7 @@ class _LocationScreenState extends State<LocationScreen> {
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
   String _currentValue;
-
+  String _adresWszystkie = 'Miasto';
   
   @override
   void initState(){
@@ -72,6 +71,7 @@ class _LocationScreenState extends State<LocationScreen> {
             for (var i = 0; i < countMia; i++) {
               if(_dropdownMenuItemsMia[i].value.miasto == _memLok[0].d){  //d:miasto
                 _selectedMiasto = _dropdownMenuItemsMia[i].value;
+                _adresWszystkie = _selectedMiasto.miasto; //miasto jako adres dla "Wszystkie"
               }
             }
             _currentValue = _memLok[0].e;  //e:restId  domyślna restauracja
@@ -142,6 +142,7 @@ class _LocationScreenState extends State<LocationScreen> {
       setState(() {
         _dropdownMenuItemsMia = buildDropdownMenuItemMia(_miaRest);//tworzenie buttona z miastami
         _selectedMiasto = _dropdownMenuItemsMia[0].value; //ustawienie pierwszego miasta
+        _adresWszystkie = _selectedMiasto.miasto; //miasto jako adres dla "Wszystkie"
       });
 
       Provider.of<Rests>(context).fetchAndSetRests(_selectedMiasto.miasto).then((_) {  //z bazy lokalnej
@@ -159,6 +160,7 @@ class _LocationScreenState extends State<LocationScreen> {
   onChangeDropdownItemMia(Rest selectedMiasto){
     setState(() {
       _selectedMiasto = selectedMiasto; //wybrane miasto 
+      _adresWszystkie = _selectedMiasto.miasto; //miasto jako adres dla "Wszystkie"
       _isLoading = true;    
     });
     
@@ -246,7 +248,7 @@ class _LocationScreenState extends State<LocationScreen> {
     print ('location budowanie ekranu');
   final restsData = Provider.of<Rests>(context);
   List<Rest> rests = restsData.items.toList();
-  rests.add(Rest(id:'0',nazwa:'Wszystkie',obiekt:'0', adres: _selectedMiasto.miasto, miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
+  rests.add(Rest(id:'0',nazwa:'Wszystkie',obiekt:'0', adres: _adresWszystkie, miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
 
     return Scaffold(
       appBar :AppBar( 

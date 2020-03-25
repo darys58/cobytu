@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart'; //zeby mozna było ustawić ze argumenty są wymagane (dekorator @required)
 
+//dane restauracji dla "Location" - wybór restauracji, "Koszyk/Stolik" - zamawianie dań
 
 class Rest{
   final String id;             //re_id
@@ -8,8 +9,8 @@ class Rest{
   final String adres;          //re_adres
   final String miaId;          //re_mia_id
   final String miasto;         //re_miasto
-  String wojId;          //re_woj_id
-  String woj;            //re_woj
+  String wojId;                //re_woj_id
+  String woj;                  //re_woj
   final String dostawy;        //re_dostawy
   final String opakowanie;     //re_opakowanie
   final String doStolika;      //re_do_stolika
@@ -33,6 +34,5 @@ class Rest{
     @required this.mogeJesc,
     @required this.modMenu,
   });
-
 }
 
