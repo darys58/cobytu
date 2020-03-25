@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  final MealRests mel = MealRests();
+
 
   // główna konstrukcja aplikacji
   @override

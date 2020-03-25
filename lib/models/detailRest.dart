@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart'; //zeby mozna było ustawić ze argumen
 
 //dane restauracji dla szczegółów dania
 
-class MealRest{
+class DetailRest{
   final String id;         //re_id
   final String logo;       //re_logo
   final String nazwa;      //re_nazwa
@@ -30,7 +30,7 @@ class MealRest{
   final String wifi;       //re_wifi
   final String modMenu;    //re_mod_menu
 
- MealRest({
+ DetailRest({
     @required this.id,
     @required this.logo,
     @required this.nazwa,      

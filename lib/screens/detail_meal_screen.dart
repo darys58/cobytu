@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../models/meals.dart';
-import '../models/mealRest.dart';
+import '../models/detailRest.dart';
 
 
 class DetailMealScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class DetailMealScreen extends StatefulWidget {
 }
 
 class _DetailMealScreenState extends State<DetailMealScreen> {
- List<MealRest> _mealRestsData = [];
+ List<DetailRest> _mealRestsData = [];
 
   @override
   void didChangeDependencies() {
@@ -31,7 +31,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   }
   
   //pobranie (z serwera www) restauracji serwujących wybrane danie - dla szczegółów dania
-  Future<List<MealRest>> fetchMealRestsFromSerwer(String idDania) async {
+  Future<List<DetailRest>> fetchMealRestsFromSerwer(String idDania) async {
     var url = 'https://cobytu.com/cbt.php?d=f_danie_resta&danie=$idDania&lang=pl';
     print(url);
     try {
@@ -45,7 +45,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 
       //final List<MealRest> loadedRests = [];
       extractedData.forEach((restId, restData) {
-        _mealRestsData.add(MealRest(
+        _mealRestsData.add(DetailRest(
           id: restId,
           logo: restData['re_logo'], 
           nazwa: restData['re_nazwa'],       
@@ -90,7 +90,8 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
     final loadedMeal = Provider.of<Meals>(context, listen: false).findById(mealId);
 
     //print('mealRestsData w szczegółach = ${_mealRestsData[0].nazwa}');
-  
+  print(loadedMeal.foto);
+  //print(_mealRestsData[0].foto);
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedMeal.nazwa),

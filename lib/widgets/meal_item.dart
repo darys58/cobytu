@@ -6,8 +6,8 @@ import 'package:provider/provider.dart'; //pakiet dostawcy
 import '../screens/tabs_detail_screen.dart';
 import '../models/meal.dart';
 import '../models/mems.dart';
-import '../models/mealRest.dart';
-import '../models/mealRests.dart';
+import '../models/detailRest.dart';
+
 
 class MealItem extends StatelessWidget {
 

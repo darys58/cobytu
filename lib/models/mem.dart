@@ -12,12 +12,12 @@ class Mem {
 
 
   Mem({
-      @required this.nazwa, 
-      this.a, 
-      this.b, 
-      this.c, 
-      this.d, 
-      this.e, 
-      this.f,
+    @required this.nazwa, 
+    this.a, 
+    this.b, 
+    this.c, 
+    this.d, 
+    this.e, 
+    this.f,
   });
 }
