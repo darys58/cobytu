@@ -7,7 +7,7 @@ import './screens/favorites_screen.dart';
 import './screens/tabs_detail_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
-import './models/MealRests.dart'; //zaimportowanie klasy dostawcy
+
 
 
 void main() => runApp(MyApp());

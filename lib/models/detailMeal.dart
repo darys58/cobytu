@@ -12,31 +12,31 @@ class DetailMeal {
   final int kcal;                   //kcal: Int
   final int lubi;                   //da_lubi: Int
   final int stolik;                 //na_stoliku: Int
-  final List<String> alergeny;      //alergeny:[String] //wszystkie alergeny (a nie zalogowanego)
+  final List<dynamic> alergeny;      //alergeny:[String] //wszystkie alergeny (a nie zalogowanego)
   final String srednia;             //da_srednia: String
   final String cenaPodst;           //cena_podst: String
   final String wagaPodst;           //da_waga_podst: String
   final String kcalPodst;           //da_kcal_podst: String
-  final List<String> werListId;     //da_id_lista_wer:[String]    //lista id dań poszczególnych wersji
-  final List<String> werList;       //da_wersja_lista:[String]    //lista nazw wersji dania
-  final List<String> warUlub;       //do_wariant: [String]        //dodatek wariantowy 1 i 2 ulubiony
-  final List<String> warList1;      //do_wariant_lista1: [String]
-  final List<String> warList2;      //do_wariant_lista2: [String]
-  final List<String> dodat;         //do_dodat: [String]
-  final List<String> podstId;       //do_podst_id: [String]
-  final List<String> warUlubId;     //do_wariant_id: [String]     //id dodatku wariantowego 1 i 2 ulubionego
-  final List<String> warList1Id;    //do_wariant_lista1_id: [String]
-  final List<String> warList2Id;    //do_wariant_lista2_id: [String]
-  final List<String> dodatId;       //do_dodat_id: [String]
-  final List<String> warList1Waga;  //do_wariant_lista1_waga: [String]
-  final List<String> warList2Waga;  //do_wariant_lista2_waga: [String]
-  final List<String> dodatWaga;     //do_dodat_waga: [String]
-  final List<String> warList1Kcal;  //do_wariant_lista1_kcal: [String]
-  final List<String> warList2Kcal;  //do_wariant_lista2_kcal: [String]
-  final List<String> dodatKcal;     //do_dodat_kcal: [String]
-  final List<String> warList1Cena;  //do_wariant_lista1_cena: [String]
-  final List<String> warList2Cena;  //do_wariant_lista2_cena: [String]
-  final List<String> dodatCena;     //do_dodat_cena: [String]
+  final List<dynamic> werListId;     //da_id_lista_wer:[String]    //lista id dań poszczególnych wersji
+  final List<dynamic> werList;       //da_wersja_lista:[String]    //lista nazw wersji dania
+  final List<dynamic> warUlub;       //do_wariant: [String]        //dodatek wariantowy 1 i 2 ulubiony
+  final List<dynamic> warList1;      //do_wariant_lista1: [String]
+  final List<dynamic> warList2;      //do_wariant_lista2: [String]
+  final List<dynamic> dodat;         //do_dodat: [String]
+  final List<dynamic> podstId;       //do_podst_id: [String]
+  final List<dynamic> warUlubId;     //do_wariant_id: [String]     //id dodatku wariantowego 1 i 2 ulubionego
+  final List<dynamic> warList1Id;    //do_wariant_lista1_id: [String]
+  final List<dynamic> warList2Id;    //do_wariant_lista2_id: [String]
+  final List<dynamic> dodatId;       //do_dodat_id: [String]
+  final List<dynamic> warList1Waga;  //do_wariant_lista1_waga: [String]
+  final List<dynamic> warList2Waga;  //do_wariant_lista2_waga: [String]
+  final List<dynamic> dodatWaga;     //do_dodat_waga: [String]
+  final List<dynamic> warList1Kcal;  //do_wariant_lista1_kcal: [String]
+  final List<dynamic> warList2Kcal;  //do_wariant_lista2_kcal: [String]
+  final List<dynamic> dodatKcal;     //do_dodat_kcal: [String]
+  final List<dynamic> warList1Cena;  //do_wariant_lista1_cena: [String]
+  final List<dynamic> warList2Cena;  //do_wariant_lista2_cena: [String]
+  final List<dynamic> dodatCena;     //do_dodat_cena: [String]
 
   DetailMeal({
     @required this.id,
@@ -73,5 +73,6 @@ class DetailMeal {
     @required this.warList1Cena,
     @required this.warList2Cena,
     @required this.dodatCena,
+   
    }); 
 }
