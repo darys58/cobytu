@@ -3,6 +3,7 @@ import 'dart:convert'; //obsługa json'a
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:grouped_buttons/grouped_buttons.dart';
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../models/mem.dart';
 import '../models/mems.dart';
@@ -24,8 +25,33 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   List<Mem> _memMeal; //dane wybranego dania w tabeli memory - baza lokalna
   List<Mem> _memLok; //dane wybranej restauracji w tabeli memory - baza lokalna
   var detailMealData;
+  
+  List<DropdownMenuItem<String>> _dropdownMenuItemsWer; ////lista wersji dania dla buttona wyboru
+  String _selectedWer; //wybrana wersja dania
+  
+  List<DropdownMenuItem<String>> _dropdownMenuItemsWar1; ////lista dodatków wariantowych 1 dla buttona wyboru
+  List<String> _listWar1; //lista dodatków wariantowych 1 jako lista stringów, zeby uzyskać index wybranego dodatku
+  String _selectedWar1; //wybrany dodatek wariantowy 1
+  int war1Id = 0; //index wybranego dodatku wariantowego 1 (index miejsca na liście a nie id dodatku )
+  
+  List<DropdownMenuItem<String>> _dropdownMenuItemsWar2; ////lista dodatków wariantowych 2 dla buttona wyboru
+  List<String> _listWar2; //lista dodatków wariantowych 2 jako lista stringów, zeby uzyskać index wybranego dodatku
+  String _selectedWar2; //wybrany dodatek wariantowy 2
+  int war2Id = 0; //index wybranego dodatku wariantowego 2 (index miejsca na liście a nie id dodatku )
+
+  List<String> _listDod; //lista dodatków dodatkowych do wyboru
+  List<String> _selectedDod = []; //wybrane dodatki dodatkowe
+  
+  bool _isChecked = true;
+  int _waga; //waga ustawiana w funkcji przelicz()
+  int _kcal; //kcal ustawiana w funkcji przelicz()
+  String _cena; //cena ustawiana w funkcji przelicz()
+  
+  
+
   @override
   void didChangeDependencies() {
+    print('init szczegóły');
     if (_isInit) {
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
@@ -35,6 +61,36 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
           fetchDetailMealFromSerwer(mealId).then((_) { 
             print('pobranie szczegółów');
+            if (_detailMealData[0].werList.isNotEmpty){
+              _dropdownMenuItemsWer = buildDropdownMenuWar(_detailMealData[0].werList); 
+              _selectedWer = _dropdownMenuItemsWer[0].value;  //domyślny war1     
+            }  
+            if (_detailMealData[0].warList1.isNotEmpty){
+              _dropdownMenuItemsWar1 = buildDropdownMenuWar(_detailMealData[0].warList1); 
+              _selectedWar1 = _dropdownMenuItemsWar1[0].value;  //domyślny war1 
+              _listWar1 = List<String>.from(_detailMealData[0].warList1);   
+            }
+            if (_detailMealData[0].warList2.isNotEmpty){
+            _dropdownMenuItemsWar2 = buildDropdownMenuWar(_detailMealData[0].warList2); 
+            _selectedWar2 = _dropdownMenuItemsWar2[0].value;  //domyślny war2
+            _listWar2 = List<String>.from(_detailMealData[0].warList2);  
+            }
+
+            _listDod = List<String>.from(_detailMealData[0].dodat);//zmiana typu List<dynamic> na List<String>
+            
+            przelicz();
+            
+            print('dod dodatkowe = ');
+            print (_listDod);
+          //ustawienie war1 domyślnego hite
+          //var countWar1 = _dropdownMenuItemsWar1.length;
+          //for (var i = 0; i < countWar1; i++) {
+            //if(_dropdownMenuItemsWar1[i].value == _memLok[0].b){  //b:woj
+   //           _selectedWar1 = _dropdownMenuItemsWar1[0].value;  //domyślny war1  
+           // }  
+         // }
+            
+            
             setState(() {
               _isLoading = false; //zatrzymanie wskaznika ładowania dań
               detailMealData  = _detailMealData ;
@@ -45,6 +101,49 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
     }
   _isInit = false;
     super.didChangeDependencies();  
+  }
+
+  //jezeli nastapiła zmiana dodatku wariantowego 1 
+  onChangeDropdownItemWar1(String selectedWar1){
+
+    setState(() {
+      _selectedWar1 = selectedWar1; //zmiana war1
+     // _isLoading = true; //uruchomienie wskaznika ładowania dań (tu chyba niepotrzebnie)
+    });
+
+  }
+
+  //jezeli nastapiła zmiana dodatku wariantowego 1 
+  onChangeDropdownItemWar2(String selectedWar2){
+
+    setState(() {
+      _selectedWar2 = selectedWar2; //zmiana war2
+     // _isLoading = true; //uruchomienie wskaznika ładowania dań (tu chyba niepotrzebnie)
+    });
+  }
+
+  onChangeDropdownItemWer(String selectedWer){
+
+    setState(() {
+      _selectedWer = selectedWer; //zmiana wersji dania
+     // _isLoading = true; //uruchomienie wskaznika ładowania dań (tu chyba niepotrzebnie)
+    });
+  }
+
+  //tworzenie buttonów wyboru dodatków wariantowych 1 i 2
+  List<DropdownMenuItem<dynamic>>buildDropdownMenuWar(List<dynamic> lista){
+    List<DropdownMenuItem<String>> items = List();    
+    print('lista do budowania buttona $lista');
+    for (String war in lista) {
+      print(war);
+      items.add(
+        DropdownMenuItem(
+          value: war,
+          child: Text(war),
+        ),
+      );
+    }
+    return items;
   }
 
 
@@ -101,7 +200,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         ));
       });
      // _items = loadedRests;
-     // print('dane restauracji w MealRests = ${_detailMealData[0].alergeny}');
+     print('dane dania war1 = ${_detailMealData[0].warList1}');
       //notifyListeners();
     return _detailMealData;
     } catch (error) {
@@ -124,6 +223,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
           f: item['f'],                               
         ),  
       ).toList();
+      print('memoryMeal$_memMeal');
       return _memMeal;
   }
 
@@ -141,7 +241,44 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
           f: item['f'],                               
         ),  
       ).toList();
+      print('memoryLok$_memLok');
       return _memLok;
+  }
+
+  przelicz(){
+    int waga = 0;
+    int kcal = 0;
+    double cena = 0.00;
+
+    waga += int.parse(_detailMealData[0].wagaPodst);         //waga podstawowa
+    kcal += int.parse(_detailMealData[0].kcalPodst);         //kcal podstawowe
+    cena +=  double.parse(_detailMealData[0].cenaPodst);     //cena podstawowa
+    
+    if (_detailMealData[0].warList1.length > 0) {                     //jeżeli są dodatki wariant1
+      waga += int.parse(_detailMealData[0].warList1Waga[war1Id]);     //+ wariant1
+      kcal += int.parse(_detailMealData[0].warList1Kcal[war1Id]);     //+ wariant1
+      cena += double.parse(_detailMealData[0].warList1Cena[war1Id]);  //+ wariant1
+    }
+
+    if (_detailMealData[0].warList2.length > 0) {                     //jeżeli są dodatki wariant2
+      waga += int.parse(_detailMealData[0].warList2Waga[war2Id]);     //+ wariant2
+      kcal += int.parse(_detailMealData[0].warList2Kcal[war2Id]);     //+ wariant2
+      cena += double.parse(_detailMealData[0].warList2Cena[war2Id]);  //+ wariant2
+    }
+
+    for (String dodatek in _selectedDod) {
+      int inx = _listDod.indexOf(dodatek); //index dodatku dodatkowego z listy wszystkich dodatków dodatkowych
+      waga += int.parse(_detailMealData[0].dodatWaga[inx]);
+      kcal += int.parse(_detailMealData[0].dodatKcal[inx]);
+      cena += double.parse(_detailMealData[0].dodatCena[inx]);
+    }
+    
+    setState(() {
+      _waga = waga; 
+      _kcal = kcal;
+      _cena = cena.toStringAsFixed(2); //zamiana z double na string w formacie XXX.XX
+     
+    });
   }
   
   @override
@@ -149,10 +286,13 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
     final mealId = ModalRoute.of(context).settings.arguments as String; //id posiłku pobrany z argumentów trasy
     //final loadedMeal = Provider.of<Meals>(context).items.firstWhere((ml) => ml.id == mealId);//dla uproszczenia kodu przeniesiona do meals.dart i wtedy jak nizej
     final loadedMeal = Provider.of<Meals>(context, listen: false).findById(mealId);
-
-    //print('dane restauracji w MealRests = ${_detailMealData[0].alergeny}');
+print('budowa widzetu');
+    !_isLoading ? print('dane dania war1 = ${detailMealData[0].warList1}') : print('nic');
   print(loadedMeal.foto);
   //print(_mealRestsData[0].foto);
+    
+    
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedMeal.nazwa),
@@ -163,7 +303,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         child: Column(
           children: <Widget>[
             Container(
-              //zdjęcie dania
+//=== zdjęcie dania
               height: 300,
               width: double.infinity,
               child: Image.network(
@@ -180,6 +320,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                 children: <Widget>[ //elementy rzędu które sa widzetami
                   Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                     children: <Widget>[
+  //=== czas                    
                       Icon(
                         Icons.hourglass_empty, color: Theme.of(context).primaryColor, //schedule
                       ),
@@ -194,17 +335,18 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                   SizedBox(
                         width: 20,
                       ),
-                  Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
-                    children: <Widget>[
+//=== waga 
+                  Row(// czas                               
+                    children: <Widget>[                     
                       Icon(
-                        Icons.fitness_center, color: Theme.of(context).primaryColor, //schedule
+                        Icons.fitness_center, color: Theme.of(context).primaryColor, 
                       ),
                       SizedBox(
                         width: 2,
                       ), //odległość miedzy ikoną i tekstem
                       Text(
-                        '${detailMealData[0].waga}' + ' g',
-                      ), //interpolacja ciągu znaków
+                        '$_waga' + ' g',
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -212,6 +354,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       ),
                   Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                     children: <Widget>[
+//=== kcal                     
                       Icon(
                         Icons.battery_unknown, color: Theme.of(context).primaryColor, //schedule
                       ),
@@ -219,7 +362,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                         width: 2,
                       ), //odległość miedzy ikoną i tekstem
                       Text(
-                        '${detailMealData[0].kcal}' + ' kcal',
+                        '$_kcal' + ' kcal',
                       ), //interpolacja ciągu znaków
                       SizedBox(
                         width: 20,
@@ -229,12 +372,13 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                 ]
               ),
             ),
+//=== opis 
             Row( //całą zawatość kolmny stanowi wiersz
               mainAxisAlignment: MainAxisAlignment.spaceBetween, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
               children: <Widget>[
               Expanded(
                   child:Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.only(left:20.0, top:20.0, right:20, bottom:5),                 
                     child: Text(
                       detailMealData[0].opis,
                       style: TextStyle(
@@ -245,29 +389,134 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                   ),
                 ),                 
               ]
-            )
+            ),
+//wersja dania
+            if (_detailMealData[0].werList.isNotEmpty)
+              Row( //całą zawatość kolmny stanowi wiersz
+                mainAxisAlignment: MainAxisAlignment.start, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
+                children: <Widget>[
+                  SizedBox(width: 20,),
+                  DropdownButton(
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                    ),
+                    value: _selectedWer,
+                    items: _dropdownMenuItemsWer,
+                    onChanged:  onChangeDropdownItemWer,
+                  ),
+                ]
+              ),
+//dodatek wariantowy 1
+            if (_detailMealData[0].warList1.isNotEmpty)
+              Row( //całą zawatość kolmny stanowi wiersz
+                mainAxisAlignment: MainAxisAlignment.start, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
+                children: <Widget>[
+                  SizedBox(width: 20,),
+                  Text(
+                    '+',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  SizedBox(width: 15,),
+                  DropdownButton(
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                    ),
+                    value: _selectedWar1, //ustawiona, widoczna wartość - nazwa dodatku
+                    items: _dropdownMenuItemsWar1,  //lista elementów do wyboru
+                    onChanged:(String newValue) {  //wybrana nowa wartość - nazwa dodatku
+                      setState(() {
+                        _selectedWar1 = newValue;
+                        war1Id = _listWar1.indexOf(newValue); //pobranie indexu wybranego dodatku z listy
+                        przelicz();
+                      });
+                    }  //onChangeDropdownItemWar1,
+                  ),
+                ]
+              ),
+          
+//dodatek wariantowy 2
+            if (_detailMealData[0].warList2.isNotEmpty) 
+              Row( //całą zawatość kolmny stanowi wiersz
+                mainAxisAlignment: MainAxisAlignment.start, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
+                children: <Widget>[
+                  SizedBox(width: 20,),
+                  Text('+',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  SizedBox(width: 15,),
+                  DropdownButton(
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                    ),
+                    value: _selectedWar2,
+                    items: _dropdownMenuItemsWar2,
+                    onChanged:  (String newValue) {  //wybrana nowa wartość - nazwa dodatku
+                      setState(() {
+                        _selectedWar2 = newValue;
+                        war2Id = _listWar2.indexOf(newValue); //pobranie indexu wybranego dodatku z listy
+                        przelicz();
+                      });
+                    },
+                  ),
+                ]
+              ),            
+//dodatki dodatkowe          
+            CheckboxGroup(
+              activeColor: Theme.of(context).primaryColor,
+              checkColor: Colors.white,
+              labelStyle: TextStyle(
+                fontSize: 18,
+                color: Colors.black54,
+              ),
+              margin:  EdgeInsets.only(top: 5, right: 10.0),
+              labels: _listDod, //lista z nazwami dodatków dodatkowych
+              onChange: (bool isChecked, String label, int index) {//
+                //przelicz();
+                //print("isChecked: $isChecked   label: $label  index: $index");//np. isChecked: true   label: sos pieczeniowy  index: 0
+              },
+              onSelected: (selectedDod){
+                setState(() {
+                  _selectedDod = selectedDod; //
+                  przelicz();
+                });
+                //print('_selectedDod: $_selectedDod');
+                //print("checked: ${_selectedDod.toString()}");
+                },
+            ),
+
           ]
         )
       ),
+//=== stopka
       bottomSheet:  
         _isLoading 
         ? Center(
           //child: CircularProgressIndicator(), //kółko ładowania danych
           )
         : Container(
-        height: 50,
-        color: Colors.grey,
+        height: 54,
+        color: Colors.white,
         width: MediaQuery.of(context).size.width,
         child: Row(
           //mainAxisAlignment: MainAxisAlignment.spaceBetween, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
           children: <Widget>[
             SizedBox(
-              width: 10,
+              width: 20,
             ), 
+//=== cena            
             Text(
-             '${detailMealData[0].cena} PLN', 
+             '$_cena' + ' PLN', 
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 24,
                 color: Colors.black,
               ),
             ),

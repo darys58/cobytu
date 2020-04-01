@@ -94,6 +94,7 @@ class _LocationScreenState extends State<LocationScreen> {
     super.didChangeDependencies();
   }
 
+  //zapisywanie zmiennych w SharedPreferences (zmienne widoczne globalnie)
   _setPrefers(String key, String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(key, value);

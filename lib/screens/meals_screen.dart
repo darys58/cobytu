@@ -45,7 +45,7 @@ class _MealsScreenState extends State<MealsScreen> {
 
   @override
   void didChangeDependencies() {
-    print('wejscie do Dependencies');
+    print('wejscie do Dependencies ms 1');
     if (_isInit) {
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
@@ -78,7 +78,7 @@ class _MealsScreenState extends State<MealsScreen> {
               });
             //});
           }else{ //przeładowanie danych - z serwera (bo np. zmiana lokalizacji)
-            print('przeładowanie danych');
+            print('przeładowanie danych ml 1');
             fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
               Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
                 Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
