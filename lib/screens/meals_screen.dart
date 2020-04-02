@@ -160,7 +160,7 @@ class _MealsScreenState extends State<MealsScreen> {
       return meal.categories.contains(categoryId);
     }).toList();
 */  final mealsData = Provider.of<Meals>(context);
-    final meals9 = mealsData.items.where((meal) {return meal.kategoria.contains('9');}).toList();
+    final meals9 = mealsData.items.where((meal) {return meal.kategoria.contains('9');}).toList(); //dania dla wybranej kategorii i wersji podstawowej
     final meals1 = mealsData.items.where((meal) {return meal.kategoria.contains('1');}).toList();
     final meals2 = mealsData.items.where((meal) {return meal.kategoria.contains('2');}).toList();
     final meals3 = mealsData.items.where((meal) {return meal.kategoria.contains('3');}).toList();
@@ -169,6 +169,7 @@ class _MealsScreenState extends State<MealsScreen> {
     final meals6 = mealsData.items.where((meal) {return meal.kategoria.contains('6');}).toList();
     final meals7 = mealsData.items.where((meal) {return meal.kategoria.contains('7');}).toList();
     final meals8 = mealsData.items.where((meal) {return meal.kategoria.contains('8');}).toList();
+    
     return Scaffold(
       // appBar: AppBar(
       //   title: Text("Test"),//Text(categoryTitle),

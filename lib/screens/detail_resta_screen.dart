@@ -104,7 +104,13 @@ List<DetailRest> _mealRestsData = []; //szczegóły restauracji
               child:
               Text('Resta'),
             ),
-
+            Container(  //napis Ingriediens
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                'Ingredients',
+                style: Theme.of(context).textTheme.title,
+              ),
+            )
 
             
           ]

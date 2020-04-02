@@ -35,7 +35,7 @@ class MealItem extends StatelessWidget {
           meal.foto,         //b - foto
           meal.alergeny,     //c - alergeny
           meal.nazwa,        //d - nazwa dania
-          'nieuzywane',      //e - nieuzywane    (w iOS - index row)
+          '0',               //e - index wersji dania   (w iOS - index row)
           meal.fav,          //f - fav - polubienie
         );
         //pobranie danych restauracji z serwera (potrzebne modMenu - info kiedy była modyfikacja menu)
