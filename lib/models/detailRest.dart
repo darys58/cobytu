@@ -21,7 +21,7 @@ class DetailRest{
   final String otwarteC;   //re_otwarte_c
   final String cena;       //cena
   final String parking;    //re_parking
-  final String pojazd;     //re_podjazd
+  final String podjazd;     //re_podjazd
   final String wynos;      //re_na_wynos
   final String karta;      //re_p_karta
   final String zabaw;      //re_s_zabaw
@@ -49,7 +49,7 @@ class DetailRest{
     @required this.otwarteC,
     @required this.cena,
     @required this.parking,
-    @required this.pojazd,
+    @required this.podjazd,
     @required this.wynos,
     @required this.karta,
     @required this.zabaw,

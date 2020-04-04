@@ -44,7 +44,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   List<String> _listDod; //lista dodatków dodatkowych do wyboru
   List<String> _selectedDod = []; //wybrane dodatki dodatkowe
   
-  bool _isChecked = true;
+  //bool _isChecked = true;
   int _waga; //waga ustawiana w funkcji przelicz()
   int _kcal; //kcal ustawiana w funkcji przelicz()
   String _cena; //cena ustawiana w funkcji przelicz()
@@ -53,16 +53,15 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 
   @override
   void didChangeDependencies() {
-    print('init szczegóły');
+    //print('init szczegóły');
     if (_isInit) {
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
-    //final mealId = ModalRoute.of(context).settings.arguments as String; //id posiłku pobrany z argumentów trasy
       fetchMemoryMeal().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
         fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
           fetchDetailMealFromSerwer().then((_) { 
-            print('pobranie szczegółów w didChangeDependencies');
+            //print('pobranie szczegółów w didChangeDependencies');
             if (_detailMealData[0].werList.isNotEmpty){
               _dropdownMenuItemsWer = buildDropdownMenuWar(_detailMealData[0].werList); 
               _selectedWer = _dropdownMenuItemsWer[int.parse(_memMeal[0].e)].value;  //domyślna wersja 
@@ -83,15 +82,6 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
             
             przelicz();
             
-          //ustawienie war1 domyślnego hite
-          //var countWar1 = _dropdownMenuItemsWar1.length;
-          //for (var i = 0; i < countWar1; i++) {
-            //if(_dropdownMenuItemsWar1[i].value == _memLok[0].b){  //b:woj
-   //           _selectedWar1 = _dropdownMenuItemsWar1[0].value;  //domyślny war1  
-           // }  
-         // }
-            
-            
             setState(() {
               _isLoading = false; //zatrzymanie wskaznika ładowania dań
               detailMealData  = _detailMealData ;
@@ -100,17 +90,16 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         });
       });
     }
-  _isInit = false;
-  print('koniec didChangeDependencies');
+    _isInit = false;
     super.didChangeDependencies();  
   }
 
-  //jezeli wybrano inną wersję dania
+  //jezeli wybrano inną wersję dania - wczytanie nowego dania
   rebuildDetailMeal(){
-    print ('wejście do rebuild');
+    //print ('wejście do rebuild');
     fetchMemoryMeal().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
       fetchDetailMealFromSerwer().then((_) { 
-        print('rebuild po pobraniu danych - budowa pól wyboru');
+        //print('rebuild po pobraniu danych - budowa pól wyboru');
         if (_detailMealData[0].werList.isNotEmpty){
           _dropdownMenuItemsWer = buildDropdownMenuWar(_detailMealData[0].werList); 
           _selectedWer = _dropdownMenuItemsWer[int.parse(_memMeal[0].e)].value;  //domyślna wersja    
@@ -130,8 +119,6 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         
         przelicz();
 
-        print('wyjście z rebuild = ${_detailMealData[0].opis}');
-
         setState(() {
           detailMealData  = _detailMealData ;
         // _isLoading = true; //uruchomienie wskaznika ładowania dań (tu chyba niepotrzebnie)
@@ -143,7 +130,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   //tworzenie buttonów wyboru dodatków wariantowych 1 i 2
   List<DropdownMenuItem<dynamic>>buildDropdownMenuWar(List<dynamic> lista){
     List<DropdownMenuItem<String>> items = List();    
-    print('lista do budowania buttona $lista');
+    //print('lista do budowania buttona $lista');
     for (String war in lista) {
       print(war);
       items.add(
@@ -160,17 +147,16 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   //pobranie (z serwera www) szczegółów dania - dla szczegółów dania
   Future<List<DetailMeal>> fetchDetailMealFromSerwer() async {
     var url = 'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&rest=${_memLok[0].e}&lang=pl';
-    print(url);
+    //print(url);
     try {
       final response = await http.get(url);
-      print(json.decode(response.body));
+      //print(json.decode(response.body));
     
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return[];
       }
 
-      //final List<MealRest> loadedRests = [];
       _detailMealData = []; //konieczne zerowanie bo doda sie do poprzedniej wartości
       extractedData.forEach((mealId, mealData) {
         _detailMealData.add(DetailMeal(
@@ -210,16 +196,13 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
           dodatCena: mealData['do_dodat_cena'],       
         ));
       });
-     // _items = loadedRests;
-     print('pobrane dane dania np. war1 = ${_detailMealData[0].opis}');
-      //notifyListeners();
+     //print('pobrane dane dania np. war1 = ${_detailMealData[0].opis}');
     return _detailMealData;
     } catch (error) {
       throw (error);
     }
   }
-  
-  
+   
   //pobranie memory z bazy lokalnej
    Future<void> fetchMemoryMeal()async{
     final data = await DBHelper.getMemory('memDanie');
@@ -234,7 +217,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
           f: item['f'],                               
         ),  
       ).toList();
-      print('memoryMeal$_memMeal');
+      //print('memoryMeal$_memMeal');
       return _memMeal;
   }
 
@@ -252,7 +235,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
           f: item['f'],                               
         ),  
       ).toList();
-      print('memoryLok$_memLok');
+      //print('memoryLok$_memLok');
       return _memLok;
   }
 
@@ -287,8 +270,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
     setState(() {
       _waga = waga; 
       _kcal = kcal;
-      _cena = cena.toStringAsFixed(2); //zamiana z double na string w formacie XXX.XX
-     
+      _cena = cena.toStringAsFixed(2); //zamiana z double na string w formacie XXX.XX              
     });
   }
   
@@ -296,21 +278,19 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   Widget build(BuildContext context) {
     final mealId = ModalRoute.of(context).settings.arguments as String; //id posiłku pobrany z argumentów trasy
     //final loadedMeal = Provider.of<Meals>(context).items.firstWhere((ml) => ml.id == mealId);//dla uproszczenia kodu przeniesiona do meals.dart i wtedy jak nizej
-    final loadedMeal = Provider.of<Meals>(context, listen: false).findById(mealId);
-print('budowa ekranu');
-    !_isLoading ? print('dane dania opis = ${detailMealData[0].opis}') : print('nic - jeszcze nie ma dania');
-  print(loadedMeal.foto);
-  //print(_mealRestsData[0].foto);
-    
-    
-    
+    final loadedMeal = Provider.of<Meals>(context, listen: false).findById(mealId); //dla uzyskania nazwy dania i foto
+
+    //!_isLoading ? print('dane dania opis = ${detailMealData[0].opis}') : print('nic - jeszcze nie ma dania');
+  
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedMeal.nazwa),
       ),
-       body: _isLoading ? Center(
-              child: CircularProgressIndicator(), //kółko ładowania danych
-            ) : SingleChildScrollView(
+      body: _isLoading 
+      ? Center(
+          child: CircularProgressIndicator(), //kółko ładowania danych
+        ) 
+      : SingleChildScrollView(
         child: Column(
           children: <Widget>[
 //=== zdjęcie dania       
@@ -327,8 +307,7 @@ print('budowa ekranu');
               padding: EdgeInsets.only(top: 15),
               child: Row( //rząd z informacjami o posiłku
                 mainAxisAlignment:
-                  MainAxisAlignment.end, //główna oś wyrównywania
-                  
+                  MainAxisAlignment.end, //główna oś wyrównywania - do prawej               
                 children: <Widget>[ //elementy rzędu które sa widzetami
 //=== czas                     
                   Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
@@ -407,22 +386,18 @@ print('budowa ekranu');
                       setState(() {
                         _selectedWer = newValue; // ustawienie nowej wybranej nazwy dodatku
                         werId = _listWer.indexOf(newValue); //pobranie indexu wybranego dodatku z listy
-                        
-                       // print(_detailMealData[0].werListId[werId]);
-                        print('newValue wersji = $newValue');
-                        //print('lista wersji = $_listWer');
-                        //print('id wersji = $werId');
+
                         Mems.insertMemory( //zapisanie danych wybranego dania przed przejściem do jego szczegółów               
                           'memDanie',        //nazwa
                           _detailMealData[0].werListId[werId],  //a - daId - id wybranej nowej wersji dania
-                          _memMeal[0].b,         //b - foto     //reszta bez zmian
+                          _memMeal[0].b,         //b - foto     // bez zmian
                           _memMeal[0].c,         //c - alergeny
                           _memMeal[0].d,         //d - nazwa dania
                           '$werId',              //e - index wersji (miejsce na liscie)  (w iOS - index row)
                           _memMeal[0].f,         //f - fav - polubienie
                         );
                        
-                        rebuildDetailMeal();
+                        rebuildDetailMeal(); //funkcja wczytująca nowe danie
                         //przelicz();
                       });
                     } 
@@ -544,105 +519,3 @@ print('budowa ekranu');
     );
   }
 }
-    /*
-      
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${selectedMeal.title}'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              //zdjęcie dania
-              height: 300,
-              width: double.infinity,
-              child: Image.network(
-                selectedMeal.imageUrl,
-                fit: BoxFit.cover, //dopasowanie do pojemnika
-              ),
-            ),
-           // buildSectionTitle(
-              //  context, 'Ingredients'), //zamiast tego co nizej zaremowane
-            
-            //frafment zamieniony wyzej na widget zeby nie powtarzać kodu w wielu miejscach
-            Container(  //napis Ingriediens
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                'Ingredients',
-                style: Theme.of(context).textTheme.title,
-              ),
-            ),
-            
-
-            
-            //opis jak wyzej
-            Container(
-              //lista składników
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(10),
-              height: 200,
-              width: 300,
-              child: ListView.builder( ..... było to co nizej
-              
-           // buildContainer(
-           /  ListView.builder(
-                itemBuilder: (ctx, index) => Card(
-                  //budowanie listy
-                  color: Theme.of(context).accentColor,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 5,
-                      horizontal: 10,
-                    ),
-                    child: Text(
-                      selectedMeal.ingredients[index],
-                    ),
-                  ),
-                ),
-                itemCount: selectedMeal.ingredients.length,
-              ),
-            ),
-            buildSectionTitle(context, 'Steps'),
-            buildContainer(
-              ListView.builder(
-                itemBuilder: (ctx, index) => Column(
-                  children: [
-                    ListTile(
-                      leading: CircleAvatar(
-                        child: Text('# ${(index + 1)}'),
-                      ),
-                      title: Text(
-                        selectedMeal.steps[index],
-                      ),
-                    ),
-                    Divider() //pozioma szara linia
-                  ],
-                ),
-                itemCount: selectedMeal.steps.length, //ilość elementów listy
-              ),
-            ),
-            
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          isFavorite(mealId) ? Icons.star : Icons.star_border,
-        ),
-        onPressed: () => toggleFavorite(mealId),
-        
-        //() {
-        //  Navigator.of(context).pop(mealId); //pop zdejmuje ekran ze stosu (podobnie jak przycisk "wstecz" <-), //mona w ten sposób zamyka okna dialogowe np.
-          //popAndPushNamed   - wyrzuca biezącą stronę i wypycha nowa nazwaną stronę. Przekazuje tez argument mealID na stronę z której przyszadł
-        //},
-      ),
-    );
-  }
-}
-*/

@@ -338,17 +338,17 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: ListView( 
                   //padding: EdgeInsets.all(8.0),
                   children: 
-                  rests.map((item) => RadioListTile(
+                    rests.map((item) => RadioListTile(
                       groupValue: _currentValue,
                       title: Text(item.nazwa),
                       subtitle: Text(item.adres),
                       value: item.id,
                       onChanged: (val) {
                         setState(() {
-                            _currentValue = val;
+                          _currentValue = val;
                         });
                       },
-                  )).toList(),
+                    )).toList(),
                   scrollDirection: Axis.vertical,
                 ),
               ),
