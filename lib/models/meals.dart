@@ -40,7 +40,8 @@ class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeN
         'foto': mealData['da_foto'],          //'https://www.cobytu.com/foto/' + 124/filet_z_pieprzem1_4026_m.jpg'      
         'gdzie': mealData['da_gdzie'],        //'Siesta'
         'kategoria': mealData['da_kategoria'],//'4'    
-        'podkat': mealData['da_podkategoria'],//['106','107'],  
+        'podkat': mealData['da_podkategoria'],//'106,107',
+        'rodzaj': mealData['da_rodzaj'],      //'Czerwone,Słodkie'
         'srednia': mealData['da_srednia'],    //'0.00' 
         'alergeny': mealData['alergeny'],     //'mleko'
         'cena': mealData['cena'],             //'25.00' 
@@ -72,7 +73,8 @@ class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeN
           foto: 'https://www.cobytu.com/foto/' + item['foto'],          
           gdzie: item['da_gdzie'],        
           kategoria: item['kategoria'],     
-          podkat: item['podkat'],    //  ['106','107'],  
+          podkat: item['podkat'],    //  '106,107', 
+          rodzaj: item['rodzaj'],
           srednia: item['srednia'],      
           alergeny: item['alergeny'],      
           cena: item['cena'],            

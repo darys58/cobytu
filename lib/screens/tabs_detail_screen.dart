@@ -67,7 +67,7 @@ void _selectPage(int index){
       //body:  _pages[_selectedPageIndex],  //wywołanie gdy była uzyta lista widzetów
       
       bottomNavigationBar: BottomNavigationBar(
-        onTap:_selectPage,  //wywołanie zmiany indeksu wyswietlwnej strony - obsługę trzeba zrobić samemu
+        onTap: _selectPage,  //wywołanie zmiany indeksu wyswietlwnej strony - obsługę trzeba zrobić samemu
         backgroundColor: Theme.of(context).primaryColor,
         unselectedItemColor: Colors.white,
         selectedItemColor: Theme.of(context).accentColor,
@@ -89,12 +89,12 @@ void _selectPage(int index){
             icon: Icon(Icons.format_list_bulleted),
             title: Text('SKŁADNIKI'),
           ),
-          BottomNavigationBarItem(
+     /*     BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.star),
             title: Text('OPINIE'),
           ),
-        ],
+      */ ],
       ),
     );
   }

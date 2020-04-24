@@ -13,6 +13,7 @@ class Meal with ChangeNotifier{ //dzięki ChangeNotifier dania mogą powiadamia�
   final String gdzie;          //da_gdzie
   final String kategoria;      //da_kategoria
   final String podkat;         //da_podkategoria
+  final String rodzaj;         //da_rodzaj
   final String srednia;        //da_srednia
   final String alergeny;       //alergeny
   final String cena;           //cena
@@ -33,6 +34,7 @@ class Meal with ChangeNotifier{ //dzięki ChangeNotifier dania mogą powiadamia�
     @required this.gdzie,
     @required this.kategoria,
     @required this.podkat,
+    this.rodzaj,
     @required this.srednia,
     @required this.alergeny,
     @required this.cena,

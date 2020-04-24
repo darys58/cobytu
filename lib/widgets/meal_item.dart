@@ -26,7 +26,7 @@ class MealItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final meal = Provider.of<Meal>(context, listen: false); //dostawca danych dostarcza danie z słuchaczem zmian. Zmiana nastąpi jezeli naciśniemy serce polubienie dania. Z listen: false zmieniony na tylko dostawcę danych a słuchacz lokalny "Consumer" zainstalowany  nizej
   //print(meal.foto.substring(27));
-
+  //print('nowa lista   !!!!!!!!!!!!!!!!!!!!!!!!!${meal.rodzaj}');
   return InkWell( //element klikalny
       onTap: () {
         Mems.insertMemory( //zapisanie danych wybranego dania przed przejściem do jego szczegółów               
@@ -42,10 +42,7 @@ class MealItem extends StatelessWidget {
         //!!!@!!!!  jeeli ok to przejście do szczegółów
 
           Navigator.of(context).pushNamed(TabsDetailScreen.routeName, arguments: meal.id,);
-       
-
-
-        
+              
       },//() => selectMeal(context),
       child: Card( //karta z daniem
         shape: RoundedRectangleBorder( //kształt karty

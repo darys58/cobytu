@@ -37,11 +37,11 @@ class DBHelper {
 
   static Future<Database> database() async {
     final dbPath = await sql.getDatabasesPath();
-    return sql.openDatabase(path.join(dbPath, 'cobytu4.db'), //ściekzka do bazy i nazwa bazy
+    return sql.openDatabase(path.join(dbPath, 'cobytu5.db'), //ściekzka do bazy i nazwa bazy
         onCreate: (db, version) async{
           print('tworzenie tabeli');
       await db.execute(
-          'CREATE TABLE dania(id TEXT PRIMARY KEY, nazwa TEXT, opis TEXT, idwer TEXT, wersja TEXT, foto TEXT, gdzie TEXT, kategoria TEXT, podkat TEXT, srednia TEXT, alergeny TEXT, cena TEXT, czas TEXT, waga TEXT, kcal TEXT, lubi TEXT, fav TEXT, stolik TEXT)'
+          'CREATE TABLE dania(id TEXT PRIMARY KEY, nazwa TEXT, opis TEXT, idwer TEXT, wersja TEXT, foto TEXT, gdzie TEXT, kategoria TEXT, podkat TEXT, rodzaj TEXT, srednia TEXT, alergeny TEXT, cena TEXT, czas TEXT, waga TEXT, kcal TEXT, lubi TEXT, fav TEXT, stolik TEXT)'
           );
       await db.execute(
           'CREATE TABLE restauracje(id TEXT PRIMARY KEY, nazwa TEXT, obiekt TEXT, adres TEXT, miaId TEXT, miasto TEXT, wojId TEXT, woj TEXT, dostawy TEXT, opakowanie TEXT, doStolika TEXT, rezerwacje TEXT, mogeJesc TEXT, modMenu TEXT)'

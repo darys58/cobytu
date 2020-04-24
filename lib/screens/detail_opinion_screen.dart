@@ -30,9 +30,22 @@ class _DetailOpinionScreenState extends State<DetailOpinionScreen> {
       ),
        body: Column(
           children: <Widget>[
-            Center(
-              child:
-              Text('Opinion'),
+            Container(
+              height: 50,
+              color: Colors.grey[300],
+              width: MediaQuery.of(context).size.width,
+              child: Row(             
+                children: <Widget>[
+                  SizedBox(width: 15,),             
+                  Text(
+                  'Opinie o daniu:', 
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              )
             ),
 
 
