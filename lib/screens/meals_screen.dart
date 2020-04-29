@@ -55,7 +55,7 @@ class _MealsScreenState extends State<MealsScreen> {
   List<Meal> meals7;
   List<Meal> meals8;
   List<Meal> meals9;
-
+  
   @override
   void initState() { 
     //_setPrefers('reload', 'true');  //dane aktualne - nie trzeba przeładować danych
@@ -70,10 +70,12 @@ class _MealsScreenState extends State<MealsScreen> {
   @override
   void didChangeDependencies() {
     print('wejscie do Dependencies ms 1');
+    print('_isInit = $_isInit');
     if (_isInit) {
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
+      
       print('wejscie do Dependencies - Init meals_screen');
       _getPrefers().then((_) { //pobranie zmiennych globalnych
         if(reload == 'true' || reload == '0'){ //jezeli 'true' lub nie ma zmiennej 'reload'
@@ -241,6 +243,9 @@ class _MealsScreenState extends State<MealsScreen> {
 
   @override
   Widget build(BuildContext context) { 
+    //final snackBar = SnackBar(content: Text('Zapisano nową lokalizację'));
+    //Scaffold.of(context).showSnackBar(snackBar);
+    
     //podkategorie + rodzaje
     var podkatData = Provider.of<Podkategorie>(context);
     final podkat1 = podkatData.items.where((podk) {return podk.kaId.contains('1');}).toList();

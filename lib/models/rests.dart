@@ -82,7 +82,7 @@ class Rests with ChangeNotifier{
   static Future<void> deleteAllRests()async{
      await DBHelper.deleteTable('restauracje');
   }
-
+  
 
 } 
 // JSON odbierany z 'https://www.cobytu.com/cbt.php?d=f_restauracje';

@@ -2,15 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; //pakiet dostawcy
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert'; //obsługa json'a
+import 'package:http/http.dart' as http;
+import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../screens/tabs_detail_screen.dart';
+import '../screens/meals_screen.dart';
 import '../models/meal.dart';
 import '../models/mems.dart';
 import '../models/detailRest.dart';
+import '../models/rests.dart';
 
 
 class MealItem extends StatelessWidget {
-
+  List<DetailRest> _mealRestsData = []; //szczegóły restauracji
 /*
 //funkcja przejścia do ekranu ze szczegółami dania
   void selectMeal(BuildContext context) {
@@ -22,28 +27,105 @@ class MealItem extends StatelessWidget {
    });
   }
 */
+  
+  //pobranie (z serwera www) restauracji serwujących wybrane danie - dla szczegółów dania
+  Future<List<DetailRest>> fetchDetailRestsFromSerwer(String idDania) async {
+    var url = 'https://cobytu.com/cbt.php?d=f_danie_resta&danie=$idDania&lang=pl';
+    print(url);
+    try {
+      final response = await http.get(url);
+      print(json.decode(response.body));
+    
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      if (extractedData == null) {
+        return[];
+      }
+
+      //final List<MealRest> loadedRests = [];
+      extractedData.forEach((restId, restData) {
+        _mealRestsData.add(DetailRest(
+          id: restId,
+          logo: restData['re_logo'], 
+          nazwa: restData['re_nazwa'],       
+          obiekt: restData['re_obiekt'],   
+          adres: restData['re_adres'],       
+          kod: restData['re_kod'], 
+          miasto: restData['re_miasto'], 
+          woj: restData['re_woj'], 
+          tel1: restData['re_tel1'], 
+          tel2: restData['re_tel2'], 
+          email: restData['re_email'], 
+          www: restData['re_www'], 
+          gps: restData['re_gps'], 
+          otwarteA: restData['re_otwarte_a'], 
+          otwarteB: restData['re_otwarte_b'], 
+          otwarteC: restData['re_otwarte_c'], 
+          cena: restData['cena'], 
+          parking: restData['re_parking'], 
+          podjazd: restData['re_podjazd'], 
+          wynos: restData['re_na_wynos'], 
+          karta: restData['re_p_karta'], 
+          zabaw: restData['re_s_zabaw'], 
+          letni: restData['re_o_letni'], 
+          klima: restData['re_klima'], 
+          wifi: restData['re_wifi'],  
+          modMenu: restData['re_mod_menu'],  
+        ));
+      });
+     // _items = loadedRests;
+      print('dane restauracji w MealRests = ${_mealRestsData[0].nazwa}');
+      //notifyListeners();
+    return _mealRestsData;
+    } catch (error) {
+      throw (error);
+    }
+  }
+  
+  //ustawienianie zmiennych globalnych
+  _setPrefers(String key, String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+    print('set $key = $value');
+  }
+
   @override
   Widget build(BuildContext context) {
     final meal = Provider.of<Meal>(context, listen: false); //dostawca danych dostarcza danie z słuchaczem zmian. Zmiana nastąpi jezeli naciśniemy serce polubienie dania. Z listen: false zmieniony na tylko dostawcę danych a słuchacz lokalny "Consumer" zainstalowany  nizej
+    
   //print(meal.foto.substring(27));
   //print('nowa lista   !!!!!!!!!!!!!!!!!!!!!!!!!${meal.rodzaj}');
   return InkWell( //element klikalny
       onTap: () {
-        Mems.insertMemory( //zapisanie danych wybranego dania przed przejściem do jego szczegółów               
-          'memDanie',        //nazwa
-          meal.id,           //a - daId
-          meal.foto,         //b - foto
-          meal.alergeny,     //c - alergeny
-          meal.nazwa,        //d - nazwa dania
-          '0',               //e - index wersji dania   (w iOS - index row)
-          meal.fav,          //f - fav - polubienie
-        );
         //pobranie danych restauracji z serwera (potrzebne modMenu - info kiedy była modyfikacja menu)
-        //!!!@!!!!  jeeli ok to przejście do szczegółów
+        print('pobranie danych restauracji z serwera');
+        fetchDetailRestsFromSerwer(meal.id).then((_) { 
+          print('pobranie mod_menu = ${_mealRestsData[0].modMenu}');
+          //pobranie danych restauracji z bazy lokalnej
+          DBHelper.getRestWithId(_mealRestsData[0].id).then((restaurant) {
+            print(restaurant.asMap()[0]['modMenu']);
+            //jezeli czasy modyfikacji menu dla restauracji (z serwera i bazy lokalnej) są równe to przejście do szczegółów dania
+            if(_mealRestsData[0].modMenu == restaurant.asMap()[0]['modMenu']){
+              print('bez przeładowania');
+              Mems.insertMemory( //zapisanie danych wybranego dania przed przejściem do jego szczegółów               
+                'memDanie',        //nazwa
+                meal.id,           //a - daId
+                meal.foto,         //b - foto
+                meal.alergeny,     //c - alergeny
+                meal.nazwa,        //d - nazwa dania
+                '0',               //e - index wersji dania   (w iOS - index row)
+                meal.fav,          //f - fav - polubienie
+              );
+              Navigator.of(context).pushNamed(TabsDetailScreen.routeName, arguments: meal.id,); 
+            }else { //jezeli nie to odświezenie menu
+              print('przeładowanie!!!!!!!!!!!!!!!');
+              _setPrefers('reload', 'true');  //dane nieaktualne - trzeba przeładować dane
+              Navigator.of(context).pushNamed(MealsScreen.routeName); 
+              }
+          });
+        });
 
-          Navigator.of(context).pushNamed(TabsDetailScreen.routeName, arguments: meal.id,);
-              
-      },//() => selectMeal(context),
+      },
+
       child: Card( //karta z daniem
         shape: RoundedRectangleBorder( //kształt karty
           borderRadius: BorderRadius.circular(15),

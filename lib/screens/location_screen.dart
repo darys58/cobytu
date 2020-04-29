@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
+import '../screens/meals_screen.dart';
 import '../models/rest.dart';
 import '../models/rests.dart';
 import '../models/mem.dart';
@@ -258,6 +259,7 @@ class _LocationScreenState extends State<LocationScreen> {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
+              
               final _rest = rests.where((re) {return re.id.contains(_currentValue);}).toList();//wybrana restauracja
               Mems.insertMemory(
                 'memLok',                 //nazwa
@@ -268,7 +270,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 _currentValue,            //e - '0' lub id restauracji
                 _rest[0].nazwa,           //f - "Wszystkie" lub nazwa restauracji
               ); 
-              _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera         
+              _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera  
+              Navigator.of(context).pushNamed(MealsScreen.routeName);        
             },
           ),
         ],

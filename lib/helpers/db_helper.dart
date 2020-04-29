@@ -111,6 +111,13 @@ class DBHelper {
     return db.rawQuery('SELECT  * FROM restauracje WHERE miasto = ? ORDER BY nazwa ASC',[miasto]);
   }
 
+  //odczyt z bazy restauracji dla danego id - dla meal_item - potrzebne modMenu
+  static Future<List<Map<String, dynamic>>> getRestWithId(String restId) async {
+    final db = await DBHelper.database();
+    print('pobieranie restauracji dla id = $restId');
+    return db.rawQuery('SELECT  * FROM restauracje WHERE id = ?',[restId]);
+  }
+
   //odczyt rekordu z bazy memory
   static Future<List<Map<String, dynamic>>> getMemory(String nazwa) async {
     final db = await DBHelper.database();
