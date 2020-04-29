@@ -271,7 +271,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 _rest[0].nazwa,           //f - "Wszystkie" lub nazwa restauracji
               ); 
               _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera  
-              Navigator.of(context).pushNamed(MealsScreen.routeName);        
+              Navigator.of(context).pushReplacementNamed(MealsScreen.routeName);   //przejście z usunięciem (wymianą) ostatniego ekranu (ekranu lokalizacji)  
             },
           ),
         ],

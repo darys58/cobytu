@@ -12,10 +12,14 @@ import '../models/meal.dart';
 import '../models/mems.dart';
 import '../models/detailRest.dart';
 import '../models/rests.dart';
-
+import '../models/mem.dart';
+import '../models/meals.dart';
+import '../models/podkat.dart';
 
 class MealItem extends StatelessWidget {
   List<DetailRest> _mealRestsData = []; //szczegóły restauracji
+  List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
+
 /*
 //funkcja przejścia do ekranu ze szczegółami dania
   void selectMeal(BuildContext context) {
@@ -88,6 +92,42 @@ class MealItem extends StatelessWidget {
     print('set $key = $value');
   }
 
+  void _showAlert(BuildContext context,String nazwa){
+    showDialog(context: context,
+      builder: (context) =>AlertDialog(
+        title: Text(nazwa),
+        content: Column( //zeby tekst był wyśrodkowany w poziomie
+          mainAxisSize:MainAxisSize.min, 
+          children: <Widget>[
+            Text('Trwa aktualizacja menu'),
+          ],
+        ),
+        elevation: 24.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+    ),
+      ),
+      barrierDismissible: false, //zeby zaciemnione tło było zablokowane na kliknięcia    
+    );
+  }
+
+  //pobranie memory z bazy lokalnej
+  Future<void> fetchMemoryLok()async{
+    final data = await DBHelper.getMemory('memLok');
+    _memLok = data.map(
+        (item) => Mem(
+          nazwa: item['nazwa'],          
+          a: item['a'], 
+          b: item['b'],     
+          c: item['c'],        
+          d: item['d'],       
+          e: item['e'],          
+          f: item['f'],                               
+        ),  
+      ).toList();
+    return _memLok;
+  }
+
   @override
   Widget build(BuildContext context) {
     final meal = Provider.of<Meal>(context, listen: false); //dostawca danych dostarcza danie z słuchaczem zmian. Zmiana nastąpi jezeli naciśniemy serce polubienie dania. Z listen: false zmieniony na tylko dostawcę danych a słuchacz lokalny "Consumer" zainstalowany  nizej
@@ -118,8 +158,37 @@ class MealItem extends StatelessWidget {
               Navigator.of(context).pushNamed(TabsDetailScreen.routeName, arguments: meal.id,); 
             }else { //jezeli nie to odświezenie menu
               print('przeładowanie!!!!!!!!!!!!!!!');
-              _setPrefers('reload', 'true');  //dane nieaktualne - trzeba przeładować dane
-              Navigator.of(context).pushNamed(MealsScreen.routeName); 
+              //_setPrefers('reload', 'true');  //dane nieaktualne - trzeba przeładować dane            
+             
+              //final snackBar = SnackBar(content: Text('Aktualizacja menu ${_mealRestsData[0].nazwa}'));
+              //Scaffold.of(context).showSnackBar(snackBar);
+              _showAlert(context, _mealRestsData[0].nazwa);
+              
+              fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
+              Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
+                Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
+                  Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
+                    Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
+                      Rests.fetchRestsFromSerwer().then((_) { 
+                        Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
+                          Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
+                            Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
+                              
+                             Navigator.of(context).pushNamedAndRemoveUntil(MealsScreen.routeName,ModalRoute.withName(MealsScreen.routeName));  //przejście z usunięciem wszystkich wczesniejszych tras i ekranów
+                              
+                            });
+                          });   
+                        });
+                      });            
+                    });
+                  });
+                });
+              });
+            });
+
+              
+              //Navigator.of(context).pushNamed(MealsScreen.routeName); 
+              
               }
           });
         });
