@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart' as sql;
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 //metody statyczne w klasie są po to, zeby nie tworzyć instancji tej klasy 
@@ -37,7 +37,13 @@ class DBHelper {
 
   static Future<Database> database() async {
     final dbPath = await sql.getDatabasesPath();
-    return sql.openDatabase(path.join(dbPath, 'cobytu5.db'), //ściekzka do bazy i nazwa bazy
+    final path = join(dbPath, "cobytu.db"); //ściekzka do bazy i nazwa bazy
+
+     
+   
+
+print('openDatabase !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    return sql.openDatabase(path, 
         onCreate: (db, version) async{
           print('tworzenie tabeli');
       await db.execute(
@@ -54,8 +60,12 @@ class DBHelper {
           );       
     }, version: 1);
   }
-
-
+  
+  static Future<void> deleteBase() async{
+    final dbPath = await sql.getDatabasesPath();
+    print('kasowanie bazy danych');
+  await sql.deleteDatabase(join(dbPath, "cobytu.db"));
+  }
 
 //zapis do bazy
   static Future<void> insert(String table, Map<String, Object> data) async {
@@ -126,3 +136,57 @@ class DBHelper {
   }
 
 }
+/*class DbHelper {
+      static const NEW_DB_VERSION = 2;
+
+      static final DbHelper _instance = DbHelper.internal();
+
+      factory DbHelper() => _instance;
+
+      DbHelper.internal();
+
+      Database _db;
+
+      Future<Database> get db async {
+        if (_db != null) {
+          return _db;
+        } else {
+          _db = await initDb();
+          return _db;
+        }
+      }
+
+      Future<Database> initDb() async {
+
+        final databasesPath = await getDatabasesPath();
+        final path = join(databasesPath, "database.db");
+
+        var db = await openDatabase(path);
+
+        //if database does not exist yet it will return version 0
+        if (await db.getVersion() < NEW_DB_VERSION) {
+
+          db.close();
+
+          //delete the old database so you can copy the new one
+          await deleteDatabase(path);
+
+          try {
+            await Directory(dirname(path)).create(recursive: true);
+          } catch (_) {}
+
+          //copy db from assets to database folder
+          ByteData data = await rootBundle.load("assets/databases/database.db");
+          List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          await File(path).writeAsBytes(bytes, flush: true);
+
+          //open the newly created db 
+          db = await openDatabase(path);
+
+          //set the new version to the copied db so you do not need to do it manually on your bundled database.db
+          db.setVersion(NEW_DB_VERSION);
+
+        }
+
+        return db;
+      }*/

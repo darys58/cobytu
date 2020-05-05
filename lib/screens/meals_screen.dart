@@ -32,6 +32,10 @@ class _MealsScreenState extends State<MealsScreen> {
   var _isLoading = false; //czy ładowanie danych?
   String reload = 'false'; //czy załadować dane z serwera - przeładowanie danych?
   String initApp = 'false'; //czy jest to inicjalizacja apki - pierwsze uruchomienie po zainstalowaniu?
+  String reloadTemp = 'false'; 
+  String initAppTemp = 'false';
+  final wersja = ['1','0','1','05.05.2020','nic','nic']; //major, minor, numer wydania, data publikacji, 
+
   String podkategoria1 = '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
   String podkategoria2 = '292'; //wybrana podkategoria, domyślnie 292 czyli "Wszystkie" w kategorii 2
   String podkategoria3 = '293'; //wybrana podkategoria, domyślnie 293 czyli "Wszystkie" w kategorii 3
@@ -44,6 +48,7 @@ class _MealsScreenState extends State<MealsScreen> {
   String rodzaj = ''; //wybrany rodzaj dania np. Dania litewskie
   String categoryTitle;
   List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
+  List<Mem> _memVer; //dane wersji aplikacji i bazy danych w tabeli memory - baza lokalna
   String _tytul = 'Lista dań'; //tytuł tymczasowy
   //String _selectedItem = '';
   List<Meal> meals1;
@@ -55,9 +60,14 @@ class _MealsScreenState extends State<MealsScreen> {
   List<Meal> meals7;
   List<Meal> meals8;
   List<Meal> meals9;
-  
+  /// bieżący czas, w „sekundach od epoki”
+  static int currentTimeInSeconds () {
+      var ms = (new DateTime.now ()). millisecondsSinceEpoch;
+      return (ms / 1000) .round ();
+  }
   @override
   void initState() { 
+    print('wejście do initState');
     //_setPrefers('reload', 'true');  //dane aktualne - nie trzeba przeładować danych
     //_setPrefers('initApp', 'true'); //inicjalizacja apki przeprowadzona
     //zainicjowanie stanu po zmianie np. usunięciu dania
@@ -69,6 +79,7 @@ class _MealsScreenState extends State<MealsScreen> {
 
   @override
   void didChangeDependencies() {
+     
     print('wejscie do Dependencies ms 1');
     print('_isInit = $_isInit');
     if (_isInit) {
@@ -76,20 +87,42 @@ class _MealsScreenState extends State<MealsScreen> {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
       
-      print('wejscie do Dependencies - Init meals_screen');
+      print('wejscie do Dependencies - Init meals_screen - czas...');
+      print(currentTimeInSeconds ());
+    fetchMemoryVer().then((_){     
+      if (_memVer.isNotEmpty ){
+        if(_memVer[0].a == wersja[0] && _memVer[0].b == wersja[1] && _memVer[0].c == wersja[2]){ //jezeli nie ma rekordu memVer a tabeli memory (tzn. nie ma tabeli i bazy) lub jest inna wersja aplikacji (i moze wersji bazy)
+            print('zgodna _memVer[0].a =${_memVer[0].a}'); 
+        }else{ 
+          print('niezgodna _memVer[0].a =${_memVer[0].a}');
+          reloadTemp = 'true';
+          initAppTemp = 'true';
+          _setPrefers('reload', 'true');  //trzeba przeładować dane
+          _setPrefers('initApp', 'true'); //potrzebna inicjalizacja apki  
+        }       
+      }else{
+         print('niema memVer - brak bazy danych');
+          reloadTemp = 'true';
+          initAppTemp = 'true';
+          _setPrefers('reload', 'true');  //trzeba załadować dane
+          _setPrefers('initApp', 'true'); //potrzebna inicjalizacja apki 
+      }
+    
       _getPrefers().then((_) { //pobranie zmiennych globalnych
-        if(reload == 'true' || reload == '0'){ //jezeli 'true' lub nie ma zmiennej 'reload'
+        if(reloadTemp == 'true' || reload == 'true' || reload == '0'){ //jezeli 'true' lub nie ma zmiennej 'reload'
           print ('trzeba załadować dane z serwera');
-          if(initApp == 'true' || initApp == '0'){ //jezeli pierwsze uruchomienie apki
+          if(initAppTemp == 'true' || initApp == 'true' || initApp == '0'){ //jezeli pierwsze uruchomienie apki
             //ładowanie danych domyślnych
             print('pierwsze uruchomienie apki!!!!!!!!');
-            Mems.insertMemory('memLok', '14','wielkopolskie','1', 'Konin','27','Borówka');//default
-            print('przeładowanie danych');
+          DBHelper.deleteBase().then((_) {  //kasowanie całej bazy danych bo będzie nowa
+            Mems.insertMemory('memLok', '14','wielkopolskie','1', 'Konin','0','Wszystkie');//default '27','Borówka'
+            Mems.insertMemory('memVer', wersja[0], wersja[1], wersja[2], wersja[3], wersja[4], wersja[5]);//default
+            //print('usunięcie wszystkich danych i wczytanie danych domślnych');
             //fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
-              Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
-                Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
-                  Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                    Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=27&lang=pl').then((_) { 
+              //Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
+                //Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
+                  //Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
+                    Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=pl').then((_) { 
                       Rests.fetchRestsFromSerwer().then((_) { 
                         Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=27&lang=pl').then((_) { 
                           Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
@@ -97,7 +130,8 @@ class _MealsScreenState extends State<MealsScreen> {
                               _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
                               _setPrefers('initApp', 'false'); //inicjalizacja apki przeprowadzona
                               setState(() {
-                                _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                                _tytul = 'Konin';
+                                //_tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
                                 _isLoading = false; //zatrzymanie wskaznika ładowania danych
                               });
                             }); 
@@ -105,12 +139,12 @@ class _MealsScreenState extends State<MealsScreen> {
                         });  
                       });            
                     });
-                  });
-                });  
-              });
-            //});
+                  //});
+                //});  
+              //});
+            });
           }else{ //przeładowanie danych - z serwera (bo np. zmiana lokalizacji)
-            print('przeładowanie danych ml 1');
+            print('przeładowanie danych - z serwera (bo np. zmiana lokalizacji)');
             fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
               Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
                 Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
@@ -137,7 +171,7 @@ class _MealsScreenState extends State<MealsScreen> {
           }
         }else { //załadowanie dań z bazy loklnej - nie było potrzeby przeładowania danych
           fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej (zeby uzyskać nazwę restacji jako tytuł ekranu)
-            print('dane lokalne');
+            print('dane lokalne - załadowanie dań z bazy loklnej');
             Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
               Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
                 setState(() {
@@ -149,6 +183,7 @@ class _MealsScreenState extends State<MealsScreen> {
           }); 
         }
       });    
+    }); 
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -172,6 +207,22 @@ class _MealsScreenState extends State<MealsScreen> {
     print('get reload=$reload');
   }
 
+    //pobranie memory z bazy lokalnej
+  Future<void> fetchMemoryVer()async{
+    final data = await DBHelper.getMemory('memVer');
+    _memVer = data.map(
+        (item) => Mem(
+          nazwa: item['nazwa'],          
+          a: item['a'], 
+          b: item['b'],     
+          c: item['c'],        
+          d: item['d'],       
+          e: item['e'],          
+          f: item['f'],                               
+        ),  
+      ).toList();
+    return _memVer;
+  }
   //pobranie memory z bazy lokalnej
   Future<void> fetchMemoryLok()async{
     final data = await DBHelper.getMemory('memLok');
