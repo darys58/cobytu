@@ -1,5 +1,6 @@
 //zarządzanie ekranami (renderowanie kart) z paska z tabami
 import 'package:flutter/material.dart';
+import 'package:meals/app_localizations.dart';
 
 //import '../widgets/main_drawer.dart';
 import './favorites_screen.dart';
@@ -84,7 +85,8 @@ void _selectPage(int index){
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.favorite),
-            title: Text('ULUBIONE'),
+            //title: Text('ULUBIONE'),
+            title: Text(AppLocalizations.of(context).translate('ulubione')),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,

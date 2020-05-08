@@ -89,101 +89,101 @@ class _MealsScreenState extends State<MealsScreen> {
       
       print('wejscie do Dependencies - Init meals_screen - czas...');
       print(currentTimeInSeconds ());
-    fetchMemoryVer().then((_){     
-      if (_memVer.isNotEmpty ){
-        if(_memVer[0].a == wersja[0] && _memVer[0].b == wersja[1] && _memVer[0].c == wersja[2]){ //jezeli nie ma rekordu memVer a tabeli memory (tzn. nie ma tabeli i bazy) lub jest inna wersja aplikacji (i moze wersji bazy)
-            print('zgodna _memVer[0].a =${_memVer[0].a}'); 
-        }else{ 
-          print('niezgodna _memVer[0].a =${_memVer[0].a}');
-          reloadTemp = 'true';
-          initAppTemp = 'true';
-          _setPrefers('reload', 'true');  //trzeba przeładować dane
-          _setPrefers('initApp', 'true'); //potrzebna inicjalizacja apki  
-        }       
-      }else{
-         print('niema memVer - brak bazy danych');
-          reloadTemp = 'true';
-          initAppTemp = 'true';
-          _setPrefers('reload', 'true');  //trzeba załadować dane
-          _setPrefers('initApp', 'true'); //potrzebna inicjalizacja apki 
-      }
-    
-      _getPrefers().then((_) { //pobranie zmiennych globalnych
-        if(reloadTemp == 'true' || reload == 'true' || reload == '0'){ //jezeli 'true' lub nie ma zmiennej 'reload'
-          print ('trzeba załadować dane z serwera');
-          if(initAppTemp == 'true' || initApp == 'true' || initApp == '0'){ //jezeli pierwsze uruchomienie apki
-            //ładowanie danych domyślnych
-            print('pierwsze uruchomienie apki!!!!!!!!');
-          DBHelper.deleteBase().then((_) {  //kasowanie całej bazy danych bo będzie nowa
-            Mems.insertMemory('memLok', '14','wielkopolskie','1', 'Konin','0','Wszystkie');//default '27','Borówka'
-            Mems.insertMemory('memVer', wersja[0], wersja[1], wersja[2], wersja[3], wersja[4], wersja[5]);//default
-            //print('usunięcie wszystkich danych i wczytanie danych domślnych');
-            //fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
-              //Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
-                //Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
-                  //Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                    Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=pl').then((_) { 
-                      Rests.fetchRestsFromSerwer().then((_) { 
-                        Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=27&lang=pl').then((_) { 
-                          Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
-                            Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                              _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
-                              _setPrefers('initApp', 'false'); //inicjalizacja apki przeprowadzona
-                              setState(() {
-                                _tytul = 'Konin';
-                                //_tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                                _isLoading = false; //zatrzymanie wskaznika ładowania danych
-                              });
-                            }); 
-                          });
-                        });  
-                      });            
-                    });
-                  //});
-                //});  
-              //});
-            });
-          }else{ //przeładowanie danych - z serwera (bo np. zmiana lokalizacji)
-            print('przeładowanie danych - z serwera (bo np. zmiana lokalizacji)');
-            fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
-              Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
-                Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
-                  Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                    Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
-                      Rests.fetchRestsFromSerwer().then((_) { 
-                        Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
-                          Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
-                            Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                              _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
-                              setState(() {
-                                _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                                _isLoading = false; //zatrzymanie wskaznika ładowania danych
-                              });
+      fetchMemoryVer().then((_){  //pobranie danych o wersji apki   
+        if (_memVer.isNotEmpty ){ 
+          if(_memVer[0].a == wersja[0] && _memVer[0].b == wersja[1] && _memVer[0].c == wersja[2]){  // jezeli jest zgodna wersja aplikacji to przejdz dalej za ifa
+              print('zgodna _memVer[0].a =${_memVer[0].a}'); 
+          }else{ //jezeli niezgodna wersja apki to zmiana bazy w całości
+            print('niezgodna _memVer[0].a =${_memVer[0].a}');
+            reloadTemp = 'true'; //ustawienia tymczasowe
+            initAppTemp = 'true'; //ustawienia tymczasowe
+            _setPrefers('reload', 'true');  //trzeba przeładować dane - ustawienie do zapamiętania
+            _setPrefers('initApp', 'true'); //potrzebna inicjalizacja apki - ustawienie do zapamiętania 
+          }       
+        }else{ //jezeli nie ma rekordu memVer tzn. ze nie ma bazy
+          print('niema memVer - brak bazy danych');
+            reloadTemp = 'true'; //ustawienia tymczasowe
+            initAppTemp = 'true'; //ustawienia tymczasowe
+            _setPrefers('reload', 'true');  //trzeba załadować dane - ustawienie do zapamiętania
+            _setPrefers('initApp', 'true'); //potrzebna inicjalizacja apki - ustawienie do zapamiętania
+        }
+      
+        _getPrefers().then((_) { //pobranie zmiennych globalnych
+          if(reloadTemp == 'true' || reload == 'true' || reload == '0'){ //jezeli trzeba przeładować lub nie ma zmiennej 'reload'
+            print ('trzeba załadować dane z serwera');
+            if(initAppTemp == 'true' || initApp == 'true' || initApp == '0'){ //jezeli pierwsze uruchomienie apki
+              //ładowanie danych domyślnych
+              print('pierwsze uruchomienie apki!!!!!!!!');
+            DBHelper.deleteBase().then((_) {  //kasowanie całej bazy danych bo będzie nowa
+              Mems.insertMemory('memLok', '14','wielkopolskie','1', 'Konin','0','Wszystkie');//default '27','Borówka'
+              Mems.insertMemory('memVer', wersja[0], wersja[1], wersja[2], wersja[3], wersja[4], wersja[5]);//default
+              //print('usunięcie wszystkich danych i wczytanie danych domślnych');
+              //fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
+                //Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
+                  //Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
+                    //Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
+                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=pl').then((_) { 
+                        Rests.fetchRestsFromSerwer().then((_) { 
+                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=27&lang=pl').then((_) { 
+                            Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
+                              Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
+                                _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
+                                _setPrefers('initApp', 'false'); //inicjalizacja apki przeprowadzona
+                                setState(() {
+                                  _tytul = 'Konin';
+                                  //_tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                                  _isLoading = false; //zatrzymanie wskaznika ładowania danych
+                                });
+                              }); 
                             });
-                          });   
-                        });
-                      });            
+                          });  
+                        });            
+                      });
+                    //});
+                  //});  
+                //});
+              });
+            }else{ //przeładowanie danych - z serwera (bo np. zmiana lokalizacji)
+              print('przeładowanie danych - z serwera (bo np. zmiana lokalizacji)');
+              fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
+                Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
+                  Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
+                    Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
+                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
+                        Rests.fetchRestsFromSerwer().then((_) { 
+                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
+                            Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
+                              Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
+                                _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
+                                setState(() {
+                                  _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                                  _isLoading = false; //zatrzymanie wskaznika ładowania danych
+                                });
+                              });
+                            });   
+                          });
+                        });            
+                      });
                     });
                   });
                 });
               });
-            });
-          }
-        }else { //załadowanie dań z bazy loklnej - nie było potrzeby przeładowania danych
-          fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej (zeby uzyskać nazwę restacji jako tytuł ekranu)
-            print('dane lokalne - załadowanie dań z bazy loklnej');
-            Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
-              Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                setState(() {
-                  _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                  _isLoading = false; //zatrzymanie wskaznika ładowania dań
+            }
+          }else { //załadowanie dań z bazy loklnej - nie było potrzeby przeładowania danych
+            fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej (zeby uzyskać nazwę restacji jako tytuł ekranu)
+              print('dane lokalne - załadowanie dań z bazy loklnej');
+              Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
+                Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
+                  setState(() {
+                    _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                    _isLoading = false; //zatrzymanie wskaznika ładowania dań
+                  });
                 });
               });
-            });
-          }); 
-        }
-      });    
-    }); 
+            }); 
+          }
+        });    
+      }); 
     }
     _isInit = false;
     super.didChangeDependencies();

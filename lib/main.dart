@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; //zarejestrowanie dostawcy
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import './screens/tabs_screen.dart';
 import './screens/detail_meal_screen.dart';
@@ -8,7 +9,7 @@ import './screens/tabs_detail_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
 import './models/podkat.dart'; //zaimportowanie klasy dostawcy
-
+import 'app_localizations.dart';
 
 void main() => runApp(MyApp());
 
@@ -60,7 +61,23 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        
+        supportedLocales:[
+          Locale('en','US'),
+          Locale('pl','PL'),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate, //ładowanie tłumaczeń z plików JSON
+          GlobalMaterialLocalizations.delegate, //tłumaczenia tekstów podstawowych
+          GlobalWidgetsLocalizations.delegate, //kierunek tekstów
+        ],
+        localeResolutionCallback: (locale, supportedLocales){ //wybór locale które ma uzyć appka
+          for (var supportedLocale in supportedLocales){
+            if(supportedLocale.languageCode == locale.languageCode && supportedLocale.countryCode == locale.countryCode){
+              return supportedLocale;
+            }
+          }
+          return supportedLocales.first; //jezeli urządzenie nie wspiera locale to wybiez pierwszy z listy
+        },
         //home: CategoriesScreen(), //MyHomePage(), //ekran startowy apki
         initialRoute: '/', //default is '/'  - dodatkowe określenie domyśnej trasy (inicjującej aplikację)
         routes: { //tabela tras (kurs 161)
