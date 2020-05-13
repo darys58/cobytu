@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../models/meals.dart';
 import '../models/detailRest.dart';
-
+import '../all_translations.dart';
 
 class DetailRestaScreen extends StatefulWidget {
   static const routeName = '/detail_resta';
@@ -18,6 +18,7 @@ class DetailRestaScreen extends StatefulWidget {
 class _DetailRestaScreenState extends State<DetailRestaScreen> {
 List<DetailRest> _mealRestsData = []; //szczegóły restauracji
 bool _isVisible = false;
+String _currLang = allTranslations.currentLanguage; //aktualny język
   
 void showToast() {
   setState(() {
@@ -40,7 +41,7 @@ void showToast() {
   
 //pobranie (z serwera www) restauracji serwujących wybrane danie - dla szczegółów dania
   Future<List<DetailRest>> fetchDetailRestsFromSerwer(String idDania) async {
-    var url = 'https://cobytu.com/cbt.php?d=f_danie_resta&danie=$idDania&lang=pl';
+    var url = 'https://cobytu.com/cbt.php?d=f_danie_resta&danie=$idDania&lang=$_currLang';
     print(url);
     try {
       final response = await http.get(url);

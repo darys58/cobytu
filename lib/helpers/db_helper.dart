@@ -42,7 +42,7 @@ class DBHelper {
      
    
 
-print('openDatabase !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+//print('openDatabase !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     return sql.openDatabase(path, 
         onCreate: (db, version) async{
           print('tworzenie tabeli');
@@ -70,7 +70,7 @@ print('openDatabase !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 //zapis do bazy
   static Future<void> insert(String table, Map<String, Object> data) async {
     final db = await DBHelper.database();
-    print('wstawianie do tabeli $table');
+    //print('wstawianie do tabeli $table');
     db.insert(
       table,
       data,

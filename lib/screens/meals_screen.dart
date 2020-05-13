@@ -15,7 +15,6 @@ import '../widgets/meal_item.dart';
 
 class MealsScreen extends StatefulWidget {
   //stanowy bo usuwanie dań
-  //stanowy bo usuwanie przepisów z listy
   static const routeName = '/category-meals'; //nazwa trasy do tego ekranu
 
   //do modyfikowania listy posiłków przez ustawianie filtów
@@ -32,6 +31,7 @@ class _MealsScreenState extends State<MealsScreen> {
   var _isLoading = false; //czy ładowanie danych?
   String reload = 'false'; //czy załadować dane z serwera - przeładowanie danych?
   String initApp = 'false'; //czy jest to inicjalizacja apki - pierwsze uruchomienie po zainstalowaniu?
+  String language; //skrót aktualnego języka np. pl
   String reloadTemp = 'false'; 
   String initAppTemp = 'false';
   final wersja = ['1','0','1','05.05.2020','nic','nic']; //major, minor, numer wydania, data publikacji, 
@@ -99,6 +99,7 @@ class _MealsScreenState extends State<MealsScreen> {
             initAppTemp = 'true'; //ustawienia tymczasowe
             _setPrefers('reload', 'true');  //trzeba przeładować dane - ustawienie do zapamiętania
             _setPrefers('initApp', 'true'); //potrzebna inicjalizacja apki - ustawienie do zapamiętania 
+            //_setPrefers('language', 'pl'); //potrzebna inicjalizacja apki - ustawienie do zapamiętania
           }       
         }else{ //jezeli nie ma rekordu memVer tzn. ze nie ma bazy
           print('niema memVer - brak bazy danych');
@@ -106,9 +107,13 @@ class _MealsScreenState extends State<MealsScreen> {
             initAppTemp = 'true'; //ustawienia tymczasowe
             _setPrefers('reload', 'true');  //trzeba załadować dane - ustawienie do zapamiętania
             _setPrefers('initApp', 'true'); //potrzebna inicjalizacja apki - ustawienie do zapamiętania
+            //_setPrefers('language', 'pl'); //potrzebna inicjalizacja apki - ustawienie do zapamiętania
         }
       
         _getPrefers().then((_) { //pobranie zmiennych globalnych
+          print('initApp = $initApp');
+          print('reload = $reload');
+          print('language = $language');
           if(reloadTemp == 'true' || reload == 'true' || reload == '0'){ //jezeli trzeba przeładować lub nie ma zmiennej 'reload'
             print ('trzeba załadować dane z serwera');
             if(initAppTemp == 'true' || initApp == 'true' || initApp == '0'){ //jezeli pierwsze uruchomienie apki
@@ -122,9 +127,9 @@ class _MealsScreenState extends State<MealsScreen> {
                 //Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
                   //Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
                     //Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=pl').then((_) { 
+                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=$language').then((_) { 
                         Rests.fetchRestsFromSerwer().then((_) { 
-                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=27&lang=pl').then((_) { 
+                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=27&lang=$language').then((_) { 
                             Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                               Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
                                 _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
@@ -149,12 +154,14 @@ class _MealsScreenState extends State<MealsScreen> {
                 Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
                   Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
                     Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
+                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language').then((_) { 
                         Rests.fetchRestsFromSerwer().then((_) { 
-                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
+                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language').then((_) { 
                             Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                               Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
                                 _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
+                                print('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
+                     
                                 setState(() {
                                   _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
                                   _isLoading = false; //zatrzymanie wskaznika ładowania danych
@@ -202,9 +209,11 @@ class _MealsScreenState extends State<MealsScreen> {
     setState(() {
       reload = prefs.getString('reload') ?? '0';
       initApp = prefs.getString('initApp') ?? '0';
+      language = prefs.getString('language') ?? '0';
       //podkategoria = prefs.getString('podkategoria') ?? '0';
     });
     print('get reload=$reload');
+    print('get language=$language');
   }
 
     //pobranie memory z bazy lokalnej

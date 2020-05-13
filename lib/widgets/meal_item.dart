@@ -15,11 +15,12 @@ import '../models/rests.dart';
 import '../models/mem.dart';
 import '../models/meals.dart';
 import '../models/podkat.dart';
+import '../all_translations.dart';
 
 class MealItem extends StatelessWidget {
   List<DetailRest> _mealRestsData = []; //szczegóły restauracji
   List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
-
+  String _currLang = allTranslations.currentLanguage; //aktualny język
 /*
 //funkcja przejścia do ekranu ze szczegółami dania
   void selectMeal(BuildContext context) {
@@ -34,7 +35,7 @@ class MealItem extends StatelessWidget {
   
   //pobranie (z serwera www) restauracji serwujących wybrane danie - dla szczegółów dania
   Future<List<DetailRest>> fetchDetailRestsFromSerwer(String idDania) async {
-    var url = 'https://cobytu.com/cbt.php?d=f_danie_resta&danie=$idDania&lang=pl';
+    var url = 'https://cobytu.com/cbt.php?d=f_danie_resta&danie=$idDania&lang=$_currLang';
     print(url);
     try {
       final response = await http.get(url);
@@ -166,9 +167,9 @@ class MealItem extends StatelessWidget {
                 Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
                   Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
                     Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
+                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$_currLang').then((_) { 
                         Rests.fetchRestsFromSerwer().then((_) { 
-                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=pl').then((_) { 
+                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$_currLang').then((_) { 
                             Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                               Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
                                 

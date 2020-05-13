@@ -9,7 +9,7 @@ import '../models/mems.dart';
 import '../models/meals.dart';
 import '../models/detailMeal.dart';
 import '../models/detailIngred.dart';
-
+import '../all_translations.dart';
 
 class DetailIngredientsScreen extends StatefulWidget {
   static const routeName = '/detail-ingredients';
@@ -27,6 +27,7 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
   List<Mem> _memLok; //dane wybranej restauracji w tabeli memory - baza lokalna
   var detailMealData;
   var detailIngredData;
+  String _currLang = allTranslations.currentLanguage; //aktualny język
 
   @override
   void didChangeDependencies() {
@@ -58,7 +59,7 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
 //!!!!! potrzebne tylko dla listy alergrnów - moze lepiej zapamitywać alergeny w zmiennej globalnej !!!!!!!! 
 
   Future<List<DetailMeal>> fetchDetailMealFromSerwer() async {
-    var url = 'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&rest=${_memLok[0].e}&lang=pl';
+    var url = 'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&rest=${_memLok[0].e}&lang=$_currLang';
     //print(url);
     try {
       final response = await http.get(url);
@@ -116,7 +117,7 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
   }
 
   Future<List<DetailIngred>> fetchDetailIngredFromSerwer() async {
-    var url = 'https://cobytu.com/cbt.php?d=f_danie_sklad&danie=${_memMeal[0].a}&uz_id=&lang=pl';
+    var url = 'https://cobytu.com/cbt.php?d=f_danie_sklad&danie=${_memMeal[0].a}&uz_id=&lang=$_currLang';
     print(url);
     try {
       final response = await http.get(url);

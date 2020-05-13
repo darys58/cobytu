@@ -9,7 +9,7 @@ import '../models/mem.dart';
 import '../models/mems.dart';
 import '../models/meals.dart';
 import '../models/detailMeal.dart';
-
+import '../all_translations.dart';
 
 class DetailMealScreen extends StatefulWidget {
   static const routeName = '/detail-meal';
@@ -25,6 +25,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   List<Mem> _memMeal; //dane wybranego dania w tabeli memory - baza lokalna
   List<Mem> _memLok; //dane wybranej restauracji w tabeli memory - baza lokalna
   var detailMealData;
+  String _currLang = allTranslations.currentLanguage; //aktualny język
   
   List<DropdownMenuItem<String>> _dropdownMenuItemsWer; ////lista wersji dania dla buttona wyboru
   List<String> _listWer; //lista wersji jako lista stringów, zeby uzyskać index wybranej wersji
@@ -146,7 +147,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 
   //pobranie (z serwera www) szczegółów dania - dla szczegółów dania
   Future<List<DetailMeal>> fetchDetailMealFromSerwer() async {
-    var url = 'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&rest=${_memLok[0].e}&lang=pl';
+    var url = 'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&rest=${_memLok[0].e}&lang=$_currLang';
     //print(url);
     try {
       final response = await http.get(url);

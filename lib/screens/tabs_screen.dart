@@ -1,8 +1,8 @@
 //zarządzanie ekranami (renderowanie kart) z paska z tabami
 import 'package:flutter/material.dart';
-import 'package:meals/app_localizations.dart';
+import 'package:meals/all_translations.dart';
 
-//import '../widgets/main_drawer.dart';
+import './more.dart';
 import './favorites_screen.dart';
 import './location_screen.dart';
 import './meals_screen.dart';
@@ -42,8 +42,8 @@ class _TabsScreenState extends State<TabsScreen> {
   _pages = [
     MealsScreen(),
     FavoritesScreen(),
-    LocationScreen()
-    
+    LocationScreen(),
+    SettingsScreen(),
     ];
     super.initState();
   }
@@ -85,13 +85,19 @@ void _selectPage(int index){
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.favorite),
+            title: Text(allTranslations.text('ulubione')),
             //title: Text('ULUBIONE'),
-            title: Text(AppLocalizations.of(context).translate('ulubione')),
+            //title: Text(AppLocalizations.of(context).translate('ulubione')),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.location_on),
             title: Text('LOKAL'),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).primaryColor,
+            icon: Icon(Icons.more_vert),
+            title: Text('WIĘCEJ'),
           ),
         ],
       ),
