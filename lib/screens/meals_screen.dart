@@ -12,6 +12,7 @@ import '../models/mems.dart';
 import '../models/rests.dart';
 import '../models/podkat.dart';
 import '../widgets/meal_item.dart';
+import '../all_translations.dart';
 
 class MealsScreen extends StatefulWidget {
   //stanowy bo usuwanie dań
@@ -375,15 +376,15 @@ class _MealsScreenState extends State<MealsScreen> {
               labelColor: Colors.black,
               unselectedLabelColor: Colors.white,
               tabs: <Widget>[
-                Tab(text: 'ŚNIADANIA',), //Tab(icon: Icon(Icons.category),text: 'Kategoria1',),
-                Tab(text: 'PRZYSTAWKI',),
-                Tab(text: 'ZUPY',),
-                Tab(text: 'SAŁATKI',),
-                Tab(text: 'DANIA GŁOWNE',),
-                Tab(text: 'DLA DZIECI',),
-                Tab(text: 'DESERY',),
-                Tab(text: 'NAPOJE',),
-                Tab(text: 'ALKOHOLE',),
+                Tab(text: allTranslations.text('L_SNIADANIA'),), //Tab(icon: Icon(Icons.category),text: 'Kategoria1',),
+                Tab(text: allTranslations.text('L_PRZYSTAWKI'),),
+                Tab(text: allTranslations.text('L_ZUPY'),),
+                Tab(text: allTranslations.text('L_SALATKI'),),
+                Tab(text: allTranslations.text('L_DANIA_GLOWNE'),),
+                Tab(text: allTranslations.text('L_DLA_DZIECI'),),
+                Tab(text: allTranslations.text('L_DESERY'),),
+                Tab(text: allTranslations.text('L_NAPOJE'),),
+                Tab(text: allTranslations.text('L_ALKOHOLE'),),
               ],
             ),
           ),

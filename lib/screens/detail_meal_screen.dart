@@ -26,6 +26,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   List<Mem> _memLok; //dane wybranej restauracji w tabeli memory - baza lokalna
   var detailMealData;
   String _currLang = allTranslations.currentLanguage; //aktualny język
+  String _separator;
   
   List<DropdownMenuItem<String>> _dropdownMenuItemsWer; ////lista wersji dania dla buttona wyboru
   List<String> _listWer; //lista wersji jako lista stringów, zeby uzyskać index wybranej wersji
@@ -91,6 +92,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         });
       });
     }
+    if (_currLang == 'en' || _currLang == 'ja' || _currLang == 'zh') _separator = '.'; //separator w cenie
     _isInit = false;
     super.didChangeDependencies();  
   }
@@ -318,7 +320,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       ),
                       SizedBox(width: 2,), //odległość miedzy ikoną i tekstem
                       Text(
-                        detailMealData[0].czas + ' min',
+                        detailMealData[0].czas + ' ' + allTranslations.text('L_MIN'),
                       ), //interpolacja ciągu znaków
                     ],
                   ),
@@ -331,7 +333,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       ),
                       SizedBox(width: 2,), //odległość miedzy ikoną i tekstem
                       Text(
-                        '$_waga' + ' g',
+                        '$_waga ' + allTranslations.text('L_G'),
                       ),
                     ],
                   ),
@@ -344,7 +346,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       ),
                       SizedBox(width: 2,), //odległość miedzy ikoną i tekstem
                       Text(
-                        '$_kcal' + ' kcal',
+                        '$_kcal ' + allTranslations.text('L_KCAL'),
                       ), //interpolacja ciągu znaków
                       SizedBox(width: 20,),                     
                     ],
@@ -508,7 +510,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 //=== cena
             SizedBox(width: 20,),             
             Text(
-             '$_cena' + ' PLN', 
+              _separator == '.' ? _cena  + ' ' + allTranslations.text('L_PLN') : _cena.replaceAll('.', ',')  + ' ' + allTranslations.text('L_PLN'), 
               style: TextStyle(
                 fontSize: 24,
                 color: Colors.black,

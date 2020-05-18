@@ -214,7 +214,7 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
                 children: <Widget>[
                   SizedBox(width: 15,),             
                   Text(
-                  'Alergeny: ${detailMealData[0].alergeny.join(', ')}', //join łączy argumenty z listy w jeden string
+                  allTranslations.text('L_ALERGENY') + ': ' + '${detailMealData[0].alergeny.join(', ')}', //join łączy argumenty z listy w jeden string
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -232,7 +232,7 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
                 children: <Widget>[
                   SizedBox(width: 15,),             
                   Text(
-                  'Składniki podstawowe dania:', 
+                  allTranslations.text('L_SKLADNIKI_DANIA') + ':', 
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,

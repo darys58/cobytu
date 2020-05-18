@@ -6,6 +6,7 @@ import './detail_meal_screen.dart';
 import './detail_resta_screen.dart';
 import './detail_ingred_screen.dart';
 import './detail_opinion_screen.dart';
+import '../all_translations.dart';
 
 
 
@@ -77,17 +78,17 @@ void _selectPage(int index){
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.info_outline),
-            title: Text('O DANIU'),
+            title: Text(allTranslations.text('L_O_DANIU')),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.local_dining),
-            title: Text('O LOKALU'),
+            title: Text(allTranslations.text('L_O_LOKALU')),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.format_list_bulleted),
-            title: Text('SKŁADNIKI'),
+            title: Text(allTranslations.text('L_SKLADNIKI')),
           ),
      /*     BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,

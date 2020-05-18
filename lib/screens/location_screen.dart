@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:meals/all_translations.dart';
+
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../screens/meals_screen.dart';
 import '../models/rest.dart';
@@ -34,7 +36,7 @@ class _LocationScreenState extends State<LocationScreen> {
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
   String _currentValue;
-  String _adresWszystkie = 'Miasto';
+  String _adresWszystkie = allTranslations.text('L_MIASTO'); //Miasto
   
   @override
   void initState(){
@@ -250,11 +252,11 @@ class _LocationScreenState extends State<LocationScreen> {
     print ('location budowanie ekranu');
   final restsData = Provider.of<Rests>(context);
   List<Rest> rests = restsData.items.toList();
-  rests.add(Rest(id:'0',nazwa:'Wszystkie',obiekt:'0', adres: _adresWszystkie, miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
+  rests.add(Rest(id:'0',nazwa:allTranslations.text('L_WSZYSTKIE'),obiekt:'0', adres: _adresWszystkie, miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
 
     return Scaffold(
       appBar :AppBar( 
-        title: Text('Wybierz lokal'),
+        title: Text(allTranslations.text('L_LOKALIZACJA')),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
@@ -297,7 +299,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         mainAxisSize:MainAxisSize.min, 
                         crossAxisAlignment: CrossAxisAlignment.start, 
                         children: <Widget>[
-                          Text('Województwo'),
+                          Text(allTranslations.text('L_WOJEWODZTWO')),
                           //SizedBox(height: 5.0),
                           DropdownButton(
                             style: TextStyle(
@@ -319,7 +321,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         mainAxisSize:MainAxisSize.min, 
                         crossAxisAlignment: CrossAxisAlignment.start, 
                         children: <Widget>[
-                          Text('Miasto'),
+                          Text(allTranslations.text('L_MIASTO')),
                           //SizedBox(height: 5.0),
                           DropdownButton(
                             style: TextStyle(

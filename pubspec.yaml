@@ -54,7 +54,15 @@ flutter:
   assets:
     - lang/en.json
     - lang/pl.json
-
+    - lang/cs.json
+    - lang/de.json
+    - lang/es.json
+    - lang/fr.json
+    - lang/ja.json
+    - lang/ru.json
+    - lang/sv.json
+    - lang/zh.json
+  
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

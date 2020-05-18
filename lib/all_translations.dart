@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Preferences related
 ///
 //const String _storageKey = "MyApplication_";
-const List<String> _supportedLanguages = ['en','pl'];
+const List<String> _supportedLanguages = ['en','pl','cs','de','es','fr','ru','sv','ja','zh'];
 Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
 

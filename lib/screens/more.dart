@@ -15,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
      
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Więcej'), //const jezeli nie będzie aktualizowany tytul
+          title: Text(allTranslations.text('L_WIECEJ')), 
         ),
         body: ListView(
           children:  <Widget>[           
@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.translate),
-                  title: Text('Język'),
+                  title: Text(allTranslations.text('L_JEZYK')),
                   trailing: Icon(Icons.more_vert),
                 ),
               ),

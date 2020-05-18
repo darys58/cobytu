@@ -80,24 +80,24 @@ void _selectPage(int index){
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.home),
-            title: Text('MENU'),
+            title: Text(allTranslations.text('L_MENU')),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.favorite),
-            title: Text(allTranslations.text('ulubione')),
+            title: Text(allTranslations.text('L_ULUBIONE')),
             //title: Text('ULUBIONE'),
             //title: Text(AppLocalizations.of(context).translate('ulubione')),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.location_on),
-            title: Text('LOKAL'),
+            title: Text(allTranslations.text('L_LOKAL')),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.more_vert),
-            title: Text('WIĘCEJ'),
+            title: Text(allTranslations.text('L_WIECEJ')),
           ),
         ],
       ),

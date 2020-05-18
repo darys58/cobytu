@@ -21,6 +21,7 @@ class MealItem extends StatelessWidget {
   List<DetailRest> _mealRestsData = []; //szczegóły restauracji
   List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
   String _currLang = allTranslations.currentLanguage; //aktualny język
+  String _separator;
 /*
 //funkcja przejścia do ekranu ze szczegółami dania
   void selectMeal(BuildContext context) {
@@ -132,7 +133,8 @@ class MealItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final meal = Provider.of<Meal>(context, listen: false); //dostawca danych dostarcza danie z słuchaczem zmian. Zmiana nastąpi jezeli naciśniemy serce polubienie dania. Z listen: false zmieniony na tylko dostawcę danych a słuchacz lokalny "Consumer" zainstalowany  nizej
-
+    if (_currLang == 'en' || _currLang == 'ja' || _currLang == 'zh') _separator = '.'; //separator w cenie
+  
   return InkWell( //element klikalny
       onTap: () {
         //pobranie danych restauracji z serwera (potrzebne modMenu - info kiedy była modyfikacja menu)
@@ -240,19 +242,19 @@ class MealItem extends StatelessWidget {
                               Row( //cena dania
                                 children: <Widget>[
                                   Text(
-                                    meal.cena, //interpolacja ciągu znaków
+                                    _separator == '.' ? meal.cena  : meal.cena.replaceAll('.', ','), //meal.cena, //interpolacja ciągu znaków
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.black,
                                     ), 
                                   ),
                                   SizedBox(
-                                    width: 5,
+                                    width: 2,
                                   ), //odległość miedzy ceną a PLN
                                   Text(
-                                    'PLN', //interpolacja ciągu znaków
+                                    allTranslations.text('L_PLN'), //interpolacja ciągu znaków
                                     style: TextStyle(
-                                      //fontSize: 15,
+                                      fontSize: 18,
                                       color: Colors.black,
                                     ), 
                                   ),  
@@ -267,7 +269,7 @@ class MealItem extends StatelessWidget {
                                     width: 2,
                                   ), //odległość miedzy ikoną i tekstem
                                   Text(
-                                    meal.czas + ' min',
+                                    meal.czas + ' ' + allTranslations.text('L_MIN'),
                                   ), //interpolacja ciągu znaków
                                 ],
                               ),

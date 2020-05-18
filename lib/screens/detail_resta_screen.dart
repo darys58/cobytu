@@ -133,8 +133,7 @@ Future<void> _launchURL(String url) async {
               child: Row(             
                 children: <Widget>[
                   SizedBox(width: 15,),             
-                  Text(
-                  'Danie dostępne w restauracji:', 
+                  Text(allTranslations.text('L_DANIE_DOSTEPNE') + ':', 
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -240,7 +239,7 @@ Future<void> _launchURL(String url) async {
                                 _launchURL('http://${_mealRestsData[index].www}');
                               },
                             ),
-                            IconButton(
+                   /*         IconButton(
                               icon: Icon(
                                 Icons.map
                               ),
@@ -248,7 +247,7 @@ Future<void> _launchURL(String url) async {
                                 //meal.toggleFavoriteStatus();
                               },
                             ),
-                            IconButton(
+                     */       IconButton(
                               icon: Icon(
                                 Icons.more
                               ),
@@ -269,7 +268,7 @@ Future<void> _launchURL(String url) async {
                                 crossAxisAlignment: CrossAxisAlignment.start, 
                                 children: <Widget>[
                                   Text(
-                                    'Udogodnienia:',
+                                    allTranslations.text('L_UDOGODNIENIA') + ':',
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.black,
@@ -278,21 +277,21 @@ Future<void> _launchURL(String url) async {
                                   ),
                                   
                                   if ('${_mealRestsData[index].wifi}' =='1') Divider(),
-                                  if ('${_mealRestsData[index].wifi}' =='1')facilities('Darmowy dostęp do internetu'),
+                                  if ('${_mealRestsData[index].wifi}' =='1')facilities(allTranslations.text('L_WIFI_TAK')),
                                   if ('${_mealRestsData[index].parking}' =='1') Divider(),
-                                  if ('${_mealRestsData[index].parking}' =='1')facilities('Własny parking dla klientów'),
+                                  if ('${_mealRestsData[index].parking}' =='1')facilities(allTranslations.text('L_PARKING_TAK')),
                                   if ('${_mealRestsData[index].klima}' =='1') Divider(),
-                                  if ('${_mealRestsData[index].klima}' =='1')facilities('Obiekt klimatyzowany'),
+                                  if ('${_mealRestsData[index].klima}' =='1')facilities(allTranslations.text('L_KLIMA_TAK')),
                                   if ('${_mealRestsData[index].karta}' =='1') Divider(),
-                                  if ('${_mealRestsData[index].karta}' =='1')facilities('Mozliwa płatność kartą'),
+                                  if ('${_mealRestsData[index].karta}' =='1')facilities(allTranslations.text('L_KARTA_TAK')),
                                   if ('${_mealRestsData[index].letni}' =='1') Divider(),
-                                  if ('${_mealRestsData[index].letni}' =='1')facilities('Ogródek letni'),
+                                  if ('${_mealRestsData[index].letni}' =='1')facilities(allTranslations.text('L_OGRODEK_TAK')),
                                   if ('${_mealRestsData[index].wynos}' =='1') Divider(),
-                                  if ('${_mealRestsData[index].wynos}' =='1')facilities('Dania na wynos'),
+                                  if ('${_mealRestsData[index].wynos}' =='1')facilities(allTranslations.text('L_WYNOS_TAK')),
                                   if ('${_mealRestsData[index].zabaw}' =='1') Divider(),
-                                  if ('${_mealRestsData[index].zabaw}' =='1')facilities('Strefa zabaw dla dzieci'),
+                                  if ('${_mealRestsData[index].zabaw}' =='1')facilities(allTranslations.text('L_STREFA_TAK')),
                                   if ('${_mealRestsData[index].podjazd}' =='1') Divider(),
-                                  if ('${_mealRestsData[index].podjazd}' =='1')facilities('Udogodnienia dla niepełnosprawnych'),
+                                  if ('${_mealRestsData[index].podjazd}' =='1')facilities(allTranslations.text('L_NIEPELNO_TAK')),
                                   //Divider(),
                                   SizedBox(height: 5,),
                                 ],
