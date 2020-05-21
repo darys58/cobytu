@@ -1,5 +1,6 @@
 {
-    "L_WOJEWODZTWO": "Voivodato",
+"L_LISTA_DAN": "Lista de platos",
+"L_WOJEWODZTWO": "Voivodato",
 "L_MIASTO": "Ciudad",
 "L_WSZYSTKIE": "Todas",
 "L_O_DANIU": "SOBRE DINAMARCA",
@@ -55,7 +56,7 @@
 "L_MIN": "min",
 "L_G": "sol",
 "L_KCAL": "kcal",
-"L_PLN": "zł",
+"L_PLN": "PLN",
 "L_KROPKA": ".",
 "L_PRZECINEK": ","
 }

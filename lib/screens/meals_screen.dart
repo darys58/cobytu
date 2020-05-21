@@ -35,7 +35,7 @@ class _MealsScreenState extends State<MealsScreen> {
   String language; //skrót aktualnego języka np. pl
   String reloadTemp = 'false'; 
   String initAppTemp = 'false';
-  final wersja = ['1','0','1','05.05.2020','nic','nic']; //major, minor, numer wydania, data publikacji, 
+  final wersja = ['1','0','0','1','20.05.2020','nic']; //major, minor,wersja, numer wydania, data publikacji, 
 
   String podkategoria1 = '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
   String podkategoria2 = '292'; //wybrana podkategoria, domyślnie 292 czyli "Wszystkie" w kategorii 2
@@ -50,7 +50,7 @@ class _MealsScreenState extends State<MealsScreen> {
   String categoryTitle;
   List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
   List<Mem> _memVer; //dane wersji aplikacji i bazy danych w tabeli memory - baza lokalna
-  String _tytul = 'Lista dań'; //tytuł tymczasowy
+  String _tytul = allTranslations.text('L_LISTA_DAN'); //tytuł tymczasowy
   //String _selectedItem = '';
   List<Meal> meals1;
   List<Meal> meals2;
@@ -121,16 +121,16 @@ class _MealsScreenState extends State<MealsScreen> {
               //ładowanie danych domyślnych
               print('pierwsze uruchomienie apki!!!!!!!!');
             DBHelper.deleteBase().then((_) {  //kasowanie całej bazy danych bo będzie nowa
-              Mems.insertMemory('memLok', '14','wielkopolskie','1', 'Konin','0','Wszystkie');//default '27','Borówka'
+              Mems.insertMemory('memLok', '14','wielkopolskie','1', 'Konin','31','Siesta');//default '27','Borówka'
               Mems.insertMemory('memVer', wersja[0], wersja[1], wersja[2], wersja[3], wersja[4], wersja[5]);//default
               //print('usunięcie wszystkich danych i wczytanie danych domślnych');
               //fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
                 //Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
                   //Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
                     //Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=&lang=$language').then((_) { 
+                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language').then((_) { 
                         Rests.fetchRestsFromSerwer().then((_) { 
-                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=27&lang=$language').then((_) { 
+                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language').then((_) { 
                             Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                               Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
                                 _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych

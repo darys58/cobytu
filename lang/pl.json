@@ -1,4 +1,5 @@
 {
+    "L_LISTA_DAN": "Lista dań",
     "L_WOJEWODZTWO": "Województwo",
     "L_MIASTO": "Miasto",
     "L_WSZYSTKIE": "Wszystkie",
@@ -58,4 +59,5 @@
     "L_PLN": "zł",
     "L_KROPKA": ".",
     "L_PRZECINEK": ","
-}
+    
+}   

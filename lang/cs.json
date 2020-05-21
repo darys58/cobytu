@@ -1,4 +1,5 @@
 {
+"L_LISTA_DAN": "Seznam jídel",
 "L_WOJEWODZTWO": "Vojvodství",
 "L_MIASTO": "Město",
 "L_WSZYSTKIE": "Všechno",
@@ -55,7 +56,7 @@
 "L_MIN": "min",
 "L_G": "g",
 "L_KCAL": "kcal",
-"L_PLN": "zł",
+"L_PLN": "PLN",
 "L_KROPKA": ".",
 "L_PRZECINEK": ","
 }

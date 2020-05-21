@@ -1,4 +1,5 @@
 {
+    "L_LISTA_DAN": "菜餚清單",
     "L_WOJEWODZTWO": "省份",
 "L_MIASTO": "市",
 "L_WSZYSTKIE": "所有",
@@ -53,9 +54,9 @@
 "L_FILTRY": "過濾器",
 "L_ANULUJ": "取消",
 "L_MIN": "分",
-"L_G": "g",
+"L_G": "克",
 "L_KCAL": "大卡",
-"L_PLN": "zł",
+"L_PLN": "PLN",
 "L_KROPKA": "。",
 "L_PRZECINEK": "。"
 }

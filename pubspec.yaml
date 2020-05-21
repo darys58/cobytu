@@ -37,6 +37,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "dev_assets/cobytu1024.png"
+  adaptive_icon_backgroud: "#ffffff"
+  adaptive_icon_foregroud: "dev_assets/cobytu1024_adaptive.png"
 
 
 # For information on the generic Dart part of this file, see the

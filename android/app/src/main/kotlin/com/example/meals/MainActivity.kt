@@ -1,4 +1,4 @@
-package com.example.meals
+package pl.cobytu
 
 import android.os.Bundle
 
