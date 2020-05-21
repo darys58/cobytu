@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../models/meals.dart';
-import '../widgets/meal_item.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import '../all_translations.dart';
 import 'languages.dart';
 
+
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings'; 
+
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceWebView: true);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -19,6 +28,7 @@ class SettingsScreen extends StatelessWidget {
         ),
         body: ListView(
           children:  <Widget>[           
+            //język
             GestureDetector(
               onTap: (){
                 Navigator.of(context).pushNamed(LanguagesScreen.routeName); 
@@ -27,6 +37,35 @@ class SettingsScreen extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.translate),
                   title: Text(allTranslations.text('L_JEZYK')),
+                  trailing: Icon(Icons.more_vert),
+                ),
+              ),
+            ),
+            //polityka prywatności
+            GestureDetector(
+              onTap: (){             
+                  _launchURL('https://www.cobytu.com/index.php?d=polityka&mobile=1');
+               // Navigator.of(context).pushNamed(LanguagesScreen.routeName); 
+              },
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.security),
+                  title: Text(allTranslations.text('L_POLITYKA')),
+                  trailing: Icon(Icons.more_vert),
+                ),
+              ),
+            ),
+
+            //regulamin
+            GestureDetector(
+              onTap: (){             
+                  _launchURL('https://www.cobytu.com/index.php?d=regulamin&mobile=1');
+               // Navigator.of(context).pushNamed(LanguagesScreen.routeName); 
+              },
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.library_books),
+                  title: Text(allTranslations.text('L_REGULAMIN')),
                   trailing: Icon(Icons.more_vert),
                 ),
               ),
