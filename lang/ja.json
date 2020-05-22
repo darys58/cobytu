@@ -1,4 +1,6 @@
 {
+    "L_ULUBIONE_BRAK": "お気に入りはありません",
+    "L_ULUBIONE_M": "お気に入り",
     "L_LISTA_DAN": "料理一覧",
     "L_WOJEWODZTWO": "Voivodeship",
 "L_MIASTO": "市",
@@ -55,7 +57,7 @@
 "L_ANULUJ": "キャンセル",
 "L_MIN": "分",
 "L_G": "グラム",
-"L_KCAL": "kcal",
+"L_KCAL": "キロカジ",
 "L_PLN": "PLN",
 "L_KROPKA": "。",
 "L_PRZECINEK": "。"

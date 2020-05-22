@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/meals.dart';
 import '../widgets/meal_item.dart';
+import '../all_translations.dart';
 
 class FavoritesScreen extends StatelessWidget {
   static const routeName = '/favorite-meals'; 
@@ -13,12 +14,12 @@ class FavoritesScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ulubione'), //const jezeli nie będzie aktualizowany tytul
+        title: Text(allTranslations.text('L_ULUBIONE_M')), //const jezeli nie będzie aktualizowany tytul
       ),
       body: favorites.isEmpty 
       ? Center( 
           child:Text(
-            'Brak ulubionych',
+            allTranslations.text('L_ULUBIONE_BRAK'),
             style: TextStyle(
               fontSize: 20,
               color: Colors.grey,
