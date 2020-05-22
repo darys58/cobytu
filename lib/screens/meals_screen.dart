@@ -35,7 +35,7 @@ class _MealsScreenState extends State<MealsScreen> {
   String language; //skrót aktualnego języka np. pl
   String reloadTemp = 'false'; 
   String initAppTemp = 'false';
-  final wersja = ['1','0','0','1','20.05.2020','nic']; //major, minor,wersja, numer wydania, data publikacji, 
+  final wersja = ['1','0','0','2','22.05.2020','nic']; //major, minor,wersja, numer wydania, data publikacji, 
 
   String podkategoria1 = '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
   String podkategoria2 = '292'; //wybrana podkategoria, domyślnie 292 czyli "Wszystkie" w kategorii 2
