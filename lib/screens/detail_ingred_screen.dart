@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../models/mem.dart';
-import '../models/mems.dart';
 import '../models/meals.dart';
 import '../models/detailMeal.dart';
 import '../models/detailIngred.dart';

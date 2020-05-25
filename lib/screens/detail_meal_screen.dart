@@ -10,6 +10,7 @@ import '../models/mems.dart';
 import '../models/meals.dart';
 import '../models/detailMeal.dart';
 import '../all_translations.dart';
+import '../globals.dart' as globals;
 
 class DetailMealScreen extends StatefulWidget {
   static const routeName = '/detail-meal';
@@ -276,6 +277,8 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
       _cena = cena.toStringAsFixed(2); //zamiana z double na string w formacie XXX.XX              
     });
   }
+
+  
   
   @override
   Widget build(BuildContext context) {
@@ -505,17 +508,69 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         color: Colors.white,
         width: MediaQuery.of(context).size.width,
         child: Row(
-          //mainAxisAlignment: MainAxisAlignment.spaceBetween, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, 
           children: <Widget>[
-//=== cena
-            SizedBox(width: 20,),             
-            Text(
-              _separator == '.' ? _cena  + ' ' + allTranslations.text('L_PLN') : _cena.replaceAll('.', ',')  + ' ' + allTranslations.text('L_PLN'), 
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.black,
-              ),
+  //=== cena          
+            Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
+              children: <Widget>[
+                SizedBox(width: 20,),             
+                Text(
+                  _separator == '.' ? _cena  + ' ' + allTranslations.text('L_PLN') : _cena.replaceAll('.', ',')  + ' ' + allTranslations.text('L_PLN'), 
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
+                  ),
+                ),                
+              ],
             ),
+
+//=== przyciski + -
+            Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.remove_circle_outline //przycisk -
+                      ),
+                      iconSize: 40.0,
+                      onPressed: (){
+                        setState(() {
+                          if (globals.naStoliku > 0) {
+                            globals.naStoliku = globals.naStoliku - 1;
+                          }
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      width: 9,
+                    ), //odległość miedzy ikoną i tekstem
+                    Text(
+                      '${globals.naStoliku}',   //ilość dań na stoliku
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 9,
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.add_circle_outline //przycisk +
+                      ),
+                      iconSize: 40.0,
+                      onPressed: (){
+                        setState(() {
+
+                          globals.naStoliku = globals.naStoliku + 1;
+                       });
+                      },
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ), //interpolacja ciągu znaków
+                  ],
+                )
           ],
         )
       ),

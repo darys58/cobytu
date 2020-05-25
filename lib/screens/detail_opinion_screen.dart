@@ -1,10 +1,10 @@
 //ekran szczegółów dania
-import 'dart:convert'; //obsługa json'a
+//import 'dart:convert'; //obsługa json'a
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
 import '../models/meals.dart';
-import '../models/detailRest.dart';
+//import '../models/detailRest.dart';
 
 
 class DetailOpinionScreen extends StatefulWidget {

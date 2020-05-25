@@ -69,13 +69,13 @@ class _MyAppState extends State<MyApp> {
           canvasColor: Color.fromRGBO(255, 255, 255, 1), //kolor płótna 255, 254, 229, 1
           fontFamily: 'Raleway', //domyślna czcionka
           textTheme: ThemeData.light().textTheme.copyWith( //domyślny motyw tektu
-            body1: TextStyle(
+            headline1: TextStyle(
               color: Color.fromRGBO(20, 51, 51, 1),
             ),
-            body2: TextStyle(
+            headline2: TextStyle(
               color: Color.fromRGBO(20, 51, 51, 1),
             ),
-            title: TextStyle(
+            headline6: TextStyle(
               fontSize: 20,
               fontFamily: 'RobotoCondensed',
               fontWeight: FontWeight.bold,

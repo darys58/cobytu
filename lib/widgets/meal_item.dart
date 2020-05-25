@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; //pakiet dostawcy
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; //obsługa json'a
 import 'package:http/http.dart' as http;
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
@@ -18,9 +18,9 @@ import '../models/podkat.dart';
 import '../all_translations.dart';
 
 class MealItem extends StatelessWidget {
-  List<DetailRest> _mealRestsData = []; //szczegóły restauracji
+  final List<DetailRest> _mealRestsData = []; //szczegóły restauracji
   List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
-  String _currLang = allTranslations.currentLanguage; //aktualny język
+  final String _currLang = allTranslations.currentLanguage; //aktualny język
   String _separator;
 /*
 //funkcja przejścia do ekranu ze szczegółami dania
@@ -86,14 +86,14 @@ class MealItem extends StatelessWidget {
       throw (error);
     }
   }
-  
+  /*
   //ustawienianie zmiennych globalnych
   _setPrefers(String key, String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(key, value);
     print('set $key = $value');
   }
-
+*/
   void _showAlert(BuildContext context,String nazwa){
     showDialog(context: context,
       builder: (context) =>AlertDialog(
