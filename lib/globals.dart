@@ -1,3 +1,4 @@
 library cobytu.globals;
 
-int naStoliku = 0; //ilość dań na stoliku
+int wKoszyku = 0; //ilość dań w koszyku
+String deviceId; //Id telefonu - identyfikator apki/uzytkownika

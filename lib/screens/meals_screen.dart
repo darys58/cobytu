@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_info/device_info.dart';
 
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../models/meals.dart';
@@ -13,6 +14,7 @@ import '../models/rests.dart';
 import '../models/podkat.dart';
 import '../widgets/meal_item.dart';
 import '../all_translations.dart';
+import '../globals.dart' as globals;
 
 class MealsScreen extends StatefulWidget {
   //stanowy bo usuwanie dań
@@ -36,6 +38,7 @@ class _MealsScreenState extends State<MealsScreen> {
   String reloadTemp = 'false'; 
   String initAppTemp = 'false';
   final wersja = ['1','0','0','2','22.05.2020','nic']; //major, minor,wersja, numer wydania, data publikacji, 
+  
 
   String podkategoria1 = '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
   String podkategoria2 = '292'; //wybrana podkategoria, domyślnie 292 czyli "Wszystkie" w kategorii 2
@@ -82,10 +85,12 @@ class _MealsScreenState extends State<MealsScreen> {
   void didChangeDependencies() {
      
     print('wejscie do Dependencies ms 1');
+
     print('_isInit = $_isInit');
     if (_isInit) {
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
+        _getId(); //pobranie Id telefonu i zapisanie w globals.deviceId - do identyfikacji uzytkownika apki
       });
       
       print('wejscie do Dependencies - Init meals_screen - czas...');
@@ -111,7 +116,7 @@ class _MealsScreenState extends State<MealsScreen> {
             //_setPrefers('language', 'pl'); //potrzebna inicjalizacja apki - ustawienie do zapamiętania
         }
       
-        _getPrefers().then((_) { //pobranie zmiennych globalnych
+        _getPrefers().then((_) { //pobranie zmiennych globalnych z pliku prefers
           print('initApp = $initApp');
           print('reload = $reload');
           print('language = $language');
@@ -196,7 +201,20 @@ class _MealsScreenState extends State<MealsScreen> {
     _isInit = false;
     super.didChangeDependencies();
   }
-  
+  //pobieranie Id telefonu  - do identyfikacji apki jakoytkownika
+  Future<void> _getId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      globals.deviceId =  iosDeviceInfo.identifierForVendor + '_' + iosDeviceInfo.model;
+      //return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else {
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      globals.deviceId = androidDeviceInfo.androidId + '_' + androidDeviceInfo.model;
+      //return androidDeviceInfo.androidId; // unique ID on Android
+    }
+  }
+    
   //ustawienianie zmiennych globalnych
   _setPrefers(String key, String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -306,7 +324,7 @@ class _MealsScreenState extends State<MealsScreen> {
   Widget build(BuildContext context) { 
     //final snackBar = SnackBar(content: Text('Zapisano nową lokalizację'));
     //Scaffold.of(context).showSnackBar(snackBar);
-    
+    print('globals.deviceId = ${globals.deviceId}');
     //podkategorie + rodzaje
     var podkatData = Provider.of<Podkategorie>(context);
     final podkat1 = podkatData.items.where((podk) {return podk.kaId.contains('1');}).toList();

@@ -1,4 +1,5 @@
 //ekran szczegółów dania
+import 'dart:async';
 import 'dart:convert'; //obsługa json'a
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,20 @@ import '../models/meals.dart';
 import '../models/detailMeal.dart';
 import '../all_translations.dart';
 import '../globals.dart' as globals;
+
+class OdpPost {
+  final int id;
+  final String title;
+
+  OdpPost({this.id, this.title});
+
+  factory OdpPost.fromJson(Map<String, dynamic> json) {
+    return OdpPost(
+      id: json['ko_ile'],
+      title: json['ko_da_id'],
+    );
+  }
+}
 
 class DetailMealScreen extends StatefulWidget {
   static const routeName = '/detail-meal';
@@ -37,21 +52,24 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   List<DropdownMenuItem<String>> _dropdownMenuItemsWar1; ////lista dodatków wariantowych 1 dla buttona wyboru
   List<String> _listWar1; //lista dodatków wariantowych 1 jako lista stringów, zeby uzyskać index wybranego dodatku
   String _selectedWar1; //wybrany dodatek wariantowy 1
+  String _selectedWar1Id; //ID wybranego dodateku wariantowego 1
   int war1Id = 0; //index wybranego dodatku wariantowego 1 (index miejsca na liście a nie id dodatku )
   
   List<DropdownMenuItem<String>> _dropdownMenuItemsWar2; ////lista dodatków wariantowych 2 dla buttona wyboru
   List<String> _listWar2; //lista dodatków wariantowych 2 jako lista stringów, zeby uzyskać index wybranego dodatku
   String _selectedWar2; //wybrany dodatek wariantowy 2
+  String _selectedWar2Id; //ID wybranego dodateku wariantowego 2
   int war2Id = 0; //index wybranego dodatku wariantowego 2 (index miejsca na liście a nie id dodatku )
 
   List<String> _listDod; //lista dodatków dodatkowych do wyboru
   List<String> _selectedDod = []; //wybrane dodatki dodatkowe
+  String _listSelectedDodId = '0'; //lista id wybranych dodatków dodatkowych - jako string np: '111,222,333'
   
   //bool _isChecked = true;
   int _waga; //waga ustawiana w funkcji przelicz()
   int _kcal; //kcal ustawiana w funkcji przelicz()
   String _cena; //cena ustawiana w funkcji przelicz()
-  
+  Future<OdpPost> _futureKoszyk;
   
 
   @override
@@ -73,12 +91,14 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
             if (_detailMealData[0].warList1.isNotEmpty){
               _dropdownMenuItemsWar1 = buildDropdownMenuWar(_detailMealData[0].warList1); 
               _selectedWar1 = _dropdownMenuItemsWar1[0].value;  //domyślny war1 
-              _listWar1 = List<String>.from(_detailMealData[0].warList1);   
+              _listWar1 = List<String>.from(_detailMealData[0].warList1); 
+              _selectedWar1Id = _detailMealData[0].warList1Id[0];  //domyśny Id war1
             }
             if (_detailMealData[0].warList2.isNotEmpty){
             _dropdownMenuItemsWar2 = buildDropdownMenuWar(_detailMealData[0].warList2); 
             _selectedWar2 = _dropdownMenuItemsWar2[0].value;  //domyślny war2
             _listWar2 = List<String>.from(_detailMealData[0].warList2);  
+            _selectedWar2Id = _detailMealData[0].warList2Id[0];  //domyśny Id war2
             }
 
             _listDod = List<String>.from(_detailMealData[0].dodat);//zmiana typu List<dynamic> na List<String>
@@ -111,12 +131,14 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         if (_detailMealData[0].warList1.isNotEmpty){
           _dropdownMenuItemsWar1 = buildDropdownMenuWar(_detailMealData[0].warList1); 
           _selectedWar1 = _dropdownMenuItemsWar1[0].value;  //domyślny war1 
-          _listWar1 = List<String>.from(_detailMealData[0].warList1); //przerobienie na listę stringów  
+          _listWar1 = List<String>.from(_detailMealData[0].warList1); //przerobienie na listę stringów 
+          _selectedWar1Id = _detailMealData[0].warList1Id[0];  //domyśny Id war1 
         }
         if (_detailMealData[0].warList2.isNotEmpty){
         _dropdownMenuItemsWar2 = buildDropdownMenuWar(_detailMealData[0].warList2); 
         _selectedWar2 = _dropdownMenuItemsWar2[0].value;  //domyślny war2
-        _listWar2 = List<String>.from(_detailMealData[0].warList2);  
+        _listWar2 = List<String>.from(_detailMealData[0].warList2); 
+        _selectedWar2Id = _detailMealData[0].warList2Id[0];  //domyśny Id war2 
         }
 
         _listDod = List<String>.from(_detailMealData[0].dodat);//zmiana typu List<dynamic> na List<String>
@@ -278,7 +300,34 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
     });
   }
 
-  
+  //wysyłanie zamawianego dania do koszyka do serwera www
+  Future<OdpPost> aktualizujKoszyk(String akcja) async {
+  final http.Response response = await http.post(
+    'https://cobytu.com/cbt_f_do_koszyka.php',
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'ko_uz_id': globals.deviceId,
+      'ko_re_id': _memLok[0].e,
+      'ko_da_id': _detailMealData[0].id,
+      'ko_dw1': _selectedWar1Id,
+      'ko_dw2': _selectedWar2Id,
+      'ko_dd': _listSelectedDodId,
+      'ko_cena': _cena,
+      'ko_waga': _waga.toString(),
+      'ko_kcal': _kcal.toString(),
+      'ko_akcja': akcja,
+    }),
+  );
+  print(response.body);
+  if (response.statusCode == 200) {
+    return OdpPost.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to create OdpPost.');
+  }
+}
+
   
   @override
   Widget build(BuildContext context) {
@@ -411,7 +460,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                 ]
               ),
 //dodatek wariantowy 1
-            if (_detailMealData[0].warList1.isNotEmpty)
+            if (_detailMealData[0].warList1.isNotEmpty) 
               Row( //całą zawatość kolmny stanowi wiersz
                 mainAxisAlignment: MainAxisAlignment.start, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem              
                 children: <Widget>[
@@ -435,13 +484,14 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       setState(() {
                         _selectedWar1 = newValue; // ustawienie nowej wybranej nazwy dodatku
                         war1Id = _listWar1.indexOf(newValue); //pobranie indexu wybranego dodatku z listy
+                        _selectedWar1Id = _detailMealData[0].warList1Id[war1Id]; //Id wybranego dodatku
                         przelicz();
                       });
                     }  //onChangeDropdownItemWar1,
                   ),
                 ]
               ),
-          
+              
 //dodatek wariantowy 2
             if (_detailMealData[0].warList2.isNotEmpty) 
               Row( //całą zawatość kolmny stanowi wiersz
@@ -466,6 +516,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       setState(() {
                         _selectedWar2 = newValue;
                         war2Id = _listWar2.indexOf(newValue); //pobranie indexu wybranego dodatku z listy
+                        _selectedWar2Id = _detailMealData[0].warList2Id[war2Id]; //Id wybranego dodatku
                         przelicz();
                       });
                     },
@@ -488,12 +539,29 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
               },
               onSelected: (selectedDod){
                 setState(() {
-                  _selectedDod = selectedDod; //
+                  List<int> _listSelectedDodIdInt = []; //lista indexów wybranych dodatków
+                  _selectedDod = selectedDod; //lista nazw wybranych dodateków
+                  
+                  for (var i = 0; i < _selectedDod.length; i++) { //dla kazdego wybranego dodatku
+                    //index miejsca dodatku na liscie wybranych dodatków                    
+                    int _indexNaLiscieSelDod = _detailMealData[0].dodat.indexOf(_selectedDod[i]); 
+                    //lista id wybranych dodatków - jako integery do posortowania by kolejność była zawsze taka sama - potrzebne do sprawdzania identyczności dania w koszyku
+                    _listSelectedDodIdInt.add(int.parse(_detailMealData[0].dodatId[_indexNaLiscieSelDod]));
+                    _listSelectedDodIdInt.sort();                
+                  }
+                  if (_listSelectedDodIdInt.isNotEmpty){
+                    print('_listSelectedDodIdwwwwwww = {$_listSelectedDodId}');
+                    _listSelectedDodId = _listSelectedDodIdInt.toString(); //lista zawiera '[' i ']' 
+                    _listSelectedDodId = _listSelectedDodId.substring(1, _listSelectedDodId.length - 1); //usuwanie '[' i ']'
+                    
+                  } else _listSelectedDodId = '0';
+                  print('_listSelectedDodId = {$_listSelectedDodId}');
                   przelicz();
                 });
                 //print("checked: ${_selectedDod.toString()}");
-                },
+              },
             ),
+            SizedBox(height: 60,), //odstęp kompensujacy dodanie bottomSheet (stopki z ceną)
           ]
         )
       ),
@@ -535,8 +603,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       iconSize: 40.0,
                       onPressed: (){
                         setState(() {
-                          if (globals.naStoliku > 0) {
-                            globals.naStoliku = globals.naStoliku - 1;
+                          if (globals.wKoszyku > 0) {
+                            globals.wKoszyku = globals.wKoszyku - 1;
+                            print('_futureStolik = $_futureKoszyk');
                           }
                         });
                       },
@@ -545,7 +614,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       width: 9,
                     ), //odległość miedzy ikoną i tekstem
                     Text(
-                      '${globals.naStoliku}',   //ilość dań na stoliku
+                      '${globals.wKoszyku}',   //ilość dań na stoliku
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.black,
@@ -561,8 +630,8 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       iconSize: 40.0,
                       onPressed: (){
                         setState(() {
-
-                          globals.naStoliku = globals.naStoliku + 1;
+                          _futureKoszyk = aktualizujKoszyk('1'); //dodanie dania do stolika na serwerze
+                          globals.wKoszyku = globals.wKoszyku + 1;
                        });
                       },
                     ),
