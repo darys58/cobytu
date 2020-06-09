@@ -100,6 +100,11 @@ class Meals with ChangeNotifier{  //klasa Meals jest zmiksowana z klasą ChangeN
 
   }
 
+  static Future<void> updateKoszyk(id, ile)async{
+     await DBHelper.updateIle(id, ile);
+
+  }
+
 }
 /*
 import 'meal.dart';

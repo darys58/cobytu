@@ -5,28 +5,39 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:grouped_buttons/grouped_buttons.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../models/mem.dart';
 import '../models/mems.dart';
 import '../models/meals.dart';
 import '../models/detailMeal.dart';
+import '../models/cart.dart';
+import '../widgets/badge.dart';
 import '../all_translations.dart';
 import '../globals.dart' as globals;
+/*
+class OdpPost { //odpowiedź serwera www po wysłaniu aktualiuzacji koszyka metodą "post"
+  final int ile;
+  final String da;
 
-class OdpPost {
-  final int id;
-  final String title;
-
-  OdpPost({this.id, this.title});
+  OdpPost({this.ile, this.da});
 
   factory OdpPost.fromJson(Map<String, dynamic> json) {
     return OdpPost(
-      id: json['ko_ile'],
-      title: json['ko_da_id'],
+      ile: json['ko_ile'],
+      da: json['ko_da_id'],
     );
   }
+  
+  Map toMap() {
+    var map = new Map<String, dynamic>();
+    map["ile"] = ile;
+    map["da"] = da;
+    return map;
+  }
 }
-
+*/
 class DetailMealScreen extends StatefulWidget {
   static const routeName = '/detail-meal';
 
@@ -69,7 +80,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   int _waga; //waga ustawiana w funkcji przelicz()
   int _kcal; //kcal ustawiana w funkcji przelicz()
   String _cena; //cena ustawiana w funkcji przelicz()
-  Future<OdpPost> _futureKoszyk;
+  //Future<OdpPost> _futureKoszyk;
   
 
   @override
@@ -102,7 +113,8 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
             }
 
             _listDod = List<String>.from(_detailMealData[0].dodat);//zmiana typu List<dynamic> na List<String>
-            
+            globals.wKoszyku = _detailMealData[0].stolik;
+            print('ile na stoliku = ${_detailMealData[0].stolik}');
             przelicz();
             
             setState(() {
@@ -172,8 +184,8 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 
   //pobranie (z serwera www) szczegółów dania - dla szczegółów dania
   Future<List<DetailMeal>> fetchDetailMealFromSerwer() async {
-    var url = 'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&rest=${_memLok[0].e}&lang=$_currLang';
-    //print(url);
+    var url = 'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&dev=${globals.deviceId}&rest=${_memLok[0].e}&lang=$_currLang';
+    print(url);
     try {
       final response = await http.get(url);
       //print(json.decode(response.body));
@@ -301,45 +313,69 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   }
 
   //wysyłanie zamawianego dania do koszyka do serwera www
-  Future<OdpPost> aktualizujKoszyk(String akcja) async {
-  final http.Response response = await http.post(
-    'https://cobytu.com/cbt_f_do_koszyka.php',
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'ko_uz_id': globals.deviceId,
-      'ko_re_id': _memLok[0].e,
-      'ko_da_id': _detailMealData[0].id,
-      'ko_dw1': _selectedWar1Id,
-      'ko_dw2': _selectedWar2Id,
-      'ko_dd': _listSelectedDodId,
-      'ko_cena': _cena,
-      'ko_waga': _waga.toString(),
-      'ko_kcal': _kcal.toString(),
-      'ko_akcja': akcja,
-    }),
-  );
-  print(response.body);
-  if (response.statusCode == 200) {
-    return OdpPost.fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to create OdpPost.');
+  Future<void> aktualizujKoszyk(String akcja) async {
+    final http.Response response = await http.post(
+      'https://cobytu.com/cbt_f_do_koszyka.php',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'ko_uz_id': globals.deviceId,
+        'ko_re_id': _memLok[0].e,
+        'ko_da_id': _detailMealData[0].id,
+        'ko_dw1': _selectedWar1Id,
+        'ko_dw2': _selectedWar2Id,
+        'ko_dd': _listSelectedDodId,
+        'ko_cena': _cena,
+        'ko_waga': _waga.toString(),
+        'ko_kcal': _kcal.toString(),
+        'ko_akcja': akcja,
+      }),
+    );
+    print(response.body);
+    if (response.statusCode >= 200 && response.statusCode <= 400 && json != null) {
+      Map<String, dynamic> odpPost = json.decode(response.body);
+      //zapisanie w tabeli 'dania' do pola 'stolik' ilości tego dania w koszyku
+      //Meal.changeStolik(odpPost['ko_da_id'], odpPost['ko_ile'].toString());    
+      Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); 
+     // _setPrefers('reload', 'true');    
+      //return OdpPost.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to create OdpPost.');
+    }
   }
-}
-
-  
+/*
+  //ustawienianie zmiennych globalnych
+  _setPrefers(String key, String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+    print('set $key = $value');
+  }
+  */
   @override
   Widget build(BuildContext context) {
     final mealId = ModalRoute.of(context).settings.arguments as String; //id posiłku pobrany z argumentów trasy
     //final loadedMeal = Provider.of<Meals>(context).items.firstWhere((ml) => ml.id == mealId);//dla uproszczenia kodu przeniesiona do meals.dart i wtedy jak nizej
     final loadedMeal = Provider.of<Meals>(context, listen: false).findById(mealId); //dla uzyskania nazwy dania i foto
-
+    final cart = Provider.of<Cart>(context, listen: false); //dostęp do danych koszyka
+    print ('cart ========== $cart');
     //!_isLoading ? print('dane dania opis = ${detailMealData[0].opis}') : print('nic - jeszcze nie ma dania');
-  
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedMeal.nazwa),
+       actions: true ? <Widget>[
+              Consumer<Cart>(builder: (_, cart, ch) => Badge(
+                child:  ch,
+                value: cart.itemCount.toString(), //globals.wKoszykuAll.toString(), //
+                  ),
+                child:  IconButton(
+                  icon: Icon(Icons.shopping_cart,
+                  ),
+                  onPressed: () {},
+                ),
+              ), 
+            ]:{},
       ),
       body: _isLoading 
       ? Center(
@@ -550,12 +586,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                     _listSelectedDodIdInt.sort();                
                   }
                   if (_listSelectedDodIdInt.isNotEmpty){
-                    print('_listSelectedDodIdwwwwwww = {$_listSelectedDodId}');
                     _listSelectedDodId = _listSelectedDodIdInt.toString(); //lista zawiera '[' i ']' 
-                    _listSelectedDodId = _listSelectedDodId.substring(1, _listSelectedDodId.length - 1); //usuwanie '[' i ']'
-                    
+                    _listSelectedDodId = _listSelectedDodId.substring(1, _listSelectedDodId.length - 1); //usuwanie '[' i ']'                
                   } else _listSelectedDodId = '0';
-                  print('_listSelectedDodId = {$_listSelectedDodId}');
                   przelicz();
                 });
                 //print("checked: ${_selectedDod.toString()}");
@@ -604,8 +637,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       onPressed: (){
                         setState(() {
                           if (globals.wKoszyku > 0) {
+                            aktualizujKoszyk('2'); //usunięcie dania z koszyka na serwerze - akcja '2'
                             globals.wKoszyku = globals.wKoszyku - 1;
-                            print('_futureStolik = $_futureKoszyk');
+                            cart.addItem(detailMealData[0].id, detailMealData[0].nazwa, -1, detailMealData[0].cena);
                           }
                         });
                       },
@@ -630,8 +664,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       iconSize: 40.0,
                       onPressed: (){
                         setState(() {
-                          _futureKoszyk = aktualizujKoszyk('1'); //dodanie dania do stolika na serwerze
+                          aktualizujKoszyk('1'); //dodanie dania do koszyka na serwerze - akcja '1'
                           globals.wKoszyku = globals.wKoszyku + 1;
+                          cart.addItem(detailMealData[0].id, detailMealData[0].nazwa, 1, detailMealData[0].cena);
                        });
                       },
                     ),

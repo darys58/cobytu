@@ -12,6 +12,8 @@ import '../models/mem.dart';
 import '../models/mems.dart';
 import '../models/rests.dart';
 import '../models/podkat.dart';
+import '../models/cart.dart';
+import '../widgets/badge.dart';
 import '../widgets/meal_item.dart';
 import '../all_translations.dart';
 import '../globals.dart' as globals;
@@ -133,7 +135,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
                   //Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
                     //Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language').then((_) { 
+                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&dev=${globals.deviceId}&woj_id=14&mia_id=1&rest=31&lang=$language').then((_) { 
                         Rests.fetchRestsFromSerwer().then((_) { 
                           Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language').then((_) { 
                             Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
@@ -160,20 +162,22 @@ class _MealsScreenState extends State<MealsScreen> {
                 Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
                   Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
                     Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language').then((_) { 
+                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&dev=${globals.deviceId}&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language').then((_) { 
                         Rests.fetchRestsFromSerwer().then((_) { 
                           Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language').then((_) { 
-                            Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
-                              Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                                _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
-                                print('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
-                     
-                                setState(() {
-                                  _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                                  _isLoading = false; //zatrzymanie wskaznika ładowania danych
+                            Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=pl').then((_) {   //zawartość koszyka z www             
+                              Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
+                                Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
+                                  _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
+                                  print('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
+                      
+                                  setState(() {
+                                    _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                                    _isLoading = false; //zatrzymanie wskaznika ładowania danych
+                                  });
                                 });
                               });
-                            });   
+                            });                  
                           });
                         });            
                       });
@@ -185,11 +189,13 @@ class _MealsScreenState extends State<MealsScreen> {
           }else { //załadowanie dań z bazy loklnej - nie było potrzeby przeładowania danych
             fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej (zeby uzyskać nazwę restacji jako tytuł ekranu)
               print('dane lokalne - załadowanie dań z bazy loklnej');
-              Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
-                Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                  setState(() {
-                    _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                    _isLoading = false; //zatrzymanie wskaznika ładowania dań
+              Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=pl').then((_) {  //zawartość koszyka z www              
+                Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
+                  Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
+                    setState(() {
+                      _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                      _isLoading = false; //zatrzymanie wskaznika ładowania dań
+                    });
                   });
                 });
               });
@@ -206,11 +212,11 @@ class _MealsScreenState extends State<MealsScreen> {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-      globals.deviceId =  iosDeviceInfo.identifierForVendor + '_' + iosDeviceInfo.model;
+      globals.deviceId =  'ios_' + iosDeviceInfo.identifierForVendor + '_' + wersja[0] + wersja[1] + wersja[2] + wersja[3]; // + '_' + iosDeviceInfo.model
       //return iosDeviceInfo.identifierForVendor; // unique ID on iOS
     } else {
       AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-      globals.deviceId = androidDeviceInfo.androidId + '_' + androidDeviceInfo.model;
+      globals.deviceId = 'and_' + androidDeviceInfo.androidId + '_' + wersja[0] + wersja[1] + wersja[2] + wersja[3]; //androidDeviceInfo.model
       //return androidDeviceInfo.androidId; // unique ID on Android
     }
   }
@@ -388,7 +394,21 @@ class _MealsScreenState extends State<MealsScreen> {
         child: Scaffold(
           appBar: AppBar(
             title: Text(_tytul),
-            bottom: TabBar(
+            
+            actions: true ? <Widget>[
+              Consumer<Cart>(builder: (_, cart, ch) => Badge(
+                child:  ch,
+                value: cart.itemCount.toString(), //globals.wKoszykuAll.toString(), //
+                  ),
+                child:  IconButton(
+                  icon: Icon(Icons.shopping_cart,
+                  ),
+                  onPressed: () {},
+                ),
+              ), 
+            ]:{},
+
+          bottom: TabBar(
               isScrollable: true,              
               indicatorColor: Colors.black,
               labelColor: Colors.black,

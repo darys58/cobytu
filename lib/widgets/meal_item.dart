@@ -260,6 +260,22 @@ class MealItem extends StatelessWidget {
                                   ),  
                                 ],
                               ),
+                              meal.stolik != '0' //jezeli danie dodano do koszyka
+                              ?
+                              Row(// ile- Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.add_shopping_cart, color: Theme.of(context).primaryColor, //schedule
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ), //odległość miedzy ikoną i tekstem
+                                  Text(
+                                    meal.stolik + 'x' ,
+                                  ), //interpolacja ciągu znaków
+                                ],
+                              )
+                              :
                               Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                                 children: <Widget>[
                                   Icon(

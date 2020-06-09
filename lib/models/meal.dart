@@ -59,5 +59,10 @@ class Meal with ChangeNotifier{ //dzięki ChangeNotifier dania mogą powiadamia�
     notifyListeners(); //wysłanie powiadomienia aby wszyscy słuchacze wiedzieli ze trzeba wywołać powiadamiacze nasłuchujące bo nastąpoiła zmiana w Meal (zmiana w obiekcie), podobnie jak zmiana stanu
   }
 
-
+/*  void changeStolik(String id, String ile) {
+    stolik = ile;
+    Meals.updateKoszyk(id, ile);  
+    notifyListeners(); 
+  }
+*/
 }

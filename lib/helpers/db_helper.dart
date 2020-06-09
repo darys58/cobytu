@@ -97,7 +97,13 @@ class DBHelper {
     final db = await DBHelper.database();
     print('update dania fav');
     db.update('dania', {'fav': fav}, where: 'id = ?', whereArgs:[id]);
+  }
 
+  //update koszyka/stolika dania - ilość dań w koszyku
+  static Future<void> updateIle(String id, String ile) async{
+    final db = await DBHelper.database();
+    print('update dania - ile w koszyku da=$id ile=$ile');
+    db.update('dania', {'stolik': ile}, where: 'id = ?', whereArgs:[id]);
   }
 
   //odczyt z bazy restauracji z unikalnymi województwami - dla location

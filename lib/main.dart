@@ -9,6 +9,7 @@ import './screens/tabs_detail_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
 import './models/podkat.dart'; //zaimportowanie klasy dostawcy
+import './models/cart.dart'; //zaimportowanie klasy dostawcy
 import 'screens/languages.dart';
 //import 'application.dart';
 import 'all_translations.dart';
@@ -56,6 +57,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider.value( //zarejestrowanie dostawcy danych (bez kontekstu)
           value: Podkategorie(), //dla Podkatergorie
+        ),
+         ChangeNotifierProvider( //zarejestrowanie dostawcy danych (bez kontekstu)
+          create: (ctx) => Cart(), //dla Cart - koszyk
         ),
       ],
        child: MaterialApp(
