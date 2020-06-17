@@ -17,6 +17,7 @@ import '../widgets/badge.dart';
 import '../widgets/meal_item.dart';
 import '../all_translations.dart';
 import '../globals.dart' as globals;
+import './cart_screen.dart';
 
 class MealsScreen extends StatefulWidget {
   //stanowy bo usuwanie dań
@@ -271,6 +272,7 @@ class _MealsScreenState extends State<MealsScreen> {
           f: item['f'],                               
         ),  
       ).toList();
+      globals.memoryLok_e = _memLok[0].e; //zapisanie id wybranej restauracji do zmiennej globalnej
     return _memLok;
   }
 /*  szuflada od dołu
@@ -403,7 +405,9 @@ class _MealsScreenState extends State<MealsScreen> {
                 child:  IconButton(
                   icon: Icon(Icons.shopping_cart,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(CartScreen.routeName);
+                  },
                 ),
               ), 
             ]:{},

@@ -64,6 +64,8 @@
                     ),
                   ),
                 )
+*** całkowicie wypełnia dostepną przestrzeń między dwoma elementami
+Spacer(),
  
  *** pętla for
  count = data.length;

@@ -6,6 +6,7 @@ import './screens/tabs_screen.dart';
 import './screens/detail_meal_screen.dart';
 import './screens/favorites_screen.dart';
 import './screens/tabs_detail_screen.dart';
+import './screens/cart_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
 import './models/podkat.dart'; //zaimportowanie klasy dostawcy
@@ -127,6 +128,7 @@ class _MyAppState extends State<MyApp> {
           FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
           TabsDetailScreen.routeName: (ctx) => TabsDetailScreen(),
           LanguagesScreen.routeName: (ctx) => LanguagesScreen(),
+          CartScreen.routeName: (ctx) => CartScreen(),
           //FiltersScreen.routeName: (ctx) => FiltersScreen(_filters, _setFilters),
         },
         //onGenerateRoute:  - (kure 168) - jezeli brak zdefiniowanej trasy, wyświetla argumenty, dynamiczne trasy

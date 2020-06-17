@@ -50,7 +50,7 @@ class Cart with ChangeNotifier{
       print(json.decode(response.body));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
-        return;
+        return _items = [];
       }
       final List<CartItem>loadedCartItems = [];
 
@@ -66,15 +66,20 @@ class Cart with ChangeNotifier{
           kcal: cartItemData['ko_kcal'], 
         ));
       });
-      _items = loadedCartItems;
+
+      if (loadedCartItems[0].id != 'brak ') _items = loadedCartItems;
+      else _items = [];
       notifyListeners();
      } catch (error) {
       throw (error);
     }
    
   }
+  /*  rezygnacja z funkcji addItem - zastąpienie przez aktualizacje z www przez wywołanie
+  Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLok_e}&lang=pl');  //aktualizacja zawartości koszyka z www             
+  w szczegłłach dania
 
-  //dodawanie do koszyka / przy odejmowaniu dania dodaje danie z ile = -1
+  //dodawanie do koszyka / przy odejmowaniu dania dodaje danie z ile = -1 (tymczasowo w szczegółach dania, tylko do obliczania ilości dań pokazywanej na ikonie koszyka)
   void addItem(String daId, String nazwa, int ile, String cena) {
     _items.add(CartItem(
       id: 'temp',            //DateTime.now().toString(), 
@@ -90,7 +95,7 @@ class Cart with ChangeNotifier{
     print('po dodaniu = $_items');    
     notifyListeners();
   }
-
+*/
 }
 
 /*

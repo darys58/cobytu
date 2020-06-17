@@ -16,6 +16,7 @@ import '../models/cart.dart';
 import '../widgets/badge.dart';
 import '../all_translations.dart';
 import '../globals.dart' as globals;
+import './cart_screen.dart';
 /*
 class OdpPost { //odpowiedź serwera www po wysłaniu aktualiuzacji koszyka metodą "post"
   final int ile;
@@ -337,7 +338,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
       Map<String, dynamic> odpPost = json.decode(response.body);
       //zapisanie w tabeli 'dania' do pola 'stolik' ilości tego dania w koszyku
       //Meal.changeStolik(odpPost['ko_da_id'], odpPost['ko_ile'].toString());    
-      Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); 
+      Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); //aktualizacja ilości dania w koszyku w danych on daniu
+      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLok_e}&lang=pl');  //aktualizacja zawartości koszyka z www             
+  
      // _setPrefers('reload', 'true');    
       //return OdpPost.fromJson(json.decode(response.body));
     } else {
@@ -372,7 +375,10 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                 child:  IconButton(
                   icon: Icon(Icons.shopping_cart,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                   // Navigator.of(context).pushNamed(CartScreen.routeName);
+                    Navigator.of(context).pushReplacementNamed(CartScreen.routeName); 
+                  },
                 ),
               ), 
             ]:{},
@@ -639,7 +645,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                           if (globals.wKoszyku > 0) {
                             aktualizujKoszyk('2'); //usunięcie dania z koszyka na serwerze - akcja '2'
                             globals.wKoszyku = globals.wKoszyku - 1;
-                            cart.addItem(detailMealData[0].id, detailMealData[0].nazwa, -1, detailMealData[0].cena);
+                            //cart.addItem(detailMealData[0].id, detailMealData[0].nazwa, -1, detailMealData[0].cena);
                           }
                         });
                       },
@@ -666,7 +672,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                         setState(() {
                           aktualizujKoszyk('1'); //dodanie dania do koszyka na serwerze - akcja '1'
                           globals.wKoszyku = globals.wKoszyku + 1;
-                          cart.addItem(detailMealData[0].id, detailMealData[0].nazwa, 1, detailMealData[0].cena);
+                          //cart.addItem(detailMealData[0].id, detailMealData[0].nazwa, 1, detailMealData[0].cena);
                        });
                       },
                     ),

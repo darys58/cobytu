@@ -260,7 +260,7 @@ class MealItem extends StatelessWidget {
                                   ),  
                                 ],
                               ),
-                              meal.stolik != '0' //jezeli danie dodano do koszyka
+                            /*  meal.stolik != '0' //jezeli danie dodano do koszyka
                               ?
                               Row(// ile- Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                                 children: <Widget>[
@@ -276,7 +276,7 @@ class MealItem extends StatelessWidget {
                                 ],
                               )
                               :
-                              Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
+                           */   Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                                 children: <Widget>[
                                   Icon(
                                     Icons.hourglass_empty, color: Theme.of(context).primaryColor, //schedule

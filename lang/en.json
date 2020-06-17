@@ -60,5 +60,6 @@
     "L_KCAL": "kcal",
     "L_PLN": "PLN",
     "L_KROPKA": ".",
-    "L_PRZECINEK": ","
+    "L_PRZECINEK": ",",
+    "L_KOSZYK_PUSTY": "Koszyk pusty"
 }
