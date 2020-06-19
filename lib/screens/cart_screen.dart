@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/cart.dart';
+import '../models/rests.dart';
 import '../widgets/cart_one.dart';
 import '../globals.dart' as globals;
 import '../all_translations.dart';
+import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 
 class CartScreen extends StatefulWidget {
   static const routeName = '/cart';
@@ -16,7 +18,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
-  String _separator;
+  String opakowanie = '';
   String _cenaRazem;
   String _wagaRazem;
   String _kcalRazem;
@@ -28,13 +30,15 @@ class _CartScreenState extends State<CartScreen> {
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
-      print('wysłanie po koszyk');
+
       Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLok_e}&lang=pl').then((_) {   //zawartość koszyka z www             
-        
-        print('odebranie koszyka'); 
-        setState(() {
-          _isLoading = false; //zatrzymanie wskaznika ładowania danych
-        });
+        DBHelper.getRestWithId(globals.memoryLok_e).then((restaurant) {
+          opakowanie = restaurant.asMap()[0]['opakowanie']; //pobranie ddoliczanej wartości opakowania
+
+          setState(() {
+            _isLoading = false; //zatrzymanie wskaznika ładowania danych
+          });
+        }); 
       });                     
 
     }  
@@ -42,10 +46,15 @@ class _CartScreenState extends State<CartScreen> {
     super.didChangeDependencies();  
   } 
 
+
   @override
   Widget build(BuildContext context){
+    
+print ('opakowanie $opakowanie');
+    //final rest = Provider.of<Rests>(context);
+    //print('rest===');
+    //print (rest.items);
     final cart = Provider.of<Cart>(context);
-    print ('cartttttttt = ${cart.items}');
     double razemC = 0;
     int razemW = 0;
     int razemK = 0;
@@ -57,10 +66,12 @@ class _CartScreenState extends State<CartScreen> {
     _cenaRazem = razemC.toStringAsFixed(2);
     _wagaRazem = razemW.toString();
     _kcalRazem = razemK.toString();
-    print ('cenaRazem = $_cenaRazem');
+
     return Scaffold (
       appBar: AppBar(
-        title: Text('Koszyk'),
+        title: globals.dostawy == '1' //jezeli dostawy
+        ? Text(allTranslations.text('L_KOSZYK'))
+        : Text(allTranslations.text('L_STOLIK')),
       ),
       body: _isLoading  //jezeli dane są ładowane
         ? Center(
@@ -102,7 +113,7 @@ class _CartScreenState extends State<CartScreen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[                        
                                   Text(
-                                    'RAZEM',
+                                    allTranslations.text('L_RAZEM'),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -116,7 +127,7 @@ class _CartScreenState extends State<CartScreen> {
                                       Row( //cena dania
                                         children: <Widget>[
                                           Text(
-                                            _separator == '.' ? _cenaRazem  : _cenaRazem.replaceAll('.', ','),
+                                            globals.separator == '.' ? _cenaRazem  : _cenaRazem.replaceAll('.', ','),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15,
@@ -184,25 +195,70 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           
-                          Container(
-                            height: 70,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                          Column(
+                            children: <Widget>[
+                              opakowanie == '0.00'  //jeli nie ma kosztu opakowania
+                              ? SizedBox(height: 2,) 
+                              : Container(
+                                height: 40,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,                    
+                                  children: <Widget>[
+                                    globals.separator == '.' 
+                                      ? Expanded(
+                                          child: Container(
+                                            padding: EdgeInsets.all(5),
+                                            child: Text(
+                                              allTranslations.text('L_DOLICZANIE_OPAKOWANIA') + ' ' + opakowanie + ' ' + allTranslations.text('L_PLN'),
+                                              softWrap: true, //zawijanie tekstu
+                                              maxLines: 3, //ilość wierszy opisu
+                                              //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie                         
+                                              )                      
+                                          ),
+                                        ) 
+                                      : Expanded(
+                                        child: Container(
+                                          padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                                          child: Text(
+                                            allTranslations.text('L_DOLICZANIE_OPAKOWANIA') + ' ' + opakowanie.replaceAll('.', ',') + ' ' + allTranslations.text('L_PLN'),
+                                            softWrap: true, //zawijanie tekstu
+                                            maxLines: 3, //ilość wierszy opisu
+                                            //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie                         
+                                          )                      
+                                        ),
+                                      )
+                                  ]
+                                )
+                              ),
                               
-                              children: <Widget>[
-                                
-                                MaterialButton(
-                                  shape: const StadiumBorder(),
-                                  onPressed: (){}, 
-                                  child: Text ('Zamawiam z dostawą'),
-                                  color: Theme.of(context).primaryColor,
-                                  textColor: Colors.white,
-                                  disabledColor: Colors.grey,
-                                  disabledTextColor: Colors.white,
-                                  
-                                ),
-                              ],
-                            ),
+                              globals.dostawy == '1' //jezeli dostawy
+                              ? Container(
+                                  height: 90,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,                             
+                                    children: <Widget>[                                
+                                      MaterialButton(
+                                        shape: const StadiumBorder(),
+                                        onPressed: (){}, 
+                                        child: Text ('Zamawiam z dostawą'),
+                                        color: Theme.of(context).primaryColor,
+                                        textColor: Colors.white,
+                                        disabledColor: Colors.grey,
+                                        disabledTextColor: Colors.white,                                    
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                padding: EdgeInsets.all(15),
+                                child: Text(
+                                  allTranslations.text('L_ZAMOW_DO_STOLIKA'),
+                                  softWrap: true, //zawijanie tekstu
+                                  maxLines: 3, //ilość wierszy opisu
+                                  //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie                         
+                                  )                      
+                              ) ,
+                            ],
                           ),
                         ],
                       );

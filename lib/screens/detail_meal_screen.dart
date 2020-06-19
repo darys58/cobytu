@@ -17,6 +17,7 @@ import '../widgets/badge.dart';
 import '../all_translations.dart';
 import '../globals.dart' as globals;
 import './cart_screen.dart';
+import 'location_screen.dart';
 /*
 class OdpPost { //odpowiedź serwera www po wysłaniu aktualiuzacji koszyka metodą "post"
   final int ile;
@@ -367,22 +368,22 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedMeal.nazwa),
-       actions: true ? <Widget>[
-              Consumer<Cart>(builder: (_, cart, ch) => Badge(
-                child:  ch,
-                value: cart.itemCount.toString(), //globals.wKoszykuAll.toString(), //
+        actions: globals.memoryLok_e != '0' ? <Widget>[
+                Consumer<Cart>(builder: (_, cart, ch) => Badge(
+                  child:  ch,
+                  value: cart.itemCount.toString(), 
+                    ),
+                  child:  IconButton(
+                    icon: Icon(Icons.shopping_cart,
+                    ),
+                    onPressed: () {
+                    // Navigator.of(context).pushNamed(CartScreen.routeName);
+                      Navigator.of(context).pushReplacementNamed(CartScreen.routeName); 
+                    },
                   ),
-                child:  IconButton(
-                  icon: Icon(Icons.shopping_cart,
-                  ),
-                  onPressed: () {
-                   // Navigator.of(context).pushNamed(CartScreen.routeName);
-                    Navigator.of(context).pushReplacementNamed(CartScreen.routeName); 
-                  },
-                ),
-              ), 
-            ]:{},
-      ),
+                ), 
+              ]: <Widget>[],
+        ),
       body: _isLoading 
       ? Center(
           child: CircularProgressIndicator(), //kółko ładowania danych
@@ -633,7 +634,8 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
             ),
 
 //=== przyciski + -
-            Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
+            globals.memoryLok_e != '0'
+            ? Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                   children: <Widget>[
                     IconButton(
                       icon: Icon(
@@ -681,6 +683,29 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                     ), //interpolacja ciągu znaków
                   ],
                 )
+            :Row(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(allTranslations.text('L_CHCESZ_ZAMOWIC') + '?'),
+                    Text(allTranslations.text('L_LOKALIZACJA'))
+                  ],
+                ),
+                IconButton(
+                    icon: Icon(
+                    Icons.location_on
+                  ),
+                  onPressed: (){
+                    //Navigator.of(context).pushReplacementNamed(LocationScreen.routeName);
+                    Navigator.of(context).pushNamedAndRemoveUntil(LocationScreen.routeName,ModalRoute.withName(LocationScreen.routeName));  //przejście z usunięciem wszystkich wczesniejszych tras i ekranów
+        
+                  },
+                ),
+              ]
+            ), //brak przycisków bo wybrano wszystkie restauracje 
           ],
         )
       ),

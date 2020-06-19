@@ -17,6 +17,7 @@ class CartOne extends StatefulWidget { //dane lokalne dla pojedynczego elementu 
    String cena;    //ko_cena
   final String waga;    //ko_waga
   final String kcal; 
+  
   //konstruktor
   CartOne(
     this.index,
@@ -36,7 +37,7 @@ class CartOne extends StatefulWidget { //dane lokalne dla pojedynczego elementu 
 
 class _CartOneState extends State<CartOne> {
   final String _currLang = allTranslations.currentLanguage; //aktualny język
-  String _separator;
+
 
   //wysyłanie zmiany ilości dania w koszyku do serwera www
   Future<void> aktualizujKoszyk(String akcja) async {
@@ -182,7 +183,7 @@ class _CartOneState extends State<CartOne> {
                         Row( //cena dania
                           children: <Widget>[
                             Text(
-                              _separator == '.' ? cart.items[widget.index].cena  : cart.items[widget.index].cena.replaceAll('.', ','), //meal.cena, //interpolacja ciągu znaków
+                              globals.separator == '.' ? cart.items[widget.index].cena  : cart.items[widget.index].cena.replaceAll('.', ','), //meal.cena, //interpolacja ciągu znaków
                             ),
                             SizedBox(
                               width: 2,

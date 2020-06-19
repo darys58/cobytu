@@ -60,6 +60,11 @@
     "L_PLN": "zł",
     "L_KROPKA": ".",
     "L_PRZECINEK": ",",
-    "L_KOSZYK_PUSTY": "Koszyk pusty"
-  
+    "L_KOSZYK_PUSTY": "Koszyk pusty",
+    "L_DOLICZANIE_OPAKOWANIA": "Przy dostawie, do ceny każdego dania doliczamy koszt opakowania termicznego",
+    "L_CHCESZ_ZAMOWIC": "Chcesz zamówić",
+    "L_RAZEM": "RAZEM",
+    "L_KOSZYK": "Koszyk",
+    "L_STOLIK": "Stolik",
+    "L_ZAMOW_DO_STOLIKA": "Zamówienie możesz złożyć u kelnera lub telefonicznie, do kosumpcji w restauracji lub \"na wynos\"."
 }   

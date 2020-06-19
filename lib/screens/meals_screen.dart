@@ -141,12 +141,16 @@ class _MealsScreenState extends State<MealsScreen> {
                           Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language').then((_) { 
                             Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                               Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                                _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
-                                _setPrefers('initApp', 'false'); //inicjalizacja apki przeprowadzona
-                                setState(() {
-                                  _tytul = 'Konin';
-                                  //_tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                                  _isLoading = false; //zatrzymanie wskaznika ładowania danych
+                                DBHelper.getRestWithId(globals.memoryLok_e).then((restaurant) {
+                                  globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
+
+                                  _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
+                                  _setPrefers('initApp', 'false'); //inicjalizacja apki przeprowadzona
+                                  setState(() {
+                                    _tytul = 'Konin';
+                                    //_tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                                    _isLoading = false; //zatrzymanie wskaznika ładowania danych
+                                  });
                                 });
                               }); 
                             });
@@ -169,12 +173,16 @@ class _MealsScreenState extends State<MealsScreen> {
                             Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=pl').then((_) {   //zawartość koszyka z www             
                               Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                                 Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                                  _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
-                                  print('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
-                      
-                                  setState(() {
-                                    _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                                    _isLoading = false; //zatrzymanie wskaznika ładowania danych
+                                   DBHelper.getRestWithId(globals.memoryLok_e).then((restaurant) {
+                                    globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
+
+                                    _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
+                                    print('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
+                        
+                                    setState(() {
+                                      _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                                      _isLoading = false; //zatrzymanie wskaznika ładowania danych
+                                    });
                                   });
                                 });
                               });
@@ -193,9 +201,13 @@ class _MealsScreenState extends State<MealsScreen> {
               Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=pl').then((_) {  //zawartość koszyka z www              
                 Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                   Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                    setState(() {
-                      _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                      _isLoading = false; //zatrzymanie wskaznika ładowania dań
+                    DBHelper.getRestWithId(globals.memoryLok_e).then((restaurant) {
+                      globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
+
+                      setState(() {
+                        _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                        _isLoading = false; //zatrzymanie wskaznika ładowania dań
+                      });
                     });
                   });
                 });
@@ -397,20 +409,28 @@ class _MealsScreenState extends State<MealsScreen> {
           appBar: AppBar(
             title: Text(_tytul),
             
-            actions: true ? <Widget>[
+            actions: globals.memoryLok_e != '0' ? <Widget>[ //id restauracji = '0' - tzn. Wszystkie w mieście
               Consumer<Cart>(builder: (_, cart, ch) => Badge(
                 child:  ch,
                 value: cart.itemCount.toString(), //globals.wKoszykuAll.toString(), //
                   ),
-                child:  IconButton(
-                  icon: Icon(Icons.shopping_cart,
+                child:  globals.dostawy == '1'  //czy resta dostarcza dania z dowozem
+                ? IconButton(
+                    icon: Icon(Icons.shopping_cart,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(CartScreen.routeName);
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(Icons.room_service,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(CartScreen.routeName);
+                    },
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(CartScreen.routeName);
-                  },
-                ),
               ), 
-            ]:{},
+            ]:<Widget>[],
 
           bottom: TabBar(
               isScrollable: true,              
@@ -445,7 +465,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat9.length, itemBuilder: (context, index) {
@@ -497,7 +517,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat1.length, itemBuilder: (context, index) {
@@ -549,7 +569,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat2.length, itemBuilder: (context, index) {
@@ -601,7 +621,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat3.length, itemBuilder: (context, index) {
@@ -653,7 +673,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat4.length, itemBuilder: (context, index) {
@@ -705,7 +725,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat5.length, itemBuilder: (context, index) {
@@ -757,7 +777,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat6.length, itemBuilder: (context, index) {
@@ -809,7 +829,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat7.length, itemBuilder: (context, index) {
@@ -861,7 +881,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 //podkategorie
                 Container( 
                   padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
-                  height: 40,//MediaQuery.of(context).size.height * 0.35,
+                  height: 46,//MediaQuery.of(context).size.height * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: podkat8.length, itemBuilder: (context, index) {
