@@ -54,7 +54,7 @@ class _CartOneState extends State<CartOne> {
     //print(response.body);
     if (response.statusCode >= 200 && response.statusCode <= 400 && json != null) {
       //pobranie zawartości koszyka w celu aktualizacji wyswietlanych danych
-      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLok_e}&lang=pl');  //zawartość koszyka z www             
+      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=$_currLang');  //zawartość koszyka z www             
     } else {
       throw Exception('Failed to create OdpPost.');
     }
@@ -82,7 +82,7 @@ class _CartOneState extends State<CartOne> {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction){
-        aktualizujKoszyk('3');//usunięcie dania z koszyka
+        aktualizujKoszyk('4');//usunięcie dania z koszyka
       },
       child: Card(
         margin: EdgeInsets.symmetric(
@@ -94,9 +94,10 @@ class _CartOneState extends State<CartOne> {
           textDirection: TextDirection.ltr, 
           children: <Widget>[
             
-            //kolumna z przyciskami ilości dania
+//kolumna z przyciskami ilości dania
             Column(
               children:[
+//+                
                 Container(
                   padding: const EdgeInsets.all(0.0),
                   height: 40.0,
@@ -114,7 +115,7 @@ class _CartOneState extends State<CartOne> {
                     },
                   ),
                 ),
-          
+//ilość dań          
                 Text(
                   widget.ile.toString(),   //ilość dań na stoliku
                   style: TextStyle(
@@ -122,7 +123,7 @@ class _CartOneState extends State<CartOne> {
                     color: Colors.black,
                   ),
                 ),
-           
+//-          
                 Container(
                   padding: const EdgeInsets.all(0.0),
                   height: 40.0,
@@ -145,12 +146,13 @@ class _CartOneState extends State<CartOne> {
               ]
             ),
            
-            //kolumna z tytułe, opisem itd.
+  //kolumna z tytułem, opisem itd.
             Expanded( //powoduje dopasowanie kolumny do wolnego miejsca
               child: Column( //ustawienie elementów jeden pod drugim - tytuł i opis
                 mainAxisSize:MainAxisSize.min, 
                 crossAxisAlignment: CrossAxisAlignment.start, 
                 children: <Widget>[
+//nazwa dania
                   Text( //nazwa dania
                     widget.nazwa,
                     style: TextStyle(
@@ -160,6 +162,7 @@ class _CartOneState extends State<CartOne> {
                     softWrap: false, //zawijanie tekstu
                     overflow: TextOverflow.fade, //skracanie tekstu zeby zmieścił sie
                     ),
+//opis
                   Container( //pojemnik na opis
                     padding: EdgeInsets.only(top: 5),
                     height: 41,
@@ -177,9 +180,9 @@ class _CartOneState extends State<CartOne> {
                   Padding(//odstępy dla wiersza z ikonami
                     padding: EdgeInsets.only(top: 5),
                     child: Row( //rząd z informacjami o posiłku
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    
+                    mainAxisAlignment: MainAxisAlignment.end,                    
                       children: <Widget>[ //elementy rzędu które sa widzetami
+//cena
                         Row( //cena dania
                           children: <Widget>[
                             Text(
@@ -196,7 +199,7 @@ class _CartOneState extends State<CartOne> {
                             ), 
                           ],
                         ),
-                        
+//waga                        
                         Row(// waga- Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                           children: <Widget>[
                             //Icon(
@@ -213,6 +216,7 @@ class _CartOneState extends State<CartOne> {
                             ),//interpolacja ciągu znaków
                           ],
                         ),
+//kcal
                         Row(// kcal - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                           children: <Widget>[
                            // Icon(

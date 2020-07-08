@@ -9,6 +9,7 @@ import '../models/rest.dart';
 import '../models/rests.dart';
 import '../models/mem.dart';
 import '../models/mems.dart';
+import '../globals.dart' as globals;
 
 //import '../widgets/main_drawer.dart';
 
@@ -347,6 +348,28 @@ class _LocationScreenState extends State<LocationScreen> {
                       groupValue: _currentValue,
                       title: Text(item.nazwa),
                       subtitle: Text(item.adres),
+                      secondary: Container(
+                        width: 120,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            item.dostawy == '1' 
+                            ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text('Zamów'),
+                                Text('online')
+                              ],
+                            )
+                            : SizedBox(width: 1),
+                            item.dostawy == '1' ? Icon(Icons.local_shipping) : SizedBox(width: 1),
+                             //Icon(Icons.local_shipping), 
+                          
+                          ]
+                        ),
+                      ),
                       value: item.id,
                       onChanged: (val) {
                         setState(() {

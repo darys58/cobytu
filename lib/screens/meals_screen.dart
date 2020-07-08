@@ -19,6 +19,7 @@ import '../all_translations.dart';
 import '../globals.dart' as globals;
 import './cart_screen.dart';
 
+
 class MealsScreen extends StatefulWidget {
   //stanowy bo usuwanie dań
   static const routeName = '/category-meals'; //nazwa trasy do tego ekranu
@@ -141,9 +142,11 @@ class _MealsScreenState extends State<MealsScreen> {
                           Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language').then((_) { 
                             Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                               Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                                DBHelper.getRestWithId(globals.memoryLok_e).then((restaurant) {
+                                DBHelper.getRestWithId(globals.memoryLokE).then((restaurant) {
                                   globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
-
+                                  globals.czyDostawa = 1; //domyślny sposób dostarczenia zamówienia: "1" - dostawa
+                                  globals.sposobPlatnosci = 1; //domyślny sposób płatności : "1" - gotówka
+                                  globals.wybranaStrefa = 1; //domyślna strefa
                                   _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
                                   _setPrefers('initApp', 'false'); //inicjalizacja apki przeprowadzona
                                   setState(() {
@@ -173,18 +176,19 @@ class _MealsScreenState extends State<MealsScreen> {
                             Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=pl').then((_) {   //zawartość koszyka z www             
                               Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                                 Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                                   DBHelper.getRestWithId(globals.memoryLok_e).then((restaurant) {
-                                    globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
-
-                                    _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
-                                    print('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
-                        
-                                    setState(() {
-                                      _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                                      _isLoading = false; //zatrzymanie wskaznika ładowania danych
-                                    });
+                                  if(globals.memoryLokE != '0'){ //jezeli wybrano restaurację
+                                    DBHelper.getRestWithId(globals.memoryLokE).then((restaurant) {
+                                      globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
+                                    }); 
+                                  }      
+                                  _setPrefers('reload', 'false');  //dane aktualne - nie trzeba przeładować danych
+                                  print('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
+                      
+                                  setState(() {
+                                    _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                                    _isLoading = false; //zatrzymanie wskaznika ładowania danych
                                   });
-                                });
+                                });     
                               });
                             });                  
                           });
@@ -201,15 +205,16 @@ class _MealsScreenState extends State<MealsScreen> {
               Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=pl').then((_) {  //zawartość koszyka z www              
                 Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
                   Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                    DBHelper.getRestWithId(globals.memoryLok_e).then((restaurant) {
-                      globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
-
-                      setState(() {
-                        _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
-                        _isLoading = false; //zatrzymanie wskaznika ładowania dań
+                    if(globals.memoryLokE != '0'){ //jezeli wybrano restaurację
+                      DBHelper.getRestWithId(globals.memoryLokE).then((restaurant) {
+                        globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
                       });
+                    }
+                    setState(() {
+                      _tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji 
+                      _isLoading = false; //zatrzymanie wskaznika ładowania dań
                     });
-                  });
+                  });                  
                 });
               });
             }); 
@@ -220,7 +225,7 @@ class _MealsScreenState extends State<MealsScreen> {
     _isInit = false;
     super.didChangeDependencies();
   }
-  //pobieranie Id telefonu  - do identyfikacji apki jakoytkownika
+  //pobieranie Id telefonu  - do identyfikacji apki jako uzytkownika
   Future<void> _getId() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Theme.of(context).platform == TargetPlatform.iOS) {
@@ -284,7 +289,7 @@ class _MealsScreenState extends State<MealsScreen> {
           f: item['f'],                               
         ),  
       ).toList();
-      globals.memoryLok_e = _memLok[0].e; //zapisanie id wybranej restauracji do zmiennej globalnej
+      globals.memoryLokE = _memLok[0].e; //zapisanie id wybranej restauracji do zmiennej globalnej
     return _memLok;
   }
 /*  szuflada od dołu
@@ -409,7 +414,7 @@ class _MealsScreenState extends State<MealsScreen> {
           appBar: AppBar(
             title: Text(_tytul),
             
-            actions: globals.memoryLok_e != '0' ? <Widget>[ //id restauracji = '0' - tzn. Wszystkie w mieście
+            actions: globals.memoryLokE != '0' ? <Widget>[ //id restauracji = '0' - tzn. Wszystkie w mieście
               Consumer<Cart>(builder: (_, cart, ch) => Badge(
                 child:  ch,
                 value: cart.itemCount.toString(), //globals.wKoszykuAll.toString(), //

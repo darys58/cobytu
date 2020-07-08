@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../all_translations.dart';
 import 'languages.dart';
+import 'orders_screen.dart';
 
 
 class SettingsScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
         ),
         body: ListView(
           children:  <Widget>[           
-            //język
+//język
             GestureDetector(
               onTap: (){
                 Navigator.of(context).pushNamed(LanguagesScreen.routeName); 
@@ -40,7 +41,20 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            //polityka prywatności
+//zamówienia
+            GestureDetector(
+              onTap: (){
+                Navigator.of(context).pushNamed(OrdersScreen.routeName); 
+              },
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.translate),
+                  title: Text(allTranslations.text('L_ZAMOWIENIA')),
+                  trailing: Icon(Icons.more_vert),
+                ),
+              ),
+            ),
+//polityka prywatności
             GestureDetector(
               onTap: (){             
                   _launchURL('https://www.cobytu.com/index.php?d=polityka&mobile=1');
@@ -55,7 +69,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
 
-            //regulamin
+//regulamin
             GestureDetector(
               onTap: (){             
                   _launchURL('https://www.cobytu.com/index.php?d=regulamin&mobile=1');

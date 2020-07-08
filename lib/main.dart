@@ -7,12 +7,13 @@ import './screens/detail_meal_screen.dart';
 import './screens/favorites_screen.dart';
 import './screens/tabs_detail_screen.dart';
 import './screens/cart_screen.dart';
+import './screens/order_screen.dart';
+import './screens/orders_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
 import './models/podkat.dart'; //zaimportowanie klasy dostawcy
 import './models/cart.dart'; //zaimportowanie klasy dostawcy
 import 'screens/languages.dart';
-//import 'application.dart';
 import 'all_translations.dart';
 
 void main() async {
@@ -129,6 +130,8 @@ class _MyAppState extends State<MyApp> {
           TabsDetailScreen.routeName: (ctx) => TabsDetailScreen(),
           LanguagesScreen.routeName: (ctx) => LanguagesScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
+          OrderScreen.routeName: (ctx) => OrderScreen(),
+          OrdersScreen.routeName: (ctx) => OrdersScreen(),
           //FiltersScreen.routeName: (ctx) => FiltersScreen(_filters, _setFilters),
         },
         //onGenerateRoute:  - (kure 168) - jezeli brak zdefiniowanej trasy, wyświetla argumenty, dynamiczne trasy

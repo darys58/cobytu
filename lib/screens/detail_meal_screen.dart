@@ -340,7 +340,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
       //zapisanie w tabeli 'dania' do pola 'stolik' ilości tego dania w koszyku
       //Meal.changeStolik(odpPost['ko_da_id'], odpPost['ko_ile'].toString());    
       Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); //aktualizacja ilości dania w koszyku w danych on daniu
-      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLok_e}&lang=pl');  //aktualizacja zawartości koszyka z www             
+      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=pl');  //aktualizacja zawartości koszyka z www             
   
      // _setPrefers('reload', 'true');    
       //return OdpPost.fromJson(json.decode(response.body));
@@ -368,22 +368,29 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedMeal.nazwa),
-        actions: globals.memoryLok_e != '0' ? <Widget>[
-                Consumer<Cart>(builder: (_, cart, ch) => Badge(
-                  child:  ch,
-                  value: cart.itemCount.toString(), 
-                    ),
-                  child:  IconButton(
-                    icon: Icon(Icons.shopping_cart,
-                    ),
-                    onPressed: () {
-                    // Navigator.of(context).pushNamed(CartScreen.routeName);
-                      Navigator.of(context).pushReplacementNamed(CartScreen.routeName); 
-                    },
-                  ),
-                ), 
-              ]: <Widget>[],
-        ),
+        actions: globals.memoryLokE != '0' ? <Widget>[ //id restauracji = '0' - tzn. Wszystkie w mieście
+          Consumer<Cart>(builder: (_, cart, ch) => Badge(
+            child:  ch,
+            value: cart.itemCount.toString(), //globals.wKoszykuAll.toString(), //
+              ),
+            child:  globals.dostawy == '1'  //czy resta dostarcza dania z dowozem
+            ? IconButton(
+                icon: Icon(Icons.shopping_cart,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CartScreen.routeName);
+                },
+              )
+            : IconButton(
+                icon: Icon(Icons.room_service,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CartScreen.routeName);
+                },
+              ),
+          ), 
+        ]:<Widget>[],
+      ),
       body: _isLoading 
       ? Center(
           child: CircularProgressIndicator(), //kółko ładowania danych
@@ -634,7 +641,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
             ),
 
 //=== przyciski + -
-            globals.memoryLok_e != '0'
+            globals.memoryLokE != '0'
             ? Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                   children: <Widget>[
                     IconButton(

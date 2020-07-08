@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert'; //obsługa json'a
 import '../models/cart.dart';
 import '../models/rests.dart';
 import '../widgets/cart_one.dart';
 import '../globals.dart' as globals;
 import '../all_translations.dart';
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
+import './order_screen.dart';
+import '../screens/meals_screen.dart';
 
 class CartScreen extends StatefulWidget {
   static const routeName = '/cart';
@@ -31,8 +34,8 @@ class _CartScreenState extends State<CartScreen> {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
 
-      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLok_e}&lang=pl').then((_) {   //zawartość koszyka z www             
-        DBHelper.getRestWithId(globals.memoryLok_e).then((restaurant) {
+      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=pl').then((_) {   //zawartość koszyka z www             
+        DBHelper.getRestWithId(globals.memoryLokE).then((restaurant) {
           opakowanie = restaurant.asMap()[0]['opakowanie']; //pobranie ddoliczanej wartości opakowania
 
           setState(() {
@@ -45,6 +48,77 @@ class _CartScreenState extends State<CartScreen> {
     _isInit = false;
     super.didChangeDependencies();  
   } 
+
+  //wysyłanie aktualizacji koszyka do serwera www - usuwanie wszystkich dań
+  Future<void> aktualizujKoszyk(String akcja) async {
+    final http.Response response = await http.post(
+      'https://cobytu.com/cbt_f_do_koszyka.php',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'ko_uz_id': globals.deviceId,
+        'ko_re_id': globals.memoryLokE,
+        'ko_da_id': '0',
+        'ko_dw1': '0',
+        'ko_dw2': '0',
+        'ko_dd': '0',
+        'ko_cena': '0',
+        'ko_waga': '0',
+        'ko_kcal': '0',
+        'ko_akcja': akcja,
+      }),
+    );
+    print(response.body);
+    if (response.statusCode >= 200 && response.statusCode <= 400 && json != null) {
+      Map<String, dynamic> odpPost = json.decode(response.body);
+      //zapisanie w tabeli 'dania' do pola 'stolik' ilości tego dania w koszyku
+      //Meal.changeStolik(odpPost['ko_da_id'], odpPost['ko_ile'].toString());    
+      //Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); //aktualizacja ilości dania w koszyku w danych on daniu
+      
+      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=pl');  //aktualizacja zawartości koszyka z www             
+  
+     // _setPrefers('reload', 'true');    
+      //return OdpPost.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to create OdpPost.');
+    }
+  }
+
+  void _showAlertYesNo(BuildContext context,String nazwa, String text){
+    showDialog(context: context,
+      builder: (context) =>AlertDialog(
+        title: Text(nazwa),
+        content: Column( //zeby tekst był wyśrodkowany w poziomie
+          mainAxisSize:MainAxisSize.min, 
+          children: <Widget>[
+            Text(text),
+          ],
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: (){
+              aktualizujKoszyk('3'); //czyszczenie koszyka na serwerze - akcja '3' 
+              Navigator.of(context).pushNamedAndRemoveUntil(MealsScreen.routeName,ModalRoute.withName(MealsScreen.routeName));  //przejście z usunięciem wszystkich wczesniejszych tras i ekranów                                
+            
+               }, 
+            child: Text('TAK'),
+          ),
+          FlatButton(
+            onPressed: (){
+              Navigator.of(context).pop();
+              }, 
+            child: Text('NIE'),
+          ),
+        ],
+        elevation: 24.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+    ),
+      ),
+      barrierDismissible: false, //zeby zaciemnione tło było zablokowane na kliknięcia    
+    );
+  }
 
 
   @override
@@ -72,6 +146,16 @@ print ('opakowanie $opakowanie');
         title: globals.dostawy == '1' //jezeli dostawy
         ? Text(allTranslations.text('L_KOSZYK'))
         : Text(allTranslations.text('L_STOLIK')),
+         actions: globals.memoryLokE != '0' ? <Widget>[
+           IconButton(
+              icon: Icon(Icons.delete_forever,
+              ),
+              onPressed: () {
+                _showAlertYesNo(context, 'Uwaga','Czy chcesz opróznić koszyk?');
+                               
+              },
+            )
+         ]:<Widget>[],
       ),
       body: _isLoading  //jezeli dane są ładowane
         ? Center(
@@ -101,7 +185,8 @@ print ('opakowanie $opakowanie');
                     }else{ //
                       return Column(
                         children: <Widget>[
-                          Card( //RAZEM + przyciski               
+//RAZEM + przyciski           
+                          Card(               
                             margin: EdgeInsets.symmetric(
                               horizontal: 15,
                               vertical: 4,
@@ -120,7 +205,7 @@ print ('opakowanie $opakowanie');
                                       color: Colors.black,
                                     ), 
                                   ),
-                                  //razem: cena, waga, kcal
+//razem: cena, waga, kcal
                                   Row(//Kazdy element wiersz jest wierszemonym 
                                   mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[ //elementy rzędu które sa widzetami
@@ -194,7 +279,7 @@ print ('opakowanie $opakowanie');
                               ),
                             ),
                           ),
-                          
+//text doliczanie opakowania                          
                           Column(
                             children: <Widget>[
                               opakowanie == '0.00'  //jeli nie ma kosztu opakowania
@@ -230,7 +315,7 @@ print ('opakowanie $opakowanie');
                                   ]
                                 )
                               ),
-                              
+//przycisk zamawiania z dostawą                              
                               globals.dostawy == '1' //jezeli dostawy
                               ? Container(
                                   height: 90,
@@ -239,7 +324,9 @@ print ('opakowanie $opakowanie');
                                     children: <Widget>[                                
                                       MaterialButton(
                                         shape: const StadiumBorder(),
-                                        onPressed: (){}, 
+                                        onPressed: (){
+                                          Navigator.of(context).pushNamed(OrderScreen.routeName); 
+                                        }, 
                                         child: Text ('Zamawiam z dostawą'),
                                         color: Theme.of(context).primaryColor,
                                         textColor: Colors.white,
