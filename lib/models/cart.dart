@@ -69,7 +69,7 @@ class Cart with ChangeNotifier{
 
       if (loadedCartItems[0].id != 'brak ') _items = loadedCartItems;
       else _items = [];
-      notifyListeners();
+      //notifyListeners();
      } catch (error) {
       throw (error);
     }

@@ -48,7 +48,7 @@ class SettingsScreen extends StatelessWidget {
               },
               child: Card(
                 child: ListTile(
-                  leading: Icon(Icons.translate),
+                  leading: Icon(Icons.list),
                   title: Text(allTranslations.text('L_ZAMOWIENIA')),
                   trailing: Icon(Icons.more_vert),
                 ),

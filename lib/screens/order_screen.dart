@@ -51,7 +51,7 @@ class _OrderState extends State<OrderScreen> {
   String opakowanie = '';
   String _cenaRazem;
   int _czyDostawa = globals.czyDostawa;
-  String _czasDostawy = 'jak najszybciej';
+  String _czasDostawy = '0.99';
   int _sposobPlatnosci = globals.sposobPlatnosci;
   int _wybranaStrefa = globals.wybranaStrefa;
   var _now = DateTime.now();
@@ -102,7 +102,7 @@ class _OrderState extends State<OrderScreen> {
     print('lista do budowania buttona $lista');
     items.add(
         DropdownMenuItem(
-          value: 'jak najszybciej',
+          value: '0.99',
           child: Text('jak najszybciej'),
         ),
       );
@@ -207,7 +207,7 @@ class _OrderState extends State<OrderScreen> {
     }
   }
 
-  //pobranie (z serwera www) restauracji serwujących wybrane danie - dla szczegółów dania
+  //pobranie (z serwera www) stref dla danej restauracji
   Future<List<Strefa>> fetchStrefyFromSerwer() async {
     var url = 'https://cobytu.com/cbt.php?d=f_strefy&re_id=${globals.memoryLokE}&';
     print(url);
@@ -252,26 +252,46 @@ class _OrderState extends State<OrderScreen> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        "za_uz_id": globals.deviceId,
-        "za_re_id": globals.memoryLokE,
-        "za_typ": "1",                     //1 - dostawa lub odbiór własny
-        "za_data": "1",   //data wstawiana w skrypcie php na serwerze
-        "za_godz": _czasDostawy,
-        "za_adres": globals.adres,
-        "za_numer": globals.numer,
-        "za_kod": globals.kod,
-        "za_miasto": globals.miasto,
-        "za_imie": globals.imie,
-        "za_nazwisko": globals.nazwisko,
-        "za_telefon": globals.telefon,
-        "za_email": globals.email,
-        "za_uwagi": _uwagi,
-        "za_platnosc": _sposobPlatnosci.toString(),
-        "za_koszt": _cenaRazem,
-        "za_lang": _currLang,
-      }),
-    );
+      body: _czyDostawa == 1 
+      ? jsonEncode(<String, String>{
+          "za_uz_id": globals.deviceId,
+          "za_re_id": globals.memoryLokE,
+          "za_typ": "1",                     //1 - dostawa lub odbiór własny
+          "za_data": "1",   //data wstawiana w skrypcie php na serwerze
+          "za_godz": _czasDostawy,
+          "za_adres": globals.adres,
+          "za_numer": globals.numer,
+          "za_kod": globals.kod,
+          "za_miasto": globals.miasto,
+          "za_imie": globals.imie,
+          "za_nazwisko": globals.nazwisko,
+          "za_telefon": globals.telefon,
+          "za_email": globals.email,
+          "za_uwagi": _uwagi,
+          "za_platnosc": _sposobPlatnosci.toString(),
+          "za_koszt": _strefy[_wybranaStrefa - 1].koszt,
+          "za_lang": _currLang,
+        })
+      : jsonEncode(<String, String>{
+          "za_uz_id": globals.deviceId,
+          "za_re_id": globals.memoryLokE,
+          "za_typ": "1",                     //1 - dostawa lub odbiór własny
+          "za_data": "1",   //data wstawiana w skrypcie php na serwerze
+          "za_godz": _czasDostawy,
+          "za_adres": '',
+          "za_numer": '',
+          "za_kod": '',
+          "za_miasto": '',
+          "za_imie": globals.imie,
+          "za_nazwisko": globals.nazwisko,
+          "za_telefon": globals.telefon,
+          "za_email": globals.email,
+          "za_uwagi": _uwagi,
+          "za_platnosc": _sposobPlatnosci.toString(),
+          "za_koszt": '0.00',
+          "za_lang": _currLang,
+          })
+        );
     
     print(response.body);
     if (response.statusCode >= 200 && response.statusCode <= 400 && json != null) {
@@ -305,7 +325,7 @@ class _OrderState extends State<OrderScreen> {
 
     return Scaffold(
           appBar: AppBar(
-            title: Text('zamównienie'),
+            title: Text('Zamównienie'),
           ),
           body:  _isLoading  //jezeli dane są ładowane
           ? Center(
@@ -614,6 +634,7 @@ class _OrderState extends State<OrderScreen> {
                           Visibility(
                             visible: _czyDostawa == 1 , 
                             child: TextFormField(
+                              initialValue: globals.adres,
                               decoration: InputDecoration(
                                 labelText: 'Adres',
                                 labelStyle: TextStyle(color: Colors.black),
@@ -632,6 +653,7 @@ class _OrderState extends State<OrderScreen> {
                           Visibility(
                             visible: _czyDostawa == 1 , 
                             child: TextFormField(
+                              initialValue: globals.numer,
                               decoration: InputDecoration(
                                 labelText: 'Numer',
                                 labelStyle: TextStyle(color: Colors.black),
@@ -652,6 +674,7 @@ class _OrderState extends State<OrderScreen> {
                           Visibility(
                             visible: _czyDostawa == 1 , 
                             child: TextFormField(
+                              initialValue: globals.kod,
                               decoration: InputDecoration(
                                 labelText: 'Kod pocztowy',
                                 labelStyle: TextStyle(color: Colors.black),
@@ -670,6 +693,7 @@ class _OrderState extends State<OrderScreen> {
                           Visibility(
                             visible: _czyDostawa == 1 , 
                             child: TextFormField(
+                              initialValue: globals.miasto,
                               decoration: InputDecoration(
                                 labelText: 'Miasto',
                                 labelStyle: TextStyle(color: Colors.black),
@@ -706,6 +730,7 @@ class _OrderState extends State<OrderScreen> {
 
   //Imię                       
                           TextFormField(
+                            initialValue: globals.imie,
                             decoration: InputDecoration(
                               labelText: 'Imię',
                               labelStyle: TextStyle(color: Colors.black),
@@ -721,6 +746,7 @@ class _OrderState extends State<OrderScreen> {
                           ),
 //Nazwisko
                           TextFormField(
+                            initialValue: globals.nazwisko,
                             decoration: InputDecoration(
                               labelText: 'Nazwisko',
                               labelStyle: TextStyle(color: Colors.black),
@@ -735,6 +761,7 @@ class _OrderState extends State<OrderScreen> {
 
 //Telefon
                           TextFormField(
+                            initialValue: globals.telefon,
                             decoration: InputDecoration(
                               labelText: 'Telefon',
                               labelStyle: TextStyle(color: Colors.black),
@@ -750,6 +777,7 @@ class _OrderState extends State<OrderScreen> {
                           ),
 //Email
                           TextFormField(
+                            initialValue: globals.email,
                             decoration: InputDecoration(
                               labelText: 'Email',
                               labelStyle: TextStyle(color: Colors.black),
@@ -804,6 +832,7 @@ class _OrderState extends State<OrderScreen> {
                         onChanged:(String newValue) {  //wybrana nowa wartość - nazwa dodatku
                           setState(() {
                             _czasDostawy = newValue; // ustawienie nowej wybranej nazwy dodatku
+                            print ('_czasDostawy = $_czasDostawy');
                           //  war1Id = _listWar1.indexOf(newValue); //pobranie indexu wybranego dodatku z listy
                           //  _selectedWar1Id = _detailMealData[0].warList1Id[war1Id]; //Id wybranego dodatku
                            // przelicz();
