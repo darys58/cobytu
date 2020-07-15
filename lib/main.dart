@@ -9,6 +9,7 @@ import './screens/tabs_detail_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/order_screen.dart';
 import './screens/orders_screen.dart';
+import './screens/order_detail_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
 import './models/podkat.dart'; //zaimportowanie klasy dostawcy
@@ -136,6 +137,7 @@ class _MyAppState extends State<MyApp> {
           CartScreen.routeName: (ctx) => CartScreen(),
           OrderScreen.routeName: (ctx) => OrderScreen(),
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
+          OrderDetailScreen.routeName: (ctx) => OrderDetailScreen(),
           //FiltersScreen.routeName: (ctx) => FiltersScreen(_filters, _setFilters),
         },
         //onGenerateRoute:  - (kure 168) - jezeli brak zdefiniowanej trasy, wyświetla argumenty, dynamiczne trasy

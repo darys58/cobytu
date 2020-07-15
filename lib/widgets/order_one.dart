@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../globals.dart' as globals;
 import '../all_translations.dart';
 import '../models/order.dart';
-
+import '../screens/order_detail_screen.dart';
 
 class OrderOne extends StatelessWidget {
   
@@ -33,6 +33,9 @@ class OrderOne extends StatelessWidget {
 
     return InkWell( //element klikalny
       onTap: () {
+
+        Navigator.of(context).pushNamed(OrderDetailScreen.routeName, arguments: zamowienie.id,); 
+
         //pobranie danych restauracji z serwera (potrzebne modMenu - info kiedy była modyfikacja menu)
         //print('pobranie danych restauracji z serwera');
 /*        fetchDetailRestsFromSerwer(meal.id).then((_) { 
@@ -89,7 +92,7 @@ class OrderOne extends StatelessWidget {
       },
 
       child: Card( //karta z daniem
-      color: kolor, //
+      color: kolor, //kolor fiszki zamówienia
         shape: RoundedRectangleBorder( //kształt karty
           borderRadius: BorderRadius.circular(15),
         ),

@@ -403,32 +403,30 @@ class _MealsScreenState extends State<MealsScreen> {
     else if (int.parse(podkategoria9) < 290) meals9 = mealsData.items.where((meal) {return meal.podkat.contains(podkategoria9);}).toList();
     else meals9 = mealsData.items.where((meal) {return meal.rodzaj.contains(rodzaj);}).toList();
     
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Test"),//Text(categoryTitle),
-      //),
+    return Scaffold( //strona główna - menu 
       body: DefaultTabController(
         length: 9,
         initialIndex: 4,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(_tytul),
-            
-            actions: globals.memoryLokE != '0' ? <Widget>[ //id restauracji = '0' - tzn. Wszystkie w mieście
+            title: Text(_tytul), //nazwa restauracji
+            //ikona koszyka na pasku górnym
+            actions: globals.memoryLokE != '0' 
+            ? <Widget>[ //id restauracji = '0' - tzn. Wszystkie w mieście
               Consumer<Cart>(builder: (_, cart, ch) => Badge(
                 child:  ch,
                 value: cart.itemCount.toString(), //globals.wKoszykuAll.toString(), //
                   ),
                 child:  globals.dostawy == '1'  //czy resta dostarcza dania z dowozem
                 ? IconButton(
-                    icon: Icon(Icons.shopping_cart,
+                    icon: Icon(Icons.shopping_cart, //koszyk - mozna zamawiać
                     ),
                     onPressed: () {
                       Navigator.of(context).pushNamed(CartScreen.routeName);
                     },
                   )
                 : IconButton(
-                    icon: Icon(Icons.room_service,
+                    icon: Icon(Icons.room_service, //stolik - bez zamawiania
                     ),
                     onPressed: () {
                       Navigator.of(context).pushNamed(CartScreen.routeName);

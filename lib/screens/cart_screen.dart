@@ -21,7 +21,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
-  String opakowanie = '';
+  String opakowanie = ''; //cena opakowania doliczana przez restaurację - wartość z bazy www
   String _cenaRazem;
   String _wagaRazem;
   String _kcalRazem;
