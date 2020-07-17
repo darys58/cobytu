@@ -37,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.translate),
                   title: Text(allTranslations.text('L_JEZYK')),
-                  trailing: Icon(Icons.more_vert),
+                  trailing: Icon(Icons.chevron_right),
                 ),
               ),
             ),
@@ -50,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.list),
                   title: Text(allTranslations.text('L_ZAMOWIENIA')),
-                  trailing: Icon(Icons.more_vert),
+                  trailing: Icon(Icons.chevron_right),
                 ),
               ),
             ),
@@ -64,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.security),
                   title: Text(allTranslations.text('L_POLITYKA')),
-                  trailing: Icon(Icons.more_vert),
+                  trailing: Icon(Icons.chevron_right),
                 ),
               ),
             ),
@@ -79,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.library_books),
                   title: Text(allTranslations.text('L_REGULAMIN')),
-                  trailing: Icon(Icons.more_vert),
+                  trailing: Icon(Icons.chevron_right),
                 ),
               ),
             ),

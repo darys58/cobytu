@@ -111,10 +111,12 @@ class OrderOne extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start, 
                       children: <Widget>[
                         Text( //nazwa dania
-                          zamowienie.typText + '   ' + zamowienie.data,
+                          (zamowienie.typ == '1') && (zamowienie.kod != '')                         
+                          ? zamowienie.typText + '   ' + zamowienie.data
+                          : 'Odbiór własny' + '   ' + zamowienie.data,
                           style: TextStyle(
                             fontSize: 18,
-
+                            fontWeight: FontWeight.bold,
                           ),
                           softWrap: false, //zawijanie tekstu
                           overflow: TextOverflow.fade, //skracanie tekstu zeby zmieścił sie
@@ -174,7 +176,17 @@ class OrderOne extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),                
+                ),
+                (zamowienie.typ == '1') && (zamowienie.kod != '')  
+                ? Image.asset('assets/images/dostawa.png')
+                : Image.asset('assets/images/jedzenie.png'),
+                SizedBox(
+                  width: 15,
+                ),
+                Icon(Icons.chevron_right), 
+                SizedBox(
+                  width: 15,
+                ),             
               ],
             ),
           ],

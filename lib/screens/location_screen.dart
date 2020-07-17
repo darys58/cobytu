@@ -351,9 +351,9 @@ class _LocationScreenState extends State<LocationScreen> {
                       secondary: Container(
                         width: 120,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            item.dostawy == '1' 
+                         /*   item.dostawy == '1' 
                             ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
@@ -364,9 +364,13 @@ class _LocationScreenState extends State<LocationScreen> {
                               ],
                             )
                             : SizedBox(width: 1),
-                            item.dostawy == '1' ? Icon(Icons.local_shipping) : SizedBox(width: 1),
-                             //Icon(Icons.local_shipping), 
-                          
+                           */ 
+                            item.dostawy == '1' ? Image.asset('assets/images/cart.png') : SizedBox(width: 1),
+                            SizedBox(width: 5), 
+                            //Image.asset('assets/images/phone.png'),
+                            //SizedBox(width: 3),
+                            item.dostawy == '1' ? Image.asset('assets/images/dostawa.png') : SizedBox(width: 1),
+                            
                           ]
                         ),
                       ),

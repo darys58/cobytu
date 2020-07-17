@@ -71,6 +71,12 @@ flutter:
     - lang/ru.json
     - lang/sv.json
     - lang/zh.json
+    - assets/images/dostawa.png
+    - assets/images/jedzenie.png
+    - assets/images/rezerwacja2.png
+    - assets/images/cart.png
+    - assets/images/phone.png
+    
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -100,6 +106,7 @@ flutter:
           weight: 300
         - asset: assets/fonts/RobotoCondensed-Italic.ttf
           style: italic
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

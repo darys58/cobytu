@@ -78,7 +78,40 @@ class _OrderDetailState extends State<OrderDetailScreen> {
     super.didChangeDependencies();  
   } 
   
-  
+  //wysyłanie zamówienia do serwera www - typ: dostawa / odbiów własny
+  Future<void> wyslijRezygnacje(String orderId, String orderTyp, String orderEmail) async {
+    final http.Response response = await http.post(
+      'https://cobytu.com/cbt_f_rezygnacja.php',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body:  jsonEncode(<String, String>{
+          "za_id": orderId,
+          "za_uz_id": globals.deviceId,
+          "za_re_id": globals.memoryLokE,
+          "za_typ": orderTyp,                     //1 - dostawa lub odbiór własny
+          "za_email": orderEmail,
+        }),
+    );
+    print(response.body);
+    if (response.statusCode >= 200 && response.statusCode <= 400 && json != null) {
+      Map<String, dynamic> odpPost = json.decode(response.body);
+      if (odpPost['success'] != 'ok'){
+        if (odpPost['zapis'] != 'ok'){
+            _showAlert(context, 'Komunikat','Wysłanie rezygnacji nie powiodło się. Sprawdź poprawność danych.');    
+        }else{
+          _showAlert(context, 'Komunikat','Rezygnację przekazano do restauracji ale nie wszystko jest OK. Prosimy o kontakt telefoniczny z naszą restauracją.');   
+        }
+      }else{
+        _showAlertOK(context, 'Komunikat','Twoja rezygnacja została przekazana do restauracji. Oczekuj na potwierdzenie. W razie pytań lub problemów prosimy o kontakt telefoniczny z naszą restauracją.');
+        //aktualizujKoszyk('3'); //czyszczenie koszyka na serwerze - akcja '3' 
+        //Navigator.of(context).pushNamed(OrderScreen.routeName);
+      }
+    } else {
+      throw Exception('Failed to create OdpPost. z rezygnacji');
+    }
+  }
+
   
   void _showAlert(BuildContext context,String nazwa, String text){
     showDialog(context: context,
@@ -251,11 +284,11 @@ class _OrderDetailState extends State<OrderDetailScreen> {
                             children: <Widget>[
                               Text(typZamowienia,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                  ),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.black,
                                 ),
+                              ),
                             ]
                           ),
                         ),
@@ -662,7 +695,9 @@ class _OrderDetailState extends State<OrderDetailScreen> {
                           ),
                         ),
 */
-                        Container(
+                        Visibility(
+                          visible: order[0].statusId == '0' || order[0].statusId == '1',
+                          child: Container(
                             height: 70,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,                             
@@ -670,15 +705,10 @@ class _OrderDetailState extends State<OrderDetailScreen> {
                                 MaterialButton(
                                   shape: const StadiumBorder(),
                                   onPressed: (){
-                                    if (_formKey1.currentState.validate()){ //jezeli formularz wypełniony poprawnie
-                                      if(globals.czyDostawa != null){
-                                        if(globals.sposobPlatnosci != null){
-                                          //wyslijZamowienie();
-                                          //Navigator.of(context).pushNamed(OrderScreen.routeName);
-                                          print('form OK');
-                                        }else  _showAlert(context, 'Komunikat','Wybierz sposób zapłaty');
-                                      } else _showAlert(context, 'Komunikat','Wybierz dostawę lub odbiór osobisty');                                                                        
-                                    }
+                                    wyslijRezygnacje(order[0].id, order[0].typ, order[0].email);
+                                  
+                                    print('rezygnacja !!!!!!!!!!');
+                                        
                                     //Navigator.of(context).pushNamed(OrderScreen.routeName); 
                                   }, 
                                   child: Text ('   Rezygnuję   '),
@@ -689,6 +719,7 @@ class _OrderDetailState extends State<OrderDetailScreen> {
                                 ),
                               ],
                             ),
+                          ),
                         ),
                       ]
                     ),
