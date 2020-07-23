@@ -1,15 +1,15 @@
 import 'dart:convert'; //obsługa json'a
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../globals.dart' as globals;
+
 
 class CartItem {
   final String id;      //ko_id
   final String daId;    //da_id
   final String nazwa;   //da_nazwa
   final String opis;    //da_opis
-  final int ile;        //ko_ile
-  final String cena;    //ko_cena
+   int ile;        //ko_ile
+   String cena;    //ko_cena
   final String waga;    //ko_waga
   final String kcal;    //ko_kcal
 

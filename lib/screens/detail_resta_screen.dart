@@ -71,7 +71,9 @@ void showToast() {
           otwarteA: restData['re_otwarte_a'], 
           otwarteB: restData['re_otwarte_b'], 
           otwarteC: restData['re_otwarte_c'], 
-          cena: restData['cena'], 
+          cena: restData['cena'],
+          dostawy: restData['re_tel_dos'], 
+          online: restData['re_online'], 
           parking: restData['re_parking'], 
           podjazd: restData['re_podjazd'], 
           wynos: restData['re_na_wynos'], 
@@ -92,12 +94,12 @@ void showToast() {
     }
   }
   
-//uwywoływanie połączeń uruchamianych ikonami
+//wywoływanie połączeń uruchamianych ikonami
 Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch $url';
+      throw 'Nie mozna połaczyć z  $url';
     }
   }
 
@@ -276,6 +278,10 @@ Future<void> _launchURL(String url) async {
                                     ),
                                   ),
                                   
+                                  if ('${_mealRestsData[index].online}' =='1') Divider(),
+                                  if ('${_mealRestsData[index].online}' =='1')facilities(allTranslations.text('L_ONLINE')),
+                                  if ('${_mealRestsData[index].dostawy}' =='1') Divider(),
+                                  if ('${_mealRestsData[index].dostawy}' =='1')facilities(allTranslations.text('L_DOSTAWY')),
                                   if ('${_mealRestsData[index].wifi}' =='1') Divider(),
                                   if ('${_mealRestsData[index].wifi}' =='1')facilities(allTranslations.text('L_WIFI_TAK')),
                                   if ('${_mealRestsData[index].parking}' =='1') Divider(),

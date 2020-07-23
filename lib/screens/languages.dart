@@ -48,7 +48,7 @@ print('_currLang = $_currLang');
 print('_currentValue = $_currentValue');
    // final String buttonText = language == 'pl' ? '=> English' : '=> Polski';
     List<String> lang = ['Polski','English','Čeština','Deutsch','Español','Français','Pусский','Svenska','日本語', '中文'];
-    List<String> lang2 = ['Polski','Angielski','Czeski','Niemiecki','Hiszpański','Franciski','Rosyjski','Szwedzki','Japoński','Chiński (tradycyjny)'];
+    List<String> lang2 = [allTranslations.text('L_PL'),allTranslations.text('L_EN'),allTranslations.text('L_CS'),allTranslations.text('L_DE'),allTranslations.text('L_ES'),allTranslations.text('L_FR'),allTranslations.text('L_RU'),allTranslations.text('L_SV'),allTranslations.text('L_JA'),allTranslations.text('L_ZH')];
     //var ile = lang.length;
 
     return Scaffold(
@@ -66,6 +66,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[0]),
                 subtitle: Text(lang2[0]),
+                secondary: Image.asset('assets/images/PL.png'),
                 value: lang[0],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == 'Polski' ? 'pl' : 'en');
@@ -82,6 +83,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[1]),
                 subtitle: Text(lang2[1]),
+                secondary: Image.asset('assets/images/EN.png'),
                 value: lang[1],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == 'English' ? 'en' : 'pl');
@@ -98,6 +100,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[2]),
                 subtitle: Text(lang2[2]),
+                secondary: Image.asset('assets/images/CS.png'),
                 value: lang[2],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == 'Čeština' ? 'cs' : 'en');
@@ -114,6 +117,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[3]),
                 subtitle: Text(lang2[3]),
+                secondary: Image.asset('assets/images/DE.png'),
                 value: lang[3],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == 'Deutsch' ? 'de' : 'en');
@@ -130,6 +134,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[4]),
                 subtitle: Text(lang2[4]),
+                secondary: Image.asset('assets/images/ES.png'),
                 value: lang[4],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == 'Español' ? 'es' : 'en');
@@ -146,6 +151,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[5]),
                 subtitle: Text(lang2[5]),
+                secondary: Image.asset('assets/images/FR.png'),
                 value: lang[5],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == 'Français' ? 'fr' : 'en');
@@ -162,6 +168,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[6]),
                 subtitle: Text(lang2[6]),
+                secondary: Image.asset('assets/images/RU.png'),
                 value: lang[6],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == 'Pусский' ? 'ru' : 'en');
@@ -178,6 +185,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[7]),
                 subtitle: Text(lang2[7]),
+                secondary: Image.asset('assets/images/SV.png'),
                 value: lang[7],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == 'Svenska' ? 'sv' : 'en');
@@ -194,6 +202,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[8]),
                 subtitle: Text(lang2[8]),
+                secondary: Image.asset('assets/images/JA.png'),
                 value: lang[8],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == '日本語' ? 'ja' : 'en');
@@ -210,6 +219,7 @@ print('_currentValue = $_currentValue');
                 groupValue: _currentValue,
                 title: Text(lang[9]),
                 subtitle: Text(lang2[9]),
+                secondary: Image.asset('assets/images/ZH.png'),
                 value: lang[9],
                 onChanged: (val) async{
                   await allTranslations.setNewLanguage(val == '中文' ? 'zh' : 'en');

@@ -20,6 +20,8 @@ class DetailRest{
   final String otwarteB;   //re_otwarte_b
   final String otwarteC;   //re_otwarte_c
   final String cena;       //cena
+  final String dostawy;    //re_tel_dos
+  final String online;    //re_online
   final String parking;    //re_parking
   final String podjazd;     //re_podjazd
   final String wynos;      //re_na_wynos
@@ -48,6 +50,8 @@ class DetailRest{
     @required this.otwarteB,
     @required this.otwarteC,
     @required this.cena,
+    @required this.dostawy,
+    @required this.online,
     @required this.parking,
     @required this.podjazd,
     @required this.wynos,

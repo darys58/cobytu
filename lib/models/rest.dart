@@ -11,6 +11,7 @@ class Rest{
   final String miasto;         //re_miasto
   String wojId;                //re_woj_id
   String woj;                  //re_woj
+  final String online;        //re_online
   final String dostawy;        //re_dostawy
   final String opakowanie;     //re_opakowanie
   final String doStolika;      //re_do_stolika
@@ -27,6 +28,7 @@ class Rest{
     @required this.miasto,
     @required this.wojId,
     @required this.woj,
+    @required this.online,
     @required this.dostawy,
     @required this.opakowanie,
     @required this.doStolika,

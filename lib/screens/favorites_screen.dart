@@ -18,12 +18,19 @@ class FavoritesScreen extends StatelessWidget {
       ),
       body: favorites.isEmpty 
       ? Center( 
-          child:Text(
-            allTranslations.text('L_ULUBIONE_BRAK'),
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.grey,
-            ),
+          child:Column(
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.only(top: 50),
+                child: Text(
+                  allTranslations.text('L_ULUBIONE_BRAK'),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ],
           ),
         ) 
       : ListView.builder(//ładowane są te elementy listy które widać na ekranie - lepsza wydajność

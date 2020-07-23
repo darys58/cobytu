@@ -76,7 +76,16 @@ flutter:
     - assets/images/rezerwacja2.png
     - assets/images/cart.png
     - assets/images/phone.png
-    
+    - assets/images/CS.png
+    - assets/images/DE.png
+    - assets/images/EN.png
+    - assets/images/ES.png
+    - assets/images/FR.png
+    - assets/images/JA.png
+    - assets/images/PL.png
+    - assets/images/RU.png
+    - assets/images/SV.png
+    - assets/images/ZH.png
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

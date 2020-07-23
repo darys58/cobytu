@@ -147,17 +147,3 @@ child: Column(
             Text(allTranslations.text('ulubione')),
           ],
         ),*/
-/*
-
-
-        Center( 
-          
-            child:Text(
-              'Brak ulubionych',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.grey,
-              ),
-            ),
-         ) 
-  */

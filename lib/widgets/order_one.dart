@@ -33,62 +33,7 @@ class OrderOne extends StatelessWidget {
 
     return InkWell( //element klikalny
       onTap: () {
-
         Navigator.of(context).pushNamed(OrderDetailScreen.routeName, arguments: zamowienie.id,); 
-
-        //pobranie danych restauracji z serwera (potrzebne modMenu - info kiedy była modyfikacja menu)
-        //print('pobranie danych restauracji z serwera');
-/*        fetchDetailRestsFromSerwer(meal.id).then((_) { 
-          //print('pobranie mod_menu = ${_mealRestsData[0].modMenu}');
-          //pobranie danych restauracji z bazy lokalnej
-          DBHelper.getRestWithId(_mealRestsData[0].id).then((restaurant) {
-            print(restaurant.asMap()[0]['modMenu']);
-            //jezeli czasy modyfikacji menu dla restauracji (z serwera i bazy lokalnej) są równe to przejście do szczegółów dania
-            if(_mealRestsData[0].modMenu == restaurant.asMap()[0]['modMenu']){
-              //print('bez przeładowania');
-              Mems.insertMemory( //zapisanie danych wybranego dania przed przejściem do jego szczegółów               
-                'memDanie',        //nazwa
-                meal.id,           //a - daId
-                meal.foto,         //b - foto
-                meal.alergeny,     //c - alergeny
-                meal.nazwa,        //d - nazwa dania
-                '0',               //e - index wersji dania   (w iOS - index row)
-                meal.fav,          //f - fav - polubienie
-              );
-              Navigator.of(context).pushNamed(TabsDetailScreen.routeName, arguments: meal.id,); 
-            }else { //jezeli nie to odświezenie menu
-              //print('przeładowanie!!!!!!!!!!!!!!!');
-              //_setPrefers('reload', 'true');  //dane nieaktualne - trzeba przeładować dane            
-             
-              //final snackBar = SnackBar(content: Text('Aktualizacja menu ${_mealRestsData[0].nazwa}'));
-              //Scaffold.of(context).showSnackBar(snackBar);
-              _showAlert(context, _mealRestsData[0].nazwa);
-              
-              fetchMemoryLok().then((_){ //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
-                Meals.deleteAllMeals().then((_) {  //kasowanie tabeli dań w bazie lokalnej
-                  Rests.deleteAllRests().then((_) {  //kasowanie tabeli restauracji w bazie lokalnej
-                    Podkategorie.deleteAllPodkategorie().then((_) {  //kasowanie tabeli podkategorii w bazie lokalnej
-                      Meals.fetchMealsFromSerwer('https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$_currLang').then((_) { 
-                        Rests.fetchRestsFromSerwer().then((_) { 
-                          Podkategorie.fetchPodkategorieFromSerwer('https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$_currLang').then((_) { 
-                            Provider.of<Meals>(context).fetchAndSetMeals().then((_) {  //z bazy lokalnej
-                              Provider.of<Podkategorie>(context).fetchAndSetPodkategorie().then((_) {  //z bazy lokalnej
-                                
-                                Navigator.of(context).pushNamedAndRemoveUntil(MealsScreen.routeName,ModalRoute.withName(MealsScreen.routeName));  //przejście z usunięciem wszystkich wczesniejszych tras i ekranów
-                                
-                              });
-                            });   
-                          });
-                        });            
-                      });
-                    });
-                  });
-                });
-              });
-            }
-          });
-        });
-*/
       },
 
       child: Card( //karta z daniem
@@ -113,7 +58,7 @@ class OrderOne extends StatelessWidget {
                         Text( //nazwa dania
                           (zamowienie.typ == '1') && (zamowienie.kod != '')                         
                           ? zamowienie.typText + '   ' + zamowienie.data
-                          : 'Odbiór własny' + '   ' + zamowienie.data,
+                          : allTranslations.text('L_ODBIOR_WLASNY') + '   ' + zamowienie.data,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -125,7 +70,7 @@ class OrderOne extends StatelessWidget {
                           padding: EdgeInsets.only(top: 2),
                           height: 20,
                           child: Text( //opis dania
-                            'na godz.  ' + zamowienie.godz,
+                            allTranslations.text('L_NA_GODZ') + '  ' + zamowienie.godz,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.black,

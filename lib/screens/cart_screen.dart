@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; //obsługa json'a
 import '../models/cart.dart';
-import '../models/rests.dart';
 import '../widgets/cart_one.dart';
 import '../globals.dart' as globals;
 import '../all_translations.dart';
@@ -21,7 +20,8 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
-  String opakowanie = ''; //cena opakowania doliczana przez restaurację - wartość z bazy www
+  String opakowanie =
+      ''; //cena opakowania doliczana przez restaurację - wartość z bazy www
   String _cenaRazem;
   String _wagaRazem;
   String _kcalRazem;
@@ -34,20 +34,24 @@ class _CartScreenState extends State<CartScreen> {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
 
-      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=pl').then((_) {   //zawartość koszyka z www             
+      Provider.of<Cart>(context)
+          .fetchAndSetCartItems(
+              'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}')
+          .then((_) {
+        //zawartość koszyka z www
         DBHelper.getRestWithId(globals.memoryLokE).then((restaurant) {
-          opakowanie = restaurant.asMap()[0]['opakowanie']; //pobranie ddoliczanej wartości opakowania
+          opakowanie = restaurant.asMap()[0]
+              ['opakowanie']; //pobranie ddoliczanej wartości opakowania
 
           setState(() {
             _isLoading = false; //zatrzymanie wskaznika ładowania danych
           });
-        }); 
-      });                     
-
-    }  
+        });
+      });
+    }
     _isInit = false;
-    super.didChangeDependencies();  
-  } 
+    super.didChangeDependencies();
+  }
 
   //wysyłanie aktualizacji koszyka do serwera www - usuwanie wszystkich dań
   Future<void> aktualizujKoszyk(String akcja) async {
@@ -70,61 +74,68 @@ class _CartScreenState extends State<CartScreen> {
       }),
     );
     print(response.body);
-    if (response.statusCode >= 200 && response.statusCode <= 400 && json != null) {
-      Map<String, dynamic> odpPost = json.decode(response.body);
+    if (response.statusCode >= 200 &&
+        response.statusCode <= 400 &&
+        json != null) {
+      //Map<String, dynamic> odpPost = json.decode(response.body);
       //zapisanie w tabeli 'dania' do pola 'stolik' ilości tego dania w koszyku
-      //Meal.changeStolik(odpPost['ko_da_id'], odpPost['ko_ile'].toString());    
+      //Meal.changeStolik(odpPost['ko_da_id'], odpPost['ko_ile'].toString());
       //Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); //aktualizacja ilości dania w koszyku w danych on daniu
-      
-      Provider.of<Cart>(context).fetchAndSetCartItems('https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=pl');  //aktualizacja zawartości koszyka z www             
-  
-     // _setPrefers('reload', 'true');    
+
+      Provider.of<Cart>(context).fetchAndSetCartItems(
+          'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}'); //aktualizacja zawartości koszyka z www
+
+      // _setPrefers('reload', 'true');
       //return OdpPost.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to create OdpPost.');
+      throw Exception('Failed przy wysyłanie aktualizacji koszyka');
     }
   }
 
-  void _showAlertYesNo(BuildContext context,String nazwa, String text){
-    showDialog(context: context,
-      builder: (context) =>AlertDialog(
+  void _showAlertYesNo(BuildContext context, String nazwa, String text) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
         title: Text(nazwa),
-        content: Column( //zeby tekst był wyśrodkowany w poziomie
-          mainAxisSize:MainAxisSize.min, 
+        content: Column(
+          //zeby tekst był wyśrodkowany w poziomie
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(text),
           ],
         ),
         actions: <Widget>[
           FlatButton(
-            onPressed: (){
-              aktualizujKoszyk('3'); //czyszczenie koszyka na serwerze - akcja '3' 
-              Navigator.of(context).pushNamedAndRemoveUntil(MealsScreen.routeName,ModalRoute.withName(MealsScreen.routeName));  //przejście z usunięciem wszystkich wczesniejszych tras i ekranów                                
-            
-               }, 
-            child: Text('TAK'),
+            onPressed: () {
+              aktualizujKoszyk(
+                  '3'); //czyszczenie koszyka na serwerze - akcja '3'
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  MealsScreen.routeName,
+                  ModalRoute.withName(MealsScreen
+                      .routeName)); //przejście z usunięciem wszystkich wczesniejszych tras i ekranów
+            },
+            child: Text(allTranslations.text('L_TAK')),
           ),
           FlatButton(
-            onPressed: (){
+            onPressed: () {
               Navigator.of(context).pop();
-              }, 
-            child: Text('NIE'),
+            },
+            child: Text(allTranslations.text('L_NIE')),
           ),
         ],
         elevation: 24.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
-    ),
+        ),
       ),
-      barrierDismissible: false, //zeby zaciemnione tło było zablokowane na kliknięcia    
+      barrierDismissible:
+          false, //zeby zaciemnione tło było zablokowane na kliknięcia
     );
   }
 
-
   @override
-  Widget build(BuildContext context){
-    
-print ('opakowanie $opakowanie');
+  Widget build(BuildContext context) {
+    print('opakowanie $opakowanie');
     //final rest = Provider.of<Rests>(context);
     //print('rest===');
     //print (rest.items);
@@ -133,7 +144,7 @@ print ('opakowanie $opakowanie');
     int razemW = 0;
     int razemK = 0;
     for (var i = 0; i < cart.items.length; i++) {
-      razemC = razemC + double.parse(cart.items[i].cena) ;
+      razemC = razemC + double.parse(cart.items[i].cena);
       razemW = razemW + int.parse(cart.items[i].waga);
       razemK = razemK + int.parse(cart.items[i].kcal);
     }
@@ -141,239 +152,287 @@ print ('opakowanie $opakowanie');
     _wagaRazem = razemW.toString();
     _kcalRazem = razemK.toString();
 
-    return Scaffold (
+    return Scaffold(
       appBar: AppBar(
         title: globals.dostawy == '1' //jezeli dostawy
-        ? Text(allTranslations.text('L_KOSZYK'))
-        : Text(allTranslations.text('L_STOLIK')),
-         actions: globals.memoryLokE != '0' ? <Widget>[
-           IconButton(
-              icon: Icon(Icons.delete_forever,
-              ),
-              onPressed: () {
-                _showAlertYesNo(context, 'Uwaga','Czy chcesz opróznić koszyk?');
-                               
-              },
-            )
-         ]:<Widget>[],
+            ? Text(allTranslations.text('L_KOSZYK'))
+            : Text(allTranslations.text('L_STOLIK')),
+        actions: globals.memoryLokE != '0'
+            ? <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.delete_forever,
+                  ),
+                  onPressed: () {
+                    _showAlertYesNo(
+                        context, allTranslations.text('L_UWAGA'), allTranslations.text('L_CZY_OPROZNIC_KOSZYK') + '?');
+                  },
+                )
+              ]
+            : <Widget>[],
       ),
-      body: _isLoading  //jezeli dane są ładowane
-        ? Center(
-            child: CircularProgressIndicator(), //kółko ładowania danych
-          )
-        : Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(child: ListView.builder(
-                itemCount: cart.items.length + 1, 
-                itemBuilder: (ctx, i) { 
-                  print(cart.items[0].id);
-                  if(cart.items[0].id != 'brak'){
-                    if (i < cart.items.length){
-                      return CartOne( //kolejne zamówione dania
-                        i,
-                        cart.items[i].id, 
-                        cart.items[i].daId, 
-                        cart.items[i].nazwa, 
-                        cart.items[i].opis, 
-                        cart.items[i].ile,
-                        cart.items[i].cena,
-                        cart.items[i].waga,
-                        cart.items[i].kcal,
-                      );
-                    }else{ //
-                      return Column(
-                        children: <Widget>[
-//RAZEM + przyciski           
-                          Card(               
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 4,
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              height: 40.0,
-                              child: Row(//polubienie - Kazdy element wiersz jest wierszemonym z ikony i tekstu                            
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[                        
-                                  Text(
-                                    allTranslations.text('L_RAZEM'),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                    ), 
-                                  ),
+      body: _isLoading //jezeli dane są ładowane
+          ? Center(
+              child: CircularProgressIndicator(), //kółko ładowania danych
+            )
+          : Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: cart.items.length + 1,
+                        itemBuilder: (ctx, i) {
+                          print(cart.items[0].id);
+                          if (cart.items[0].id != 'brak') {
+                            if (i < cart.items.length) {
+                              return CartOne(
+                                //kolejne zamówione dania
+                                i,
+                                cart.items[i].id,
+                                cart.items[i].daId,
+                                cart.items[i].nazwa,
+                                cart.items[i].opis,
+                                cart.items[i].ile,
+                                cart.items[i].cena,
+                                cart.items[i].waga,
+                                cart.items[i].kcal,
+                              );
+                            } else {
+                              //
+                              return Column(
+                                children: <Widget>[
+//RAZEM + przyciski
+                                  Card(
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal: 15,
+                                      vertical: 4,
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      height: 40.0,
+                                      child: Row(
+                                        //polubienie - Kazdy element wiersz jest wierszemonym z ikony i tekstu
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            allTranslations.text('L_RAZEM'),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
 //razem: cena, waga, kcal
-                                  Row(//Kazdy element wiersz jest wierszemonym 
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                    children: <Widget>[ //elementy rzędu które sa widzetami
-                                      Row( //cena dania
-                                        children: <Widget>[
-                                          Text(
-                                            globals.separator == '.' ? _cenaRazem  : _cenaRazem.replaceAll('.', ','),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                              color: Colors.black,
-                                            ), //meal.cena, //interpolacja ciągu znaków
+                                          Row(
+                                            //Kazdy element wiersz jest wierszemonym
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: <Widget>[
+                                              //elementy rzędu które sa widzetami
+                                              Row(
+                                                //cena dania
+                                                children: <Widget>[
+                                                  Text(
+                                                    globals.separator == '.'
+                                                        ? _cenaRazem
+                                                        : _cenaRazem.replaceAll(
+                                                            '.', ','),
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.black,
+                                                    ), //meal.cena, //interpolacja ciągu znaków
+                                                  ),
+                                                  SizedBox(
+                                                    width: 2,
+                                                  ), //odległość miedzy ceną a PLN
+                                                  Text(
+                                                    allTranslations.text('L_PLN'),
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.black,
+                                                    ), //interpolacja ciągu znaków
+                                                  ),
+                                                  SizedBox(
+                                                    width: 25,
+                                                  ),
+                                                ],
+                                              ),
+
+                                              Row(
+                                                // waga-
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    width: 2,
+                                                  ), //odległość miedzy ikoną i tekstem
+                                                  Text(
+                                                    _wagaRazem +
+                                                        ' ' +
+                                                        allTranslations.text('L_G'),
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 25,
+                                                  ), //interpolacja ciągu znaków
+                                                ],
+                                              ),
+                                              Row(
+                                                // kcal - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    width: 2,
+                                                  ), //odległość miedzy ikoną i tekstem
+                                                  Text(
+                                                    _kcalRazem +
+                                                        ' ' +
+                                                        allTranslations.text('L_KCAL'),
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ), //interpolacja ciągu znaków
+                                                  SizedBox(
+                                                    width: 25,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(
-                                            width: 2,
-                                          ), //odległość miedzy ceną a PLN
-                                          Text(
-                                            allTranslations.text('L_PLN'),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                              color: Colors.black,
-                                            ), //interpolacja ciągu znaków
-                                          ), 
-                                          SizedBox(
-                                            width: 25,
-                                          ), 
                                         ],
                                       ),
-                                      
-                                      Row(// waga- 
-                                        children: <Widget>[
-                                          SizedBox(
-                                            width: 2,
-                                          ), //odległość miedzy ikoną i tekstem
-                                          Text(
-                                            _wagaRazem + ' ' + allTranslations.text('L_G'),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                              color: Colors.black,
-                                            ), 
-                                          ), 
-                                          SizedBox(
-                                            width: 25,
-                                          ),//interpolacja ciągu znaków
-                                        ],
-                                      ),
-                                      Row(// kcal - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
-                                        children: <Widget>[
-                                          SizedBox(
-                                            width: 2,
-                                          ), //odległość miedzy ikoną i tekstem
-                                          Text(
-                                            _kcalRazem + ' ' + allTranslations.text('L_KCAL'),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                              color: Colors.black,
-                                            ), 
-                                          ), //interpolacja ciągu znaków
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                        ],
-                                      ),                 
+                                    ),
+                                  ),
+//text doliczanie opakowania
+                                  Column(
+                                    children: <Widget>[
+                                      opakowanie == '0.00' //jeli nie ma kosztu opakowania
+                                          ? SizedBox(height: 2,)
+                                          : Container(
+                                              height: 40,
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    globals.separator == '.'
+                                                        ? Expanded(
+                                                            child: Container(
+                                                                padding: EdgeInsets.all(5),
+                                                                child: Text(
+                                                                  allTranslations.text('L_DOLICZANIE_OPAKOWANIA') +
+                                                                      ' ' + opakowanie +
+                                                                      ' ' + allTranslations.text('L_PLN'),
+                                                                  softWrap: true, //zawijanie tekstu
+                                                                  maxLines: 3, //ilość wierszy opisu
+                                                                  //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
+                                                                )),
+                                                          )
+                                                        : Expanded(
+                                                            child: Container(
+                                                              padding: EdgeInsets.only(left: 15,right:15,top: 5),
+                                                              child: Text(
+                                                                allTranslations.text('L_DOLICZANIE_OPAKOWANIA') +
+                                                                    ' ' + opakowanie.replaceAll('.',',') +
+                                                                    ' ' + allTranslations.text('L_PLN'),
+                                                                softWrap: true, //zawijanie tekstu
+                                                                maxLines: 3, //ilość wierszy opisu
+                                                                //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
+                                                              )
+                                                            ),
+                                                          )
+                                                  ])),
+//przycisk zamawiania z dostawą
+                                      globals.online == '1' //jezeli zamawianie online przez CoByTu.com
+                                          ? Container(
+                                              height: 90,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  MaterialButton(
+                                                    shape:
+                                                        const StadiumBorder(),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pushNamed(OrderScreen
+                                                              .routeName);
+                                                    },
+                                                    child: Text(
+                                                        allTranslations.text('L_ZAMAWIAM_Z_DOSTAWA')),
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    textColor: Colors.white,
+                                                    disabledColor: Colors.grey,
+                                                    disabledTextColor:
+                                                        Colors.white,
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : Container(
+                                              padding: EdgeInsets.all(15),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Text(
+                                                    globals.dostawy == '1' 
+                                                    ? allTranslations.text('L_ZAMOW_DO_STOLIKA') + '\n' + allTranslations.text('L_DOSTAWA_POD_ADRES')
+                                                    : allTranslations.text('L_ZAMOW_DO_STOLIKA') ,
+                                                    softWrap: true, //zawijanie tekstu
+                                                    maxLines: 5, //ilość wierszy opisu
+                                                    //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
+                                                  ),
+                                             /*     globals.dostawy == '1' 
+                                                  ? Text(
+                                                    allTranslations
+                                                        .text('L_DOSTAWA_POD_ADRES'),
+                                                    softWrap:
+                                                        true, //zawijanie tekstu
+                                                    maxLines:
+                                                        5, //ilość wierszy opisu
+                                                    //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
+                                                  ):{},
+                                                */  
+                                                ],
+                                              )
+                                            ),
                                     ],
                                   ),
-                                  
                                 ],
-                              ),
-                            ),
-                          ),
-//text doliczanie opakowania                          
-                          Column(
-                            children: <Widget>[
-                              opakowanie == '0.00'  //jeli nie ma kosztu opakowania
-                              ? SizedBox(height: 2,) 
-                              : Container(
-                                height: 40,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,                    
-                                  children: <Widget>[
-                                    globals.separator == '.' 
-                                      ? Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.all(5),
-                                            child: Text(
-                                              allTranslations.text('L_DOLICZANIE_OPAKOWANIA') + ' ' + opakowanie + ' ' + allTranslations.text('L_PLN'),
-                                              softWrap: true, //zawijanie tekstu
-                                              maxLines: 3, //ilość wierszy opisu
-                                              //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie                         
-                                              )                      
-                                          ),
-                                        ) 
-                                      : Expanded(
-                                        child: Container(
-                                          padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                                          child: Text(
-                                            allTranslations.text('L_DOLICZANIE_OPAKOWANIA') + ' ' + opakowanie.replaceAll('.', ',') + ' ' + allTranslations.text('L_PLN'),
-                                            softWrap: true, //zawijanie tekstu
-                                            maxLines: 3, //ilość wierszy opisu
-                                            //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie                         
-                                          )                      
-                                        ),
-                                      )
-                                  ]
-                                )
-                              ),
-//przycisk zamawiania z dostawą                              
-                              globals.dostawy == '1' //jezeli dostawy
-                              ? Container(
-                                  height: 90,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,                             
-                                    children: <Widget>[                                
-                                      MaterialButton(
-                                        shape: const StadiumBorder(),
-                                        onPressed: (){
-                                          Navigator.of(context).pushNamed(OrderScreen.routeName); 
-                                        }, 
-                                        child: Text ('Zamawiam z dostawą'),
-                                        color: Theme.of(context).primaryColor,
-                                        textColor: Colors.white,
-                                        disabledColor: Colors.grey,
-                                        disabledTextColor: Colors.white,                                    
-                                      ),
-                                    ],
+                              );
+                            }
+                          } else {
+                            //od if(cart.items[0].id != 'brak') - czy koszyk jest pusty
+                            if (i ==
+                                0) //bo jest jeszcze i==1 i wtedy wyświetla dwa razy to samo
+                              return Column(children: <Widget>[
+                                Container(
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: Text(
+                                    allTranslations.text('L_KOSZYK_PUSTY'),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 )
-                              : Container(
-                                padding: EdgeInsets.all(15),
-                                child: Text(
-                                  allTranslations.text('L_ZAMOW_DO_STOLIKA'),
-                                  softWrap: true, //zawijanie tekstu
-                                  maxLines: 3, //ilość wierszy opisu
-                                  //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie                         
-                                  )                      
-                              ) ,
-                            ],
-                          ),
-                        ],
-                      );
-                    }
-                  }else{ //od if(cart.items[0].id != 'brak') - czy koszyk jest pusty
-                    if(i == 0) //bo jest jeszcze i==1 i wtedy wyświetla dwa razy to samo
-                    return Column(                      
-                      children: <Widget>[
-                        Container( 
-                          padding: const EdgeInsets.only(top: 50),
-                          child:Text(
-                            allTranslations.text('L_KOSZYK_PUSTY'),
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ) 
-                      ]
-                    );
-                  }
-                }
+                              ]);
+                          }
+                        }),
+                  ),
+                ],
               ),
             ),
- 
-          ],
-      ),
-        ),
     );
   }
-} 
+}

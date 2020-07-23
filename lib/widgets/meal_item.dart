@@ -66,7 +66,9 @@ class MealItem extends StatelessWidget {
           otwarteA: restData['re_otwarte_a'], 
           otwarteB: restData['re_otwarte_b'], 
           otwarteC: restData['re_otwarte_c'], 
-          cena: restData['cena'], 
+          cena: restData['cena'],
+          dostawy: restData['re_tel_dos'], 
+          online: restData['re_online'], 
           parking: restData['re_parking'], 
           podjazd: restData['re_podjazd'], 
           wynos: restData['re_na_wynos'], 
@@ -101,7 +103,7 @@ class MealItem extends StatelessWidget {
         content: Column( //zeby tekst był wyśrodkowany w poziomie
           mainAxisSize:MainAxisSize.min, 
           children: <Widget>[
-            Text('Trwa aktualizacja menu'),
+            Text(allTranslations.text('L_AKTUALIZACJA_MENU')),
           ],
         ),
         elevation: 24.0,

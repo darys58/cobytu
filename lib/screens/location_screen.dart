@@ -193,7 +193,8 @@ class _LocationScreenState extends State<LocationScreen> {
           miaId: item['miaId'],       
           miasto: item['miasto'],          
           wojId: item['wojId'],        
-          woj: item['woj'],     
+          woj: item['woj'], 
+          online: item['online'],     
           dostawy: item['dostawy'],   
           opakowanie: item['opakowanie'],      
           doStolika: item['doStolika'],      
@@ -218,7 +219,8 @@ class _LocationScreenState extends State<LocationScreen> {
           miaId: item['miaId'],       
           miasto: item['miasto'],          
           wojId: item['wojId'],        
-          woj: item['woj'],     
+          woj: item['woj'],  
+          online: item['online'],  
           dostawy: item['dostawy'],   
           opakowanie: item['opakowanie'],      
           doStolika: item['doStolika'],      
@@ -253,7 +255,7 @@ class _LocationScreenState extends State<LocationScreen> {
     print ('location budowanie ekranu');
   final restsData = Provider.of<Rests>(context);
   List<Rest> rests = restsData.items.toList();
-  rests.add(Rest(id:'0',nazwa:allTranslations.text('L_WSZYSTKIE'),obiekt:'0', adres: _adresWszystkie, miaId:'0',miasto:'0',wojId:'0',woj:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
+  rests.add(Rest(id:'0',nazwa:allTranslations.text('L_WSZYSTKIE'),obiekt:'0', adres: _adresWszystkie, miaId:'0',miasto:'0',wojId:'0',woj:'0',online:'0',dostawy:'0',opakowanie:'0',doStolika:'0',rezerwacje:'0',mogeJesc:'0',modMenu:'0')); //ten wpis zastąpił parametr memLok.f
 
     return Scaffold(
       appBar :AppBar( 
@@ -273,7 +275,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 _currentValue,            //e - '0' lub id restauracji
                 _rest[0].nazwa,           //f - "Wszystkie" lub nazwa restauracji
               ); 
-              _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera  
+              _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera 
+              globals.wybranaStrefa = 1; //domyślna strefa 
               Navigator.of(context).pushReplacementNamed(MealsScreen.routeName);   //przejście z usunięciem (wymianą) ostatniego ekranu (ekranu lokalizacji)  
             },
           ),
@@ -365,7 +368,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             )
                             : SizedBox(width: 1),
                            */ 
-                            item.dostawy == '1' ? Image.asset('assets/images/cart.png') : SizedBox(width: 1),
+                            item.online == '1' ? Image.asset('assets/images/cart.png') : SizedBox(width: 1),
                             SizedBox(width: 5), 
                             //Image.asset('assets/images/phone.png'),
                             //SizedBox(width: 3),

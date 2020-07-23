@@ -281,7 +281,7 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
                         Row(
                           children: <Widget>[
                             Text(
-                              detailIngredData[index].doKcal100 + ' kcal/100g',
+                              detailIngredData[index].doKcal100 + ' ' + allTranslations.text('L_KCAL') + '/100' + allTranslations.text('L_G'),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black54,
