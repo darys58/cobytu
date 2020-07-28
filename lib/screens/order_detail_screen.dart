@@ -33,7 +33,7 @@ class _OrderDetailState extends State<OrderDetailScreen> {
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
   //final _formKey1 = GlobalKey<FormState>();
-  String opakowanie = '';
+  //String opakowanie = '';
 
   //final String _currLang = allTranslations.currentLanguage; //aktualny język
   List<OrderMeal> _dania = []; //lista dań do zamówienia
@@ -436,11 +436,11 @@ class _OrderDetailState extends State<OrderDetailScreen> {
                                           ),
                                         ),
                                       ]),
-//nazwisko
+//imie i nazwisko
                                     TableRow(children: [
                                       TableCell(child: SizedBox(height: 25)),
                                       Text(
-                                        allTranslations.text('L_NAZWISKO') + ': ',
+                                        allTranslations.text('L_IMIE') + ': ',
                                         style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.black,

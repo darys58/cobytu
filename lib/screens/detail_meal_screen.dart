@@ -56,7 +56,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   List<Mem> _memLok; //dane wybranej restauracji w tabeli memory - baza lokalna
   var detailMealData;
   String _currLang = allTranslations.currentLanguage; //aktualny język
-  String _separator;
+  
 
   List<DropdownMenuItem<String>>
       _dropdownMenuItemsWer; ////lista wersji dania dla buttona wyboru
@@ -147,7 +147,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
       });
     }
     if (_currLang == 'en' || _currLang == 'ja' || _currLang == 'zh')
-      _separator = '.'; //separator w cenie
+      globals.separator = '.'; //separator w cenie
     _isInit = false;
     super.didChangeDependencies();
   }
@@ -479,12 +479,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       Row(
                         // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
                         children: <Widget>[
-                          Icon(
-                            Icons.hourglass_empty,
-                            color: Theme.of(context).primaryColor, //schedule
-                          ),
+                          Image.asset('assets/images/czas.png',height: 15),
                           SizedBox(
-                            width: 2,
+                            width: 3,
                           ), //odległość miedzy ikoną i tekstem
                           Text(
                             detailMealData[0].czas +
@@ -500,12 +497,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       Row(
                         // czas
                         children: <Widget>[
-                          Icon(
-                            Icons.fitness_center,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                          Image.asset('assets/images/waga.png',height: 15),
                           SizedBox(
-                            width: 2,
+                            width: 3,
                           ), //odległość miedzy ikoną i tekstem
                           Text(
                             '$_waga ' + allTranslations.text('L_G'),
@@ -519,12 +513,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       Row(
                         // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
                         children: <Widget>[
-                          Icon(
-                            Icons.battery_unknown,
-                            color: Theme.of(context).primaryColor, //schedule
-                          ),
+                          Image.asset('assets/images/energia.png',height: 15),
                           SizedBox(
-                            width: 2,
+                            width: 3,
                           ), //odległość miedzy ikoną i tekstem
                           Text(
                             '$_kcal ' + allTranslations.text('L_KCAL'),
@@ -749,7 +740,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                         width: 20,
                       ),
                       Text(
-                        _separator == '.'
+                        globals.separator == '.'
                             ? _cena + ' ' + allTranslations.text('L_PLN')
                             : _cena.replaceAll('.', ',') +
                                 ' ' +

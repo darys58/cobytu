@@ -102,7 +102,7 @@ class DBHelper {
   //update koszyka/stolika dania - ilość dań w koszyku
   static Future<void> updateIle(String id, String ile) async{
     final db = await DBHelper.database();
-    print('update dania - ile w koszyku da=$id ile=$ile');
+    print('db_helpers: update dania - ile w koszyku da=$id ile=$ile');
     db.update('dania', {'stolik': ile}, where: 'id = ?', whereArgs:[id]);
   }
 
@@ -130,7 +130,7 @@ class DBHelper {
   //odczyt z bazy restauracji dla danego id - dla meal_item - potrzebne modMenu
   static Future<List<Map<String, dynamic>>> getRestWithId(String restId) async {
     final db = await DBHelper.database();
-    print('pobieranie restauracji dla id = $restId');
+    print('db_helpers: pobieranie restauracji dla id = $restId');
     return db.rawQuery('SELECT  * FROM restauracje WHERE id = ?',[restId]);
   }
 

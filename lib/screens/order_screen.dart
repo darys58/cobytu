@@ -9,33 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../all_translations.dart';
 import '../globals.dart' as globals;
 import '../models/cart.dart';
+import '../models/strefa.dart';
 import '../screens/meals_screen.dart';
-
-class Strefa {
-  final String numer; //str_numer
-  final String czynne; //czynne
-  final String zamOd; //zamow_od
-  final String zamDo; //zamow_do
-  final String zakres; //str_zakres
-  final String wartMin; //str_wart_min
-  final String koszt; //str_koszt
-  final String wartMax; //str_wart_max
-  final String bonus; //str_wat_bonus
-  final String platne; //re_platne_dos
-
-  Strefa({
-    @required this.numer,
-    this.czynne,
-    this.zamOd,
-    this.zamDo,
-    this.zakres,
-    this.wartMin,
-    this.koszt,
-    this.wartMax,
-    this.bonus,
-    this.platne,
-  });
-}
 
 class OrderScreen extends StatefulWidget {
   static const routeName = '/order'; //nazwa trasy do tego ekranu
@@ -48,8 +23,7 @@ class _OrderState extends State<OrderScreen> {
   var _isInit = true; //czy inicjowanie ekranu?
   var _isLoading = false; //czy ładowanie danych?
   final _formKey1 = GlobalKey<FormState>();
-  String opakowanie = '';
-  String _cenaRazem;
+  //String opakowanie = '';
   int _czyDostawa = globals.czyDostawa;
   String _czasDostawy = '0.99';
   int _sposobPlatnosci = globals.sposobPlatnosci;
@@ -60,7 +34,8 @@ class _OrderState extends State<OrderScreen> {
   final String _currLang = allTranslations.currentLanguage; //aktualny język
   List<DropdownMenuItem<String>> _listaCzasowDostaw = [];
   List<Strefa> _strefy = []; //lista stref
- 
+  bool moznaWysylac =
+      true; //słuy do blokowania przycisku "Zamawiam" zeby pnie wysyłac kilka razy tego samego
 
   @override
   void didChangeDependencies() {
@@ -70,12 +45,12 @@ class _OrderState extends State<OrderScreen> {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
 
-      fetchStrefyFromSerwer().then((str) {
+      fetchStrefyFromSerwer().then((_) {
         //pobranie stref z serwera www
         //opakowanie = restaurant.asMap()[0]['opakowanie']; //pobranie doliczanej wartości opakowania
 
         //do której mozna składać zamówienia
-        print('_wybranaStrefa $_wybranaStrefa');
+        print('order_screen: _wybranaStrefa = $_wybranaStrefa');
         if (_wybranaStrefa == null) _wybranaStrefa = 1;
         int doGodz =
             double.parse(_strefy[_wybranaStrefa - 1].zamDo).round().toInt();
@@ -87,6 +62,10 @@ class _OrderState extends State<OrderScreen> {
           _czasy.add(i.toString() + ':45');
         }
         _listaCzasowDostaw = buildDropdownMenuItem(_czasy);
+        if (_czyDostawa != 1 && _czyDostawa != 2) {
+          _czyDostawa = 2;
+          globals.czyDostawa = 2;
+        }
         setState(() {
           _isLoading = false; //zatrzymanie wskaznika ładowania danych
         });
@@ -96,10 +75,10 @@ class _OrderState extends State<OrderScreen> {
     super.didChangeDependencies();
   }
 
-  //tworzenie buttona wyboru województwa
+  //tworzenie buttona wyboru czasu dostawy
   List<DropdownMenuItem<String>> buildDropdownMenuItem(List<String> lista) {
     List<DropdownMenuItem<String>> items = List();
-    print('lista do budowania buttona $lista');
+    print('order_screen: lista do budowania buttona  = $lista');
     items.add(
       DropdownMenuItem(
         value: '0.99',
@@ -200,7 +179,7 @@ class _OrderState extends State<OrderScreen> {
         'ko_akcja': akcja,
       }),
     );
-    print(response.body);
+    print('order_screen: aktualizujKoszyk response.body = ${response.body}');
     if (response.statusCode >= 200 &&
         response.statusCode <= 400 &&
         json != null) {
@@ -249,7 +228,7 @@ class _OrderState extends State<OrderScreen> {
         ));
       });
       // _items = loadedRests;
-      print('numer strefy w order = ${_strefy[0].numer}');
+      print('order_screen: numer strefy w order = ${_strefy[0].numer}');
       //notifyListeners();
       return _strefy;
     } catch (error) {
@@ -281,7 +260,8 @@ class _OrderState extends State<OrderScreen> {
                     "za_email": globals.email,
                     "za_uwagi": _uwagi,
                     "za_platnosc": _sposobPlatnosci.toString(),
-                    "za_koszt": _strefy[_wybranaStrefa - 1].koszt,
+                    "za_koszt":
+                        _strefy[_wybranaStrefa - 1].koszt, //koszt dostawy
                     "za_lang": _currLang,
                   })
                 : jsonEncode(<String, String>{
@@ -304,7 +284,7 @@ class _OrderState extends State<OrderScreen> {
                     "za_lang": _currLang,
                   }));
 
-    print(response.body);
+    print('order_screen: wyslijZamowienie response.body ${response.body}');
     if (response.statusCode >= 200 &&
         response.statusCode <= 400 &&
         json != null) {
@@ -313,13 +293,16 @@ class _OrderState extends State<OrderScreen> {
         if (odpPost['zapis'] != 'ok') {
           _showAlert(context, allTranslations.text('L_KOMUNIKAT'),
               allTranslations.text('L_WYSLANIE_ZAMOWIENIA_NIE'));
+          moznaWysylac = true;
         } else {
           _showAlert(context, allTranslations.text('L_KOMUNIKAT'),
               allTranslations.text('L_ZAMOWIENIE_PRZEKAZANO_ALE'));
+          moznaWysylac = true;
         }
       } else {
         _showAlertOK(context, allTranslations.text('L_KOMUNIKAT'),
             allTranslations.text('L_ZAMOWIENIE_PRZEKAZANE'));
+        moznaWysylac = true;
         aktualizujKoszyk('3'); //czyszczenie koszyka na serwerze - akcja '3'
         //Navigator.of(context).pushNamed(OrderScreen.routeName);
       }
@@ -332,13 +315,25 @@ class _OrderState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
     //print('platne ${_strefy[_wybranaStrefa - 1].platne}');
-    
-    //obliczenie wartości menu
-    double razemC = 0;
+
+    //obliczenie wartości menu + opakowania
+    double kosztMenu = 0;
+    double kosztOpakowan = 0;
     for (var i = 0; i < cart.items.length; i++) {
-      razemC = razemC + double.parse(cart.items[i].cena);
+      kosztMenu = kosztMenu + double.parse(cart.items[i].cena); //cena dań
+      kosztOpakowan = kosztOpakowan +
+          (cart.items[i].ile) * double.parse(globals.cenaOpakowania) +
+          cart.items[i].dodOpak * double.parse(globals.cenaOpakowania);
+      //(ilość dań * cena opakowania) + (ilość dodatkowych opakowań dla "zup dnia" * cena opakowania)
+
+      print(kosztMenu);
+      print('koszt menu = ');
+      print(double.parse(cart.items[i].cena));
+      print('+');
+      print(cart.items[i].dodOpak);
+      print('*');
+      print(double.parse(globals.cenaOpakowania));
     }
-    _cenaRazem = razemC.toStringAsFixed(2);
 
     return Scaffold(
       appBar: AppBar(
@@ -393,7 +388,8 @@ class _OrderState extends State<OrderScreen> {
                                       globals.czyDostawa = value;
                                     });
                                   }),
-                              label: Text(allTranslations.text('L_ODBIOR_WLASNY'))),
+                              label: Text(
+                                  allTranslations.text('L_ODBIOR_WLASNY'))),
                         ],
                       ),
                       //koszty
@@ -419,12 +415,14 @@ class _OrderState extends State<OrderScreen> {
                                   ),
                                 ),
                                 Row(
-                                  //cena dania
+                                  //wartość
                                   children: <Widget>[
                                     Text(
                                       globals.separator == '.'
-                                          ? _cenaRazem
-                                          : _cenaRazem.replaceAll('.', ','),
+                                          ? kosztMenu.toStringAsFixed(2)
+                                          : kosztMenu
+                                              .toStringAsFixed(2)
+                                              .replaceAll('.', ','),
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.black,
@@ -449,7 +447,59 @@ class _OrderState extends State<OrderScreen> {
                           Divider(
                             color: Colors.grey,
                           ),
-                          //koszt dostawy
+
+//koszt opakowań
+                          Visibility(
+                            visible: globals.cenaOpakowania != "0.00",
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Text(
+                                      allTranslations.text('L_KOSZT_OPAKOWAN'),
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    //wartość
+                                    children: <Widget>[
+                                      Text(
+                                        globals.separator == '.'
+                                            ? kosztOpakowan.toStringAsFixed(2)
+                                            : kosztOpakowan
+                                                .toStringAsFixed(2)
+                                                .replaceAll('.', ','),
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 2,
+                                      ), //odległość miedzy ceną a PLN
+                                      Text(
+                                        allTranslations.text('L_PLN'),
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                        ), //interpolacja ciągu znaków
+                                      ),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                          ),
+//koszt dostawy
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -464,7 +514,7 @@ class _OrderState extends State<OrderScreen> {
                                   ),
                                 ),
                                 Row(
-                                  //cena dania
+//wartość
                                   children: <Widget>[
                                     Text(
                                       _czyDostawa == 1
@@ -501,7 +551,7 @@ class _OrderState extends State<OrderScreen> {
                           Divider(
                             color: Colors.grey,
                           ),
-                          //całkowity koszt
+//całkowity koszt
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -517,18 +567,20 @@ class _OrderState extends State<OrderScreen> {
                                   ),
                                 ),
                                 Row(
-                                  //cena dania
+//wartość
                                   children: <Widget>[
                                     Text(
                                       _czyDostawa == 1
                                           ? globals.separator == '.'
-                                              ? (razemC +
+                                              ? (kosztMenu +
+                                                      kosztOpakowan +
                                                       double.parse(_strefy[
                                                               _wybranaStrefa -
                                                                   1]
                                                           .koszt))
                                                   .toStringAsFixed(2)
-                                              : (razemC +
+                                              : (kosztMenu +
+                                                      kosztOpakowan +
                                                       double.parse(_strefy[
                                                               _wybranaStrefa -
                                                                   1]
@@ -536,8 +588,11 @@ class _OrderState extends State<OrderScreen> {
                                                   .toStringAsFixed(2)
                                                   .replaceAll('.', ',')
                                           : globals.separator == '.'
-                                              ? _cenaRazem
-                                              : _cenaRazem.replaceAll('.', ','),
+                                              ? (kosztOpakowan + kosztMenu)
+                                                  .toStringAsFixed(2)
+                                              : (kosztOpakowan + kosztMenu)
+                                                  .toStringAsFixed(2)
+                                                  .replaceAll('.', ','),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
@@ -599,65 +654,89 @@ class _OrderState extends State<OrderScreen> {
                           padding: const EdgeInsets.only(left: 20, top: 10),
                           child: RaisedButton(
                             onPressed: () {
-                              showDialog( //okno do wyboru stref
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 30.0),
-                                    child: AlertDialog(
-                                      content: Container(
-                                        width: double.maxFinite,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Text(allTranslations.text('L_WYBIERZ_STREFE')),
-                                            Expanded(
-                                              child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount: _strefy.length,
-                                                itemBuilder: (context, index) {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      Navigator.of(context).pop();
-                                                      setState(() {
-                                                        _wybranaStrefa = index + 1;
-                                                        globals.wybranaStrefa = index + 1;
-                                                      });
-                                                    },
-                                                    child: Card(
-                                                      margin: EdgeInsets.only(top: 20),
-                                                      elevation: 4, //cień za kartą
-                                                      child: Container(
-                                                        padding: EdgeInsets.all(10),
-                                                        child: Column(
-                                                          children: <Widget>[
-                                                            Text(
-                                                              allTranslations.text('L_STREFA') + ' ${_strefy[index].numer}',
-                                                              style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:FontWeight.bold,
-                                                                //color: Colors.grey,
-                                                              ),
-                                                            ),
-                                                            SizedBox(height: 10),
-                                                            Text(_strefy[index].zakres)
-                                                          ],
-                                                        ),
-                                                      )
-                                                    ),
-                                                  );
-                                                }
-                                              ),
-                                            ),
-                                          ]),
+                              showDialog(
+                                  //okno do wyboru stref
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 30.0),
+                                      child: AlertDialog(
+                                        content: Container(
+                                          width: double.maxFinite,
+                                          child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Text(allTranslations
+                                                    .text('L_WYBIERZ_STREFE')),
+                                                Expanded(
+                                                  child: ListView.builder(
+                                                      shrinkWrap: true,
+                                                      itemCount: _strefy.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return InkWell(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            setState(() {
+                                                              _wybranaStrefa =
+                                                                  index + 1;
+                                                              globals.wybranaStrefa =
+                                                                  index + 1;
+                                                            });
+                                                          },
+                                                          child: Card(
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      top: 20),
+                                                              elevation:
+                                                                  4, //cień za kartą
+                                                              child: Container(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            10),
+                                                                child: Column(
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Text(
+                                                                      allTranslations
+                                                                              .text('L_STREFA') +
+                                                                          ' ${_strefy[index].numer}',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            15,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        //color: Colors.grey,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            10),
+                                                                    Text(_strefy[
+                                                                            index]
+                                                                        .zakres)
+                                                                  ],
+                                                                ),
+                                                              )),
+                                                        );
+                                                      }),
+                                                ),
+                                              ]),
                                         ),
                                       ),
-                                  );
+                                    );
                                   });
                             },
                             color: Colors.grey[200],
                             child: Text(
-                              allTranslations.text('L_STREFA_DOSTAWY') + ' ' + _wybranaStrefa.toString(),
+                              allTranslations.text('L_STREFA_DOSTAWY') +
+                                  ' ' +
+                                  _wybranaStrefa.toString(),
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16,
@@ -681,15 +760,17 @@ class _OrderState extends State<OrderScreen> {
                                     child: TextFormField(
                                         initialValue: globals.adres,
                                         decoration: InputDecoration(
-                                          labelText: allTranslations.text('L_ADRES'),
+                                          labelText:
+                                              allTranslations.text('L_ADRES'),
                                           labelStyle:
                                               TextStyle(color: Colors.black),
-                                          hintText:
-                                              allTranslations.text('L_WPISZ_ULICE'),
+                                          hintText: allTranslations
+                                              .text('L_WPISZ_ULICE'),
                                         ),
                                         validator: (value) {
                                           if (value.isEmpty) {
-                                            return allTranslations.text('L_WPISZ_ULICE');
+                                            return allTranslations
+                                                .text('L_WPISZ_ULICE');
                                           }
                                           globals.adres = value;
                                           return null;
@@ -701,15 +782,17 @@ class _OrderState extends State<OrderScreen> {
                                     child: TextFormField(
                                         initialValue: globals.numer,
                                         decoration: InputDecoration(
-                                          labelText: allTranslations.text('L_NUMER'),
+                                          labelText:
+                                              allTranslations.text('L_NUMER'),
                                           labelStyle:
                                               TextStyle(color: Colors.black),
-                                          hintText:
-                                              allTranslations.text('L_WPISZ_NUMER'),
+                                          hintText: allTranslations
+                                              .text('L_WPISZ_NUMER'),
                                         ),
                                         validator: (value) {
                                           if (value.isEmpty) {
-                                            return allTranslations.text('L_WPISZ_NUMER');
+                                            return allTranslations
+                                                .text('L_WPISZ_NUMER');
                                           }
                                           globals.numer = value;
                                           return null;
@@ -722,15 +805,19 @@ class _OrderState extends State<OrderScreen> {
                                     child: TextFormField(
                                         initialValue: globals.kod,
                                         decoration: InputDecoration(
-                                          labelText: allTranslations.text('L_KOD_POCZTOWY'),
+                                          labelText: allTranslations
+                                              .text('L_KOD_POCZTOWY'),
                                           labelStyle:
                                               TextStyle(color: Colors.black),
-                                          hintText:
-                                            allTranslations.text('L_WPISZ_KOD') + ' (XX-XXX)',
+                                          hintText: allTranslations
+                                                  .text('L_WPISZ_KOD') +
+                                              ' (XX-XXX)',
                                         ),
                                         validator: (value) {
                                           if (value.isEmpty) {
-                                            return allTranslations.text('L_WPISZ_KOD') + ' (XX-XXX)';
+                                            return allTranslations
+                                                    .text('L_WPISZ_KOD') +
+                                                ' (XX-XXX)';
                                           }
                                           globals.kod = value;
                                           return null;
@@ -742,15 +829,17 @@ class _OrderState extends State<OrderScreen> {
                                     child: TextFormField(
                                         initialValue: globals.miasto,
                                         decoration: InputDecoration(
-                                          labelText: allTranslations.text('L_MIASTO'),
+                                          labelText:
+                                              allTranslations.text('L_MIASTO'),
                                           labelStyle:
                                               TextStyle(color: Colors.black),
-                                          hintText:
-                                              allTranslations.text('L_WPISZ_MIASTO'),
+                                          hintText: allTranslations
+                                              .text('L_WPISZ_MIASTO'),
                                         ),
                                         validator: (value) {
                                           if (value.isEmpty) {
-                                            return allTranslations.text('L_WPISZ_MIASTO');
+                                            return allTranslations
+                                                .text('L_WPISZ_MIASTO');
                                           }
                                           globals.miasto = value;
                                           return null;
@@ -767,7 +856,8 @@ class _OrderState extends State<OrderScreen> {
                                             MainAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            allTranslations.text('L_DANE_ZAMAWIAJACEGO'),
+                                            allTranslations
+                                                .text('L_DANE_ZAMAWIAJACEGO'),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18,
@@ -781,14 +871,17 @@ class _OrderState extends State<OrderScreen> {
                                   TextFormField(
                                       initialValue: globals.imie,
                                       decoration: InputDecoration(
-                                        labelText: allTranslations.text('L_IMIE'),
+                                        labelText:
+                                            allTranslations.text('L_IMIE'),
                                         labelStyle:
                                             TextStyle(color: Colors.black),
-                                        hintText: allTranslations.text('L_WPISZ_IMIE'),
+                                        hintText: allTranslations
+                                            .text('L_WPISZ_IMIE'),
                                       ),
                                       validator: (value) {
                                         if (value.isEmpty) {
-                                          return allTranslations.text('L_WPISZ_IMIE');
+                                          return allTranslations
+                                              .text('L_WPISZ_IMIE');
                                         }
                                         globals.imie = value;
                                         return null;
@@ -797,10 +890,12 @@ class _OrderState extends State<OrderScreen> {
                                   TextFormField(
                                       initialValue: globals.nazwisko,
                                       decoration: InputDecoration(
-                                        labelText: allTranslations.text('L_NAZWISKO'),
+                                        labelText:
+                                            allTranslations.text('L_NAZWISKO'),
                                         labelStyle:
                                             TextStyle(color: Colors.black),
-                                        hintText: allTranslations.text('L_WPISZ_NAZWISKO'),
+                                        hintText: allTranslations
+                                            .text('L_WPISZ_NAZWISKO'),
                                       ),
                                       validator: (value) {
                                         globals.nazwisko = value;
@@ -811,14 +906,17 @@ class _OrderState extends State<OrderScreen> {
                                   TextFormField(
                                       initialValue: globals.telefon,
                                       decoration: InputDecoration(
-                                        labelText: allTranslations.text('L_TELEFON'),
+                                        labelText:
+                                            allTranslations.text('L_TELEFON'),
                                         labelStyle:
                                             TextStyle(color: Colors.black),
-                                        hintText: allTranslations.text('L_WPISZ_TELEFON'),
+                                        hintText: allTranslations
+                                            .text('L_WPISZ_TELEFON'),
                                       ),
                                       validator: (value) {
                                         if (value.isEmpty) {
-                                          return allTranslations.text('L_WPISZ_TELEFON');
+                                          return allTranslations
+                                              .text('L_WPISZ_TELEFON');
                                         }
                                         globals.telefon = value;
                                         return null;
@@ -827,14 +925,17 @@ class _OrderState extends State<OrderScreen> {
                                   TextFormField(
                                       initialValue: globals.email,
                                       decoration: InputDecoration(
-                                        labelText: allTranslations.text('L_EMAIL'),
+                                        labelText:
+                                            allTranslations.text('L_EMAIL'),
                                         labelStyle:
                                             TextStyle(color: Colors.black),
-                                        hintText: allTranslations.text('L_WPISZ_EMAIL'),
+                                        hintText: allTranslations
+                                            .text('L_WPISZ_EMAIL'),
                                       ),
                                       validator: (value) {
                                         if (value.isEmpty) {
-                                          return allTranslations.text('L_WPISZ_EMAIL');
+                                          return allTranslations
+                                              .text('L_WPISZ_EMAIL');
                                         }
                                         globals.email = value;
                                         return null;
@@ -850,7 +951,8 @@ class _OrderState extends State<OrderScreen> {
                                             MainAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            allTranslations.text('L_INFO_DODATKOWE'),
+                                            allTranslations
+                                                .text('L_INFO_DODATKOWE'),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18,
@@ -864,7 +966,8 @@ class _OrderState extends State<OrderScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        allTranslations.text('L_CZAS_DOSTAWY') + ': ',
+                                        allTranslations.text('L_CZAS_DOSTAWY') +
+                                            ': ',
                                         style: TextStyle(
                                           //fontWeight: FontWeight.bold,
                                           fontSize: 16,
@@ -899,7 +1002,8 @@ class _OrderState extends State<OrderScreen> {
                                   //Uwagi
                                   TextFormField(
                                     decoration: InputDecoration(
-                                      labelText: allTranslations.text('L_UWAGI'),
+                                      labelText:
+                                          allTranslations.text('L_UWAGI'),
                                       labelStyle:
                                           TextStyle(color: Colors.black),
                                       hintText:
@@ -923,7 +1027,8 @@ class _OrderState extends State<OrderScreen> {
                                             MainAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            allTranslations.text('L_SPOSOB_ZAPLATY'),
+                                            allTranslations
+                                                .text('L_SPOSOB_ZAPLATY'),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18,
@@ -955,7 +1060,8 @@ class _OrderState extends State<OrderScreen> {
                                                       value;
                                                 });
                                               }),
-                                          label: Text(allTranslations.text('L_GOTOWKA_PRZY_ODBIORZE'))),
+                                          label: Text(allTranslations.text(
+                                              'L_GOTOWKA_PRZY_ODBIORZE'))),
 
 //jezeli platne (tzn. re_platne_dos) =  3 lub 7 to opócz gotówki jest karta
                                       Visibility(
@@ -982,8 +1088,8 @@ class _OrderState extends State<OrderScreen> {
                                                         value;
                                                   });
                                                 }),
-                                            label: Text(
-                                                allTranslations.text('L_KARTA_PRZY_ODBIORZE'))),
+                                            label: Text(allTranslations.text(
+                                                'L_KARTA_PRZY_ODBIORZE'))),
                                       ),
 
 //jezeli platne (tzn. re_platne_dos) =  5 lub 7 to opócz gotówki i/lub karta jest online
@@ -995,30 +1101,29 @@ class _OrderState extends State<OrderScreen> {
                                                     .platne ==
                                                 '7',
                                         child: FlatButton.icon(
-                                            onPressed: () {
-                                              setState(() {
-                                                _sposobPlatnosci = 3;
-                                                globals.sposobPlatnosci = 3;
-                                              });
-                                            },
-                                            icon: Radio(
-                                                value: 2,
-                                                groupValue: _sposobPlatnosci,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    _sposobPlatnosci = value;
-                                                    globals.sposobPlatnosci =
-                                                        value;
-                                                  });
-                                                }),
-                                            label: Text(allTranslations.text('L_ONLINE_M')),
+                                          onPressed: () {
+                                            setState(() {
+                                              _sposobPlatnosci = 3;
+                                              globals.sposobPlatnosci = 3;
+                                            });
+                                          },
+                                          icon: Radio(
+                                              value: 2,
+                                              groupValue: _sposobPlatnosci,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _sposobPlatnosci = value;
+                                                  globals.sposobPlatnosci =
+                                                      value;
+                                                });
+                                              }),
+                                          label: Text(allTranslations
+                                              .text('L_ONLINE_M')),
                                         ),
                                       )
                                     ],
                                   ),
-                                ]
-                              )
-                            ),
+                                ])),
                       ),
 
 //informacje dodatkowe
@@ -1033,8 +1138,9 @@ class _OrderState extends State<OrderScreen> {
                               RichText(
                                 text: TextSpan(children: [
                                   TextSpan(
-                                    text:
-                                        allTranslations.text('L_KLIKAJAC_POTWIERDZASZ') + ' ',
+                                    text: allTranslations
+                                            .text('L_KLIKAJAC_POTWIERDZASZ') +
+                                        ' ',
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.black,
@@ -1053,7 +1159,9 @@ class _OrderState extends State<OrderScreen> {
                                       },
                                   ),
                                   TextSpan(
-                                    text: ' ' + allTranslations.text('L_ORAZ') + ' ',
+                                    text: ' ' +
+                                        allTranslations.text('L_ORAZ') +
+                                        ' ',
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.black,
@@ -1091,20 +1199,34 @@ class _OrderState extends State<OrderScreen> {
                                         if (_formKey1.currentState.validate()) {
                                           //jezeli formularz wypełniony poprawnie
                                           if (globals.czyDostawa != null) {
-                                            if (globals.sposobPlatnosci != null) {
-                                              wyslijZamowienie();
+                                            if (globals.sposobPlatnosci !=
+                                                null) {
+                                              if (moznaWysylac) {
+                                                moznaWysylac = false;
+                                                wyslijZamowienie();
+                                              }
                                               //Navigator.of(context).pushNamed(OrderScreen.routeName);
-                                              print('form OK');
+                                              print('order_screen: form OK');
                                             } else
-                                              _showAlert(context, allTranslations.text('L_KOMUNIKAT'),
-                                                  allTranslations.text('L_WYBIERZ_SPOSOB_ZAPLATY'));
+                                              _showAlert(
+                                                  context,
+                                                  allTranslations
+                                                      .text('L_KOMUNIKAT'),
+                                                  allTranslations.text(
+                                                      'L_WYBIERZ_SPOSOB_ZAPLATY'));
                                           } else
-                                            _showAlert(context, allTranslations.text('L_KOMUNIKAT'),
-                                                allTranslations.text('L_WYBIERZ_DOSTAWE_LUB'));
+                                            _showAlert(
+                                                context,
+                                                allTranslations
+                                                    .text('L_KOMUNIKAT'),
+                                                allTranslations.text(
+                                                    'L_WYBIERZ_DOSTAWE_LUB'));
                                         }
                                         //Navigator.of(context).pushNamed(OrderScreen.routeName);
                                       },
-                                      child: Text('   ' + allTranslations.text('L_ZAMAWIAM') + '   '),
+                                      child: Text('   ' +
+                                          allTranslations.text('L_ZAMAWIAM') +
+                                          '   '),
                                       color: Theme.of(context).primaryColor,
                                       textColor: Colors.white,
                                       disabledColor: Colors.grey,

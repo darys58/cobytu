@@ -105,7 +105,7 @@
 "L_INFO": "Prediction",
 "L_DATA": "Date",
 "L_ADRES": "Address",
-"L_NAZWISKO": "Name",
+"L_NAZWISKO": "Surname",
 "L_TELEFON": "Telephone",
 "L_EMAIL": "E-mail",
 "L_UWAGI": "Comments",
@@ -148,6 +148,9 @@
 "L_WYBIERZ_DOSTAWE_LUB": "Choose delivery or pickup in person",
 "L_ZAMAWIAM": "Orders",
 "L_AKTUALIZACJA_MENU": "The menu is being updated",
-"L_NA_GODZ": "at"
+"L_NA_GODZ": "at",
+"L_KOSZT_OPAKOWAN": "Packaging cost",
+"L_MUSI_PRZEKRACZAC": "The order value must exceed ",
+"L_PROSIMY_SKLADAC": "Please place online orders within hours "
 
 }

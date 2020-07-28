@@ -88,7 +88,7 @@
 "L_PL": "拋光",
 "L_RU": "俄語",
 "L_SV": "瑞典",
-"L_ZH": "中國傳統的）",
+"L_ZH": "中國傳統的",
 "L_KOMUNIKAT": "聲明",
 "L_WYSLANIE_REZYGNACJI_NIE": "無法發送您的辭職。檢查數據的正確性。",
 "L_REZYGNACJE_PRZEKAZANO_ALE": "辭職傳給了餐廳，但並非一切都很好。請通過電話聯繫我們的餐廳。",
@@ -148,5 +148,8 @@
 "L_WYBIERZ_DOSTAWE_LUB": "親自選擇送貨或取貨",
 "L_ZAMAWIAM": "命令",
 "L_AKTUALIZACJA_MENU": "菜單正在更新",
-"L_NA_GODZ": "在"
+"L_NA_GODZ": "在",
+"L_KOSZT_OPAKOWAN": "包裝費用",
+"L_MUSI_PRZEKRACZAC": "訂單價值必須超過 ",
+"L_PROSIMY_SKLADAC": "請在數小時內下訂單 "
 }

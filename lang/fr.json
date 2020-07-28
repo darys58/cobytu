@@ -131,7 +131,7 @@
 "L_WPISZ_KOD": "Entrez votre code postal",
 "L_WPISZ_MIASTO": "Entrez le nom de la ville, village",
 "L_DANE_ZAMAWIAJACEGO": "Données de l'acheteur",
-"L_IMIE": "Nom",
+"L_IMIE": "Prénom",
 "L_WPISZ_IMIE": "S'il vous plaît entrez votre nom",
 "L_WPISZ_NAZWISKO": "Veuillez entrer votre nom de famille",
 "L_WPISZ_TELEFON": "Entrer un numéro de téléphone",
@@ -148,5 +148,8 @@
 "L_WYBIERZ_DOSTAWE_LUB": "Choisissez la livraison ou le ramassage en personne",
 "L_ZAMAWIAM": "Ordres",
 "L_AKTUALIZACJA_MENU": "Le menu est en cours de mise à jour",
-"L_NA_GODZ": "à"
+"L_NA_GODZ": "à",
+"L_KOSZT_OPAKOWAN": "Coût d'emballage",
+"L_MUSI_PRZEKRACZAC": "La valeur de la commande doit dépasser ",
+"L_PROSIMY_SKLADAC": "Veuillez passer des commandes en ligne en quelques heures "
 }

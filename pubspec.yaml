@@ -86,6 +86,9 @@ flutter:
     - assets/images/RU.png
     - assets/images/SV.png
     - assets/images/ZH.png
+    - assets/images/czas.png
+    - assets/images/energia.png
+    - assets/images/waga.png
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

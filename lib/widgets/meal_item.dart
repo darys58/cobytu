@@ -16,12 +16,13 @@ import '../models/mem.dart';
 import '../models/meals.dart';
 import '../models/podkat.dart';
 import '../all_translations.dart';
+import '../globals.dart' as globals;
 
 class MealItem extends StatelessWidget {
   final List<DetailRest> _mealRestsData = []; //szczegóły restauracji
   List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
   final String _currLang = allTranslations.currentLanguage; //aktualny język
-  String _separator;
+
 /*
 //funkcja przejścia do ekranu ze szczegółami dania
   void selectMeal(BuildContext context) {
@@ -135,8 +136,9 @@ class MealItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final meal = Provider.of<Meal>(context, listen: false); //dostawca danych dostarcza danie z słuchaczem zmian. Zmiana nastąpi jezeli naciśniemy serce polubienie dania. Z listen: false zmieniony na tylko dostawcę danych a słuchacz lokalny "Consumer" zainstalowany  nizej
-    if (_currLang == 'en' || _currLang == 'ja' || _currLang == 'zh') _separator = '.'; //separator w cenie
-  
+    if (_currLang == 'en' || _currLang == 'ja' || _currLang == 'zh') globals.separator = '.'; //separator w cenie
+    else globals.separator = ',';
+    
   return InkWell( //element klikalny
       onTap: () {
         //pobranie danych restauracji z serwera (potrzebne modMenu - info kiedy była modyfikacja menu)
@@ -244,7 +246,7 @@ class MealItem extends StatelessWidget {
                               Row( //cena dania
                                 children: <Widget>[
                                   Text(
-                                    _separator == '.' ? meal.cena  : meal.cena.replaceAll('.', ','), //meal.cena, //interpolacja ciągu znaków
+                                    globals.separator == '.' ? meal.cena  : meal.cena.replaceAll('.', ','), //meal.cena, //interpolacja ciągu znaków
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.black,
@@ -280,9 +282,7 @@ class MealItem extends StatelessWidget {
                               :
                            */   Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                                 children: <Widget>[
-                                  Icon(
-                                    Icons.hourglass_empty, color: Theme.of(context).primaryColor, //schedule
-                                  ),
+                                  Image.asset('assets/images/czas.png',height: 15),
                                   SizedBox(
                                     width: 2,
                                   ), //odległość miedzy ikoną i tekstem

@@ -79,10 +79,12 @@ class GlobalTranslations {
       language = "en";
     }
     _locale = Locale(language, "");
-    
+
     //zapisanie do zmiennej globalnej
     globals.language = language;
-
+    if (language == 'en' || language == 'ja' || language == 'zh') globals.separator = '.';
+    else globals.separator = ',';
+    
     // Załaduj ciągi językowe
     String jsonContent =
         await rootBundle.loadString("lang/${locale.languageCode}.json");

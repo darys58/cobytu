@@ -6,6 +6,7 @@ String deviceId; //Id telefonu - identyfikator apki/uzytkownika
 String memoryLokE = '31'; //id wybranej restauracji
 String language; //język
 String separator; // '.' lub ',' ustawiany w meal_item.dart
+String cenaOpakowania; //cena jednego opakowania
 String dostawy; //'0' brak dostaw, '1' - restauracja dostarcza z dowozem
 String online; //'0' brak, '1' - zamawianie online przez CoByTu.com
 int czyDostawa; //wybrany przez uzytkownika sposób dostarczenia zamówienia

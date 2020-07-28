@@ -148,7 +148,10 @@
     "L_WYBIERZ_DOSTAWE_LUB": "Wybierz dostawę lub odbiór osobisty",
     "L_ZAMAWIAM": "Zamawiam",
     "L_AKTUALIZACJA_MENU": "Trwa aktualizacja menu",
-    "L_NA_GODZ": "na godz."
+    "L_NA_GODZ": "na godz.",
+    "L_KOSZT_OPAKOWAN": "Koszt opakowań",
+    "L_MUSI_PRZEKRACZAC": "Wartość zamówienia musi przekraczać ",
+    "L_PROSIMY_SKLADAC": "Zamówienia online prosimy składać w godzinach "
 
 
 

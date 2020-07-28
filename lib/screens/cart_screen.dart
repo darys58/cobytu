@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; //obsługa json'a
 import '../models/cart.dart';
+import '../models/strefa.dart';
 import '../widgets/cart_one.dart';
 import '../globals.dart' as globals;
 import '../all_translations.dart';
@@ -25,6 +26,8 @@ class _CartScreenState extends State<CartScreen> {
   String _cenaRazem;
   String _wagaRazem;
   String _kcalRazem;
+  List<Strefa> _strefy = []; //lista stref
+  int _wybranaStrefa = globals.wybranaStrefa;
 
   @override
   void didChangeDependencies() {
@@ -33,18 +36,24 @@ class _CartScreenState extends State<CartScreen> {
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
+      fetchStrefyFromSerwer().then((_) {
+        //pobranie stref z serwera www
+        print('cart_screen: _wybranaStrefa = $_wybranaStrefa');
+        if (_wybranaStrefa == null) _wybranaStrefa = 1;
 
-      Provider.of<Cart>(context)
-          .fetchAndSetCartItems(
-              'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}')
-          .then((_) {
-        //zawartość koszyka z www
-        DBHelper.getRestWithId(globals.memoryLokE).then((restaurant) {
-          opakowanie = restaurant.asMap()[0]
-              ['opakowanie']; //pobranie ddoliczanej wartości opakowania
-
-          setState(() {
-            _isLoading = false; //zatrzymanie wskaznika ładowania danych
+        //pobieranie dań w koszyku z serwera www
+        Provider.of<Cart>(context)
+            .fetchAndSetCartItems(
+                'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}')
+            .then((_) {
+          DBHelper.getRestWithId(globals.memoryLokE).then((restaurant) {
+            opakowanie = restaurant.asMap()[0]
+                ['opakowanie']; //pobranie doliczanej wartości opakowania
+            print(
+                'cart_screen: pobranie wartości opakowania z bazy lokalnej = $opakowanie');
+            setState(() {
+              _isLoading = false; //zatrzymanie wskaznika ładowania danych
+            });
           });
         });
       });
@@ -73,7 +82,7 @@ class _CartScreenState extends State<CartScreen> {
         'ko_akcja': akcja,
       }),
     );
-    print(response.body);
+    print('cart_screen: aktualizujKoszyk response.body ${response.body}');
     if (response.statusCode >= 200 &&
         response.statusCode <= 400 &&
         json != null) {
@@ -82,13 +91,52 @@ class _CartScreenState extends State<CartScreen> {
       //Meal.changeStolik(odpPost['ko_da_id'], odpPost['ko_ile'].toString());
       //Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); //aktualizacja ilości dania w koszyku w danych on daniu
 
+      //aktualizacja zawartości koszyka z www
       Provider.of<Cart>(context).fetchAndSetCartItems(
-          'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}'); //aktualizacja zawartości koszyka z www
+          'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}');
 
       // _setPrefers('reload', 'true');
       //return OdpPost.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed przy wysyłanie aktualizacji koszyka');
+    }
+  }
+
+  //pobranie (z serwera www) stref dla danej restauracji
+  Future<List<Strefa>> fetchStrefyFromSerwer() async {
+    var url =
+        'https://cobytu.com/cbt.php?d=f_strefy&re_id=${globals.memoryLokE}';
+    print(url);
+    try {
+      final response = await http.get(url);
+      print(json.decode(response.body));
+
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      if (extractedData == null) {
+        return [];
+      }
+
+      //final List<MealRest> loadedRests = [];
+      extractedData.forEach((numerStrefy, strefaData) {
+        _strefy.add(Strefa(
+          numer: numerStrefy,
+          czynne: strefaData['czynne'],
+          zamOd: strefaData['zamow_od'],
+          zamDo: strefaData['zamow_do'],
+          zakres: strefaData['str_zakres'],
+          wartMin: strefaData['str_wart_min'],
+          koszt: strefaData['str_koszt'],
+          wartMax: strefaData['str_wart_max'],
+          bonus: strefaData['str_wat_bonus'],
+          platne: strefaData['re_platne_dos'],
+        ));
+      });
+      // _items = loadedRests;
+      print('cart_screen: numer strefy w order = ${_strefy[0].numer}');
+      //notifyListeners();
+      return _strefy;
+    } catch (error) {
+      throw (error);
     }
   }
 
@@ -133,9 +181,45 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  void _showAlert(BuildContext context, String nazwa, String text) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+       // title: Text(nazwa),
+        content: Column(
+          //zeby tekst był wyśrodkowany w poziomie
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(text,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                //color: Colors.black,
+              ),
+            ),
+            //Divider(),
+          ],
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(allTranslations.text('L_ANULUJ')),
+          ),
+        ],
+        elevation: 24.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+      ),
+      barrierDismissible:
+          false, //zeby zaciemnione tło było zablokowane na kliknięcia
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    print('opakowanie $opakowanie');
+    print('cart_screen: opłata za opakowanie = $opakowanie');
     //final rest = Provider.of<Rests>(context);
     //print('rest===');
     //print (rest.items);
@@ -151,6 +235,8 @@ class _CartScreenState extends State<CartScreen> {
     _cenaRazem = razemC.toStringAsFixed(2);
     _wagaRazem = razemW.toString();
     _kcalRazem = razemK.toString();
+    print(
+        'cart_screen: wartość obliczana z zawartości koszyka _cenaRazem = $_cenaRazem');
 
     return Scaffold(
       appBar: AppBar(
@@ -164,8 +250,8 @@ class _CartScreenState extends State<CartScreen> {
                     Icons.delete_forever,
                   ),
                   onPressed: () {
-                    _showAlertYesNo(
-                        context, allTranslations.text('L_UWAGA'), allTranslations.text('L_CZY_OPROZNIC_KOSZYK') + '?');
+                    _showAlertYesNo(context, allTranslations.text('L_UWAGA'),
+                        allTranslations.text('L_CZY_OPROZNIC_KOSZYK') + '?');
                   },
                 )
               ]
@@ -183,11 +269,11 @@ class _CartScreenState extends State<CartScreen> {
                     child: ListView.builder(
                         itemCount: cart.items.length + 1,
                         itemBuilder: (ctx, i) {
-                          print(cart.items[0].id);
+                          //print(cart.items[0].id);
                           if (cart.items[0].id != 'brak') {
                             if (i < cart.items.length) {
                               return CartOne(
-                                //kolejne zamówione dania
+//kolejne zamówione dania
                                 i,
                                 cart.items[i].id,
                                 cart.items[i].daId,
@@ -224,7 +310,7 @@ class _CartScreenState extends State<CartScreen> {
                                               color: Colors.black,
                                             ),
                                           ),
-//razem: cena, waga, kcal
+//RAZEM: cena, waga, kcal
                                           Row(
                                             //Kazdy element wiersz jest wierszemonym
                                             mainAxisAlignment:
@@ -250,7 +336,8 @@ class _CartScreenState extends State<CartScreen> {
                                                     width: 2,
                                                   ), //odległość miedzy ceną a PLN
                                                   Text(
-                                                    allTranslations.text('L_PLN'),
+                                                    allTranslations
+                                                        .text('L_PLN'),
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -273,7 +360,8 @@ class _CartScreenState extends State<CartScreen> {
                                                   Text(
                                                     _wagaRazem +
                                                         ' ' +
-                                                        allTranslations.text('L_G'),
+                                                        allTranslations
+                                                            .text('L_G'),
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -295,7 +383,8 @@ class _CartScreenState extends State<CartScreen> {
                                                   Text(
                                                     _kcalRazem +
                                                         ' ' +
-                                                        allTranslations.text('L_KCAL'),
+                                                        allTranslations
+                                                            .text('L_KCAL'),
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -317,8 +406,11 @@ class _CartScreenState extends State<CartScreen> {
 //text doliczanie opakowania
                                   Column(
                                     children: <Widget>[
-                                      opakowanie == '0.00' //jeli nie ma kosztu opakowania
-                                          ? SizedBox(height: 2,)
+                                      opakowanie ==
+                                              '0.00' //jeli nie ma kosztu opakowania
+                                          ? SizedBox(
+                                              height: 2,
+                                            )
                                           : Container(
                                               height: 40,
                                               child: Row(
@@ -328,32 +420,58 @@ class _CartScreenState extends State<CartScreen> {
                                                     globals.separator == '.'
                                                         ? Expanded(
                                                             child: Container(
-                                                                padding: EdgeInsets.all(5),
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(5),
                                                                 child: Text(
-                                                                  allTranslations.text('L_DOLICZANIE_OPAKOWANIA') +
-                                                                      ' ' + opakowanie +
-                                                                      ' ' + allTranslations.text('L_PLN'),
-                                                                  softWrap: true, //zawijanie tekstu
-                                                                  maxLines: 3, //ilość wierszy opisu
+                                                                  allTranslations
+                                                                          .text(
+                                                                              'L_DOLICZANIE_OPAKOWANIA') +
+                                                                      ' ' +
+                                                                      opakowanie +
+                                                                      ' ' +
+                                                                      allTranslations
+                                                                          .text(
+                                                                              'L_PLN'),
+                                                                  softWrap:
+                                                                      true, //zawijanie tekstu
+                                                                  maxLines:
+                                                                      3, //ilość wierszy opisu
                                                                   //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
                                                                 )),
                                                           )
                                                         : Expanded(
                                                             child: Container(
-                                                              padding: EdgeInsets.only(left: 15,right:15,top: 5),
-                                                              child: Text(
-                                                                allTranslations.text('L_DOLICZANIE_OPAKOWANIA') +
-                                                                    ' ' + opakowanie.replaceAll('.',',') +
-                                                                    ' ' + allTranslations.text('L_PLN'),
-                                                                softWrap: true, //zawijanie tekstu
-                                                                maxLines: 3, //ilość wierszy opisu
-                                                                //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
-                                                              )
-                                                            ),
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        left:
+                                                                            15,
+                                                                        right:
+                                                                            15,
+                                                                        top: 5),
+                                                                child: Text(
+                                                                  allTranslations
+                                                                          .text(
+                                                                              'L_DOLICZANIE_OPAKOWANIA') +
+                                                                      ' ' +
+                                                                      opakowanie.replaceAll(
+                                                                          '.',
+                                                                          ',') +
+                                                                      ' ' +
+                                                                      allTranslations
+                                                                          .text(
+                                                                              'L_PLN'),
+                                                                  softWrap:
+                                                                      true, //zawijanie tekstu
+                                                                  maxLines:
+                                                                      3, //ilość wierszy opisu
+                                                                  //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
+                                                                )),
                                                           )
                                                   ])),
 //przycisk zamawiania z dostawą
-                                      globals.online == '1' //jezeli zamawianie online przez CoByTu.com
+                                      globals.online ==
+                                              '1' //jezeli zamawianie online przez CoByTu.com
                                           ? Container(
                                               height: 90,
                                               child: Row(
@@ -364,12 +482,39 @@ class _CartScreenState extends State<CartScreen> {
                                                     shape:
                                                         const StadiumBorder(),
                                                     onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pushNamed(OrderScreen
-                                                              .routeName);
+                                                      if (_strefy[_wybranaStrefa-1].czynne=='1'){
+                                                        if(razemC > double.parse(_strefy[_wybranaStrefa-1].wartMin)){
+                                                          Navigator.of(context).pushNamed(OrderScreen.routeName);
+                                                        }else globals.separator == '.' 
+                                                          ? _showAlert(
+                                                            context,
+                                                            allTranslations.text(
+                                                                'L_KOMUNIKAT'),
+                                                            allTranslations.text(
+                                                                'L_MUSI_PRZEKRACZAC') + _strefy[_wybranaStrefa-1].wartMin + ' ' + allTranslations
+                                                                          .text(
+                                                                              'L_PLN'))
+                                                          : _showAlert(
+                                                            context,
+                                                            allTranslations.text(
+                                                                'L_KOMUNIKAT'),
+                                                            allTranslations.text(
+                                                                'L_MUSI_PRZEKRACZAC') + _strefy[_wybranaStrefa-1].wartMin.replaceAll(
+                                                                          '.',
+                                                                          ',') + ' ' + allTranslations
+                                                                          .text(
+                                                                              'L_PLN'));
+                                                      }else _showAlert(
+                                                            context,
+                                                            allTranslations.text(
+                                                                'L_KOMUNIKAT'),
+                                                            allTranslations.text(
+                                                                'L_PROSIMY_SKLADAC') + _strefy[_wybranaStrefa-1].zamOd + ' - ' + _strefy[_wybranaStrefa-1].zamDo
+                                                      );
                                                     },
                                                     child: Text(
-                                                        allTranslations.text('L_ZAMAWIAM_Z_DOSTAWA')),
+                                                        allTranslations.text(
+                                                            'L_ZAMAWIAM_Z_DOSTAWA')),
                                                     color: Theme.of(context)
                                                         .primaryColor,
                                                     textColor: Colors.white,
@@ -385,14 +530,21 @@ class _CartScreenState extends State<CartScreen> {
                                               child: Column(
                                                 children: <Widget>[
                                                   Text(
-                                                    globals.dostawy == '1' 
-                                                    ? allTranslations.text('L_ZAMOW_DO_STOLIKA') + '\n' + allTranslations.text('L_DOSTAWA_POD_ADRES')
-                                                    : allTranslations.text('L_ZAMOW_DO_STOLIKA') ,
-                                                    softWrap: true, //zawijanie tekstu
-                                                    maxLines: 5, //ilość wierszy opisu
+                                                    globals.dostawy == '1'
+                                                        ? allTranslations.text(
+                                                                'L_ZAMOW_DO_STOLIKA') +
+                                                            '\n' +
+                                                            allTranslations.text(
+                                                                'L_DOSTAWA_POD_ADRES')
+                                                        : allTranslations.text(
+                                                            'L_ZAMOW_DO_STOLIKA'),
+                                                    softWrap:
+                                                        true, //zawijanie tekstu
+                                                    maxLines:
+                                                        5, //ilość wierszy opisu
                                                     //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
                                                   ),
-                                             /*     globals.dostawy == '1' 
+                                                  /*     globals.dostawy == '1' 
                                                   ? Text(
                                                     allTranslations
                                                         .text('L_DOSTAWA_POD_ADRES'),
@@ -402,10 +554,9 @@ class _CartScreenState extends State<CartScreen> {
                                                         5, //ilość wierszy opisu
                                                     //overflow: TextOverflow.ellipsis, //skracanie tekstu zeby zmieścił sie
                                                   ):{},
-                                                */  
+                                                */
                                                 ],
-                                              )
-                                            ),
+                                              )),
                                     ],
                                   ),
                                 ],

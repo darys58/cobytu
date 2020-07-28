@@ -88,7 +88,7 @@
 "L_PL": "Putsa",
 "L_RU": "Ryska",
 "L_SV": "Svenska",
-"L_ZH": "Traditionell Kinesisk)",
+"L_ZH": "Traditionell Kinesisk",
 "L_KOMUNIKAT": "Påstående",
 "L_WYSLANIE_REZYGNACJI_NIE": "Underlåtenhet att skicka ditt avgång. Kontrollera att data är korrekta.",
 "L_REZYGNACJE_PRZEKAZANO_ALE": "Avgåendet gick till restaurangen men inte allt är OK. Kontakta vår restaurang per telefon.",
@@ -105,7 +105,7 @@
 "L_INFO": "Förutsägelse",
 "L_DATA": "Datum",
 "L_ADRES": "Adress",
-"L_NAZWISKO": "Namn",
+"L_NAZWISKO": "Efternamn",
 "L_TELEFON": "Telefon",
 "L_EMAIL": "E-post",
 "L_UWAGI": "Kommentarer",
@@ -131,7 +131,7 @@
 "L_WPISZ_KOD": "Ange ditt postnummer",
 "L_WPISZ_MIASTO": "Ange namnet på staden, staden",
 "L_DANE_ZAMAWIAJACEGO": "Köparens data",
-"L_IMIE": "Namn",
+"L_IMIE": "Förnamnn",
 "L_WPISZ_IMIE": "Vänligen fyll i ditt namn",
 "L_WPISZ_NAZWISKO": "Ange ditt efternamn",
 "L_WPISZ_TELEFON": "Ange ett telefonnummer",
@@ -148,6 +148,9 @@
 "L_WYBIERZ_DOSTAWE_LUB": "Välj leverans eller hämtning personligen",
 "L_ZAMAWIAM": "Order",
 "L_AKTUALIZACJA_MENU": "Menyn uppdateras",
-"L_NA_GODZ": "på"
+"L_NA_GODZ": "på",
+"L_KOSZT_OPAKOWAN": "Förpackningskostnad",
+"L_MUSI_PRZEKRACZAC": "Ordervärdet måste överskrida ",
+"L_PROSIMY_SKLADAC": "Lägg online-beställningar inom några timmar "
 
 }

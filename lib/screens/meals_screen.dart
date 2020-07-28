@@ -42,8 +42,10 @@ class _MealsScreenState extends State<MealsScreen> {
   String language; //skrót aktualnego języka np. pl
   String reloadTemp = 'false';
   String initAppTemp = 'false';
-  //final wersja = ['1','0','0','2','22.05.2020','nic']; //major, minor,wersja, numer wydania, data publikacji,
-  final wersja = ['1', '0', '1', '2', '17.07.2020', 'nic']; //zamawianie online
+  //final wersja = ['1','0','0','2','22.05.2020','nic']; //major, minor,wersja(zmiana w bazie), numer wydania(bez zmiany w bazie
+  //1.0.0.1 22.05.2020 - pierwsza wersja, przegląanie dań, bez zamówień
+  //1.0.1.1 28.07.2020 - zamówienia online
+  final wersja = ['1', '0', '1', '1', '28.07.2020', 'nic']; //zamawianie online
 
   String podkategoria1 = '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
   String podkategoria2 = '292'; //wybrana podkategoria, domyślnie 292 czyli "Wszystkie" w kategorii 2
@@ -79,7 +81,7 @@ class _MealsScreenState extends State<MealsScreen> {
 
   @override
   void initState() {
-    print('wejście do initState');
+    print('meals_scerrn: wejście do initState');
     //_setPrefers('reload', 'true');  //dane aktualne - nie trzeba przeładować danych
     //_setPrefers('initApp', 'true'); //inicjalizacja apki przeprowadzona
     //zainicjowanie stanu po zmianie np. usunięciu dania
@@ -91,16 +93,16 @@ class _MealsScreenState extends State<MealsScreen> {
 
   @override
   void didChangeDependencies() {
-    print('wejscie do Dependencies ms 1');
+    print('meals_scerrn: wejscie do Dependencies ms 1');
 
-    print('_isInit = $_isInit');
+    print('meals_scerrn: _isInit = $_isInit');
     if (_isInit) {
       setState(() {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
         _getId(); //pobranie Id telefonu i zapisanie w globals.deviceId - do identyfikacji uzytkownika apki
       });
 
-      print('wejscie do Dependencies - Init meals_screen - czas...');
+      print('meals_scerrn: wejscie do Dependencies - Init meals_screen - czas...');
       print(currentTimeInSeconds());
       fetchMemoryVer().then((_) {
         //pobranie danych o wersji apki
@@ -109,10 +111,10 @@ class _MealsScreenState extends State<MealsScreen> {
               _memVer[0].b == wersja[1] &&
               _memVer[0].c == wersja[2]) {
             // jezeli jest zgodna wersja aplikacji to przejdz dalej za ifa
-            print('zgodna _memVer[0].a =${_memVer[0].a}');
+            print('meals_scerrn: zgodna _memVer[0].a =${_memVer[0].a}');
           } else {
             //jezeli niezgodna wersja apki to zmiana bazy w całości
-            print('niezgodna _memVer[0].a =${_memVer[0].a}');
+            print('meals_scerrn: niezgodna _memVer[0].a =${_memVer[0].a}');
             reloadTemp = 'true'; //ustawienia tymczasowe
             initAppTemp = 'true'; //ustawienia tymczasowe
             _setPrefers('reload',
@@ -123,7 +125,7 @@ class _MealsScreenState extends State<MealsScreen> {
           }
         } else {
           //jezeli nie ma rekordu memVer tzn. ze nie ma bazy
-          print('niema memVer - brak bazy danych');
+          print('meals_scerrn: niema memVer - brak bazy danych');
           reloadTemp = 'true'; //ustawienia tymczasowe
           initAppTemp = 'true'; //ustawienia tymczasowe
           _setPrefers('reload',
@@ -135,17 +137,20 @@ class _MealsScreenState extends State<MealsScreen> {
 
         _getPrefers().then((_) {
           //pobranie zmiennych globalnych z pliku prefers
-          print('initApp = $initApp');
-          print('reload = $reload');
-          print('language = $language');
+          print('meals_scerrn: initApp = $initApp');
+          print('meals_scerrn: reload = $reload');
+          print('meals_scerrn: language = $language');
           globals.language = language; //przepisanie języka z pliku Prefers do pamęci globalnej
+          if (language == 'en' || language == 'ja' || language == 'zh') globals.separator = '.';
+          else globals.separator = ',';
+          
           if (reloadTemp == 'true' || reload == 'true' || reload == '0') {
             //jezeli trzeba przeładować lub nie ma zmiennej 'reload'
-            print('trzeba załadować dane z serwera');
+            print('meals_scerrn: trzeba załadować dane z serwera');
             if (initAppTemp == 'true' || initApp == 'true' || initApp == '0') {
               //jezeli pierwsze uruchomienie apki
               //ładowanie danych domyślnych
-              print('pierwsze uruchomienie apki!!!!!!!!');
+              print('meals_scerrn: pierwsze uruchomienie apki!!!!!!!!');
               DBHelper.deleteBase().then((_) {
                 //kasowanie całej bazy danych bo będzie nowa
                 Mems.insertMemory('memLok', '14', 'wielkopolskie', '1', 'Konin',
@@ -171,6 +176,7 @@ class _MealsScreenState extends State<MealsScreen> {
                             globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
                             globals.czyDostawa = 1; //domyślny sposób dostarczenia zamówienia: "1" - dostawa
                             globals.sposobPlatnosci = 1; //domyślny sposób płatności : "1" - gotówka
+                            globals.cenaOpakowania = '0.00'; //cena za jedno opakowanie - domyślnie ???
                             globals.wybranaStrefa = 1; //domyślna strefa
                             _setPrefers('reload','false'); //dane aktualne - nie trzeba przeładować danych
                             _setPrefers('initApp','false'); //inicjalizacja apki przeprowadzona
@@ -190,7 +196,7 @@ class _MealsScreenState extends State<MealsScreen> {
               });
             } else {
               //przeładowanie danych - z serwera (bo np. zmiana lokalizacji)
-              print('przeładowanie danych - z serwera (bo np. zmiana lokalizacji)');
+              print('meals_scerrn: przeładowanie danych - z serwera (bo np. zmiana lokalizacji)');
               fetchMemoryLok().then((_) {//pobranie aktualnie wybranej lokalizacji z bazy lokalnej
                 Meals.deleteAllMeals().then((_) {//kasowanie tabeli dań w bazie lokalnej
                   Rests.deleteAllRests().then((_) {//kasowanie tabeli restauracji w bazie lokalnej
@@ -208,6 +214,8 @@ class _MealsScreenState extends State<MealsScreen> {
                                         .then((restaurant) {
                                       globals.online = restaurant.asMap()[0]['online']; //'1'  - zamawianie online przez CoByTu.com 
                                       globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
+                                      globals.cenaOpakowania = restaurant.asMap()[0]['opakowanie']; //cena za jedno opakowanie
+                                      globals.wybranaStrefa = 1; //domyślna strefa
                                     });
                                   }
                                   _setPrefers('reload',
@@ -236,7 +244,7 @@ class _MealsScreenState extends State<MealsScreen> {
             //załadowanie dań z bazy loklnej - nie było potrzeby przeładowania danych
             fetchMemoryLok().then((_) {
               //pobranie aktualnie wybranej lokalizacji z bazy lokalnej (zeby uzyskać nazwę restacji jako tytuł ekranu)
-              print('dane lokalne - załadowanie dań z bazy loklnej');
+              print('meals_scerrn: dane lokalne - załadowanie dań z bazy loklnej');
               Provider.of<Cart>(context)
                   .fetchAndSetCartItems(
                       'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language')
@@ -253,6 +261,8 @@ class _MealsScreenState extends State<MealsScreen> {
                       DBHelper.getRestWithId(globals.memoryLokE).then((restaurant) {
                         globals.online = restaurant.asMap()[0]['online']; //'1'  - zamawianie online przez CoByTu.com 
                         globals.dostawy = restaurant.asMap()[0]['dostawy']; //'1' - resta dostarcza z dowozem
+                        globals.cenaOpakowania = restaurant.asMap()[0]['opakowanie']; //cena za jedno opakowanie
+                        globals.wybranaStrefa = 1; //domyślna strefa
                       });
                     }
                     setState(() {
@@ -364,7 +374,7 @@ class _MealsScreenState extends State<MealsScreen> {
   Widget build(BuildContext context) {
     //final snackBar = SnackBar(content: Text('Zapisano nową lokalizację'));
     //Scaffold.of(context).showSnackBar(snackBar);
-    print('globals.deviceId = ${globals.deviceId}');
+    print('meals_scerrn: globals.deviceId = ${globals.deviceId}');
     //podkategorie + rodzaje
     var podkatData = Provider.of<Podkategorie>(context);
     final podkat1 = podkatData.items.where((podk) {

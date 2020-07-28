@@ -105,7 +105,7 @@
 "L_INFO": "Předpověď",
 "L_DATA": "Datum",
 "L_ADRES": "Adresa",
-"L_NAZWISKO": "Název",
+"L_NAZWISKO": "Příjmení",
 "L_TELEFON": "Telefon",
 "L_EMAIL": "E-mailem",
 "L_UWAGI": "Komentáře",
@@ -131,7 +131,7 @@
 "L_WPISZ_KOD": "Zadejte PSČ",
 "L_WPISZ_MIASTO": "Zadejte název města, města",
 "L_DANE_ZAMAWIAJACEGO": "Údaje o kupujícím",
-"L_IMIE": "Název",
+"L_IMIE": "Jméno",
 "L_WPISZ_IMIE": "Zadejte prosím své jméno",
 "L_WPISZ_NAZWISKO": "Prosím zadejte své příjmení",
 "L_WPISZ_TELEFON": "Vložte telefonní číslo",
@@ -148,6 +148,9 @@
 "L_WYBIERZ_DOSTAWE_LUB": "Vyberte si doručení nebo vyzvednutí osobně",
 "L_ZAMAWIAM": "Objednávky",
 "L_AKTUALIZACJA_MENU": "Nabídka se aktualizuje",
-"L_NA_GODZ": "v"
+"L_NA_GODZ": "v",
+"L_KOSZT_OPAKOWAN": "Náklady na balení",
+"L_MUSI_PRZEKRACZAC": "Hodnota objednávky musí překročit ",
+"L_PROSIMY_SKLADAC": "Zadejte objednávky online do několika hodin "
 
 }

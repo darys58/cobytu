@@ -277,6 +277,7 @@ class _LocationScreenState extends State<LocationScreen> {
               ); 
               _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera 
               globals.wybranaStrefa = 1; //domyślna strefa 
+              globals.cenaOpakowania = _rest[0].opakowanie; //cena za jedno opakowanie
               Navigator.of(context).pushReplacementNamed(MealsScreen.routeName);   //przejście z usunięciem (wymianą) ostatniego ekranu (ekranu lokalizacji)  
             },
           ),

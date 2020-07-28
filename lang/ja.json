@@ -2,7 +2,7 @@
     "L_ULUBIONE_BRAK": "お気に入りはありません",
     "L_ULUBIONE_M": "お気に入り",
     "L_LISTA_DAN": "料理一覧",
-    "L_WOJEWODZTWO": "Voivodeship",
+    "L_WOJEWODZTWO": "州",
 "L_MIASTO": "市",
 "L_WSZYSTKIE": "すべて",
 "L_O_DANIU": "デンマークについて",
@@ -56,8 +56,8 @@
 "L_FILTRY": "フィルター",
 "L_ANULUJ": "キャンセル",
 "L_MIN": "分",
-"L_G": "グラム",
-"L_KCAL": "キロカジ",
+"L_G": "g",
+"L_KCAL": "kcal",
 "L_PLN": "PLN",
 "L_KROPKA": "。",
 "L_PRZECINEK": "。",
@@ -88,7 +88,7 @@
 "L_PL": "研磨",
 "L_RU": "ロシア",
 "L_SV": "スウェーデンの",
-"L_ZH": "中国の伝統的な）",
+"L_ZH": "中国の伝統的な",
 "L_KOMUNIKAT": "ステートメント",
 "L_WYSLANIE_REZYGNACJI_NIE": "辞任の送信に失敗しました。データの正確性を確認してください。",
 "L_REZYGNACJE_PRZEKAZANO_ALE": "辞任はレストランに渡されましたが、すべてが問題があるわけではありません。電話で当店にご連絡ください。",
@@ -148,5 +148,8 @@
 "L_WYBIERZ_DOSTAWE_LUB": "直接配達または集荷を選択してください",
 "L_ZAMAWIAM": "注文",
 "L_AKTUALIZACJA_MENU": "メニューを更新しています",
-"L_NA_GODZ": "で"
+"L_NA_GODZ": "で",
+"L_KOSZT_OPAKOWAN": "梱包費",
+"L_MUSI_PRZEKRACZAC": "注文値は ",
+"L_PROSIMY_SKLADAC": "時間以内にオンラインでご注文ください "
 }

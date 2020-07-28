@@ -88,7 +88,7 @@
 "L_PL": "Polaco",
 "L_RU": "Ruso",
 "L_SV": "Sueco",
-"L_ZH": "Chino tradicional)",
+"L_ZH": "Chino (tradicional)",
 "L_KOMUNIKAT": "Declaración",
 "L_WYSLANIE_REZYGNACJI_NIE": "No enviar su renuncia. Verifique la exactitud de los datos.",
 "L_REZYGNACJE_PRZEKAZANO_ALE": "La renuncia pasó al restaurante pero no todo está bien. Por favor, póngase en contacto con nuestro restaurante por teléfono.",
@@ -105,7 +105,7 @@
 "L_INFO": "Predicción",
 "L_DATA": "Fecha",
 "L_ADRES": "Habla a",
-"L_NAZWISKO": "Nombre",
+"L_NAZWISKO": "Apellido",
 "L_TELEFON": "Teléfono",
 "L_EMAIL": "Email",
 "L_UWAGI": "Comentarios",
@@ -148,5 +148,8 @@
 "L_WYBIERZ_DOSTAWE_LUB": "Elija entrega o recogida en persona",
 "L_ZAMAWIAM": "Pedidos",
 "L_AKTUALIZACJA_MENU": "El menú se está actualizando.",
-"L_NA_GODZ": "a"
+"L_NA_GODZ": "a",
+"L_KOSZT_OPAKOWAN": "Costo de embalaje",
+"L_MUSI_PRZEKRACZAC": "El valor del pedido debe exceder ",
+"L_PROSIMY_SKLADAC": "Realice pedidos en línea en horas "
 }

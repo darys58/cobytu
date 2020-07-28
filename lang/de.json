@@ -88,7 +88,7 @@
 "L_PL": "Polieren",
 "L_RU": "Russisch",
 "L_SV": "Schwedisch",
-"L_ZH": "Chinesische Tradition)",
+"L_ZH": "Chinesische (Tradition)",
 "L_KOMUNIKAT": "Aussage",
 "L_WYSLANIE_REZYGNACJI_NIE": "Versäumnis, Ihren Rücktritt zu senden. Überprüfen Sie die Richtigkeit der Daten.",
 "L_REZYGNACJE_PRZEKAZANO_ALE": "Der Rücktritt ging an das Restaurant, aber nicht alles ist in Ordnung. Bitte kontaktieren Sie unser Restaurant telefonisch.",
@@ -105,7 +105,7 @@
 "L_INFO": "Prognose",
 "L_DATA": "Datum",
 "L_ADRES": "Adresse",
-"L_NAZWISKO": "Name",
+"L_NAZWISKO": "Nachname",
 "L_TELEFON": "Telefon",
 "L_EMAIL": "Email",
 "L_UWAGI": "Bemerkungen",
@@ -131,7 +131,7 @@
 "L_WPISZ_KOD": "Geben Sie Ihre Postleitzahl ein",
 "L_WPISZ_MIASTO": "Geben Sie den Namen der Stadt ein",
 "L_DANE_ZAMAWIAJACEGO": "Käuferdaten",
-"L_IMIE": "Name",
+"L_IMIE": "Vorname",
 "L_WPISZ_IMIE": "Bitte geben Sie Ihren Namen ein",
 "L_WPISZ_NAZWISKO": "Bitte geben Sie ihren Nachnamen ein",
 "L_WPISZ_TELEFON": "Geben Sie eine Telefonnummer ein",
@@ -148,6 +148,9 @@
 "L_WYBIERZ_DOSTAWE_LUB": "Wählen Sie die Lieferung oder persönliche Abholung",
 "L_ZAMAWIAM": "Aufträge",
 "L_AKTUALIZACJA_MENU": "Das Menü wird aktualisiert",
-"L_NA_GODZ": "beim"
+"L_NA_GODZ": "beim",
+"L_KOSZT_OPAKOWAN": "Verpackungskosten",
+"L_MUSI_PRZEKRACZAC": "Der Bestellwert muss überschreiten ",
+"L_PROSIMY_SKLADAC": "Bitte geben Sie Online-Bestellungen innerhalb von Stunden auf "
 
 }
