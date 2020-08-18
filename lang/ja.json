@@ -151,5 +151,7 @@
 "L_NA_GODZ": "で",
 "L_KOSZT_OPAKOWAN": "梱包費",
 "L_MUSI_PRZEKRACZAC": "注文値は ",
-"L_PROSIMY_SKLADAC": "時間以内にオンラインでご注文ください "
+"L_PROSIMY_SKLADAC": "時間以内にオンラインでご注文ください ",
+"L_BRAK_INTERNETU": "インターネットがない",
+"L_URUCHOM_INTERNETU": "インターネットに接続して、もう一度お試しください"
 }

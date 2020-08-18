@@ -151,5 +151,7 @@
 "L_NA_GODZ": "在",
 "L_KOSZT_OPAKOWAN": "包裝費用",
 "L_MUSI_PRZEKRACZAC": "訂單價值必須超過 ",
-"L_PROSIMY_SKLADAC": "請在數小時內下訂單 "
+"L_PROSIMY_SKLADAC": "請在數小時內下訂單 ",
+"L_BRAK_INTERNETU": "沒有網路",
+"L_URUCHOM_INTERNETU": "建立互聯網連接，然後重試"
 }

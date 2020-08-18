@@ -151,6 +151,8 @@
 "L_NA_GODZ": "v",
 "L_KOSZT_OPAKOWAN": "Náklady na balení",
 "L_MUSI_PRZEKRACZAC": "Hodnota objednávky musí překročit ",
-"L_PROSIMY_SKLADAC": "Zadejte objednávky online do několika hodin "
+"L_PROSIMY_SKLADAC": "Zadejte objednávky online do několika hodin ",
+"L_BRAK_INTERNETU": "Žádný Internet",
+"L_URUCHOM_INTERNETU": "Vytvořte připojení k Internetu a zkuste to znovu"
 
 }

@@ -151,5 +151,7 @@
 "L_NA_GODZ": "à",
 "L_KOSZT_OPAKOWAN": "Coût d'emballage",
 "L_MUSI_PRZEKRACZAC": "La valeur de la commande doit dépasser ",
-"L_PROSIMY_SKLADAC": "Veuillez passer des commandes en ligne en quelques heures "
+"L_PROSIMY_SKLADAC": "Veuillez passer des commandes en ligne en quelques heures ",
+"L_BRAK_INTERNETU": "Pas d'Internet",
+"L_URUCHOM_INTERNETU": "Établissez une connexion Internet et réessayez"
 }

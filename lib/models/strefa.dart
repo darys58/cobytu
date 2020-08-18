@@ -1,6 +1,6 @@
-import 'dart:convert'; //obsługa json'a
+//import 'dart:convert'; //obsługa json'a
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
 
 class Strefa {
   final String numer; //str_numer

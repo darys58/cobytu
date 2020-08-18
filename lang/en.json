@@ -151,6 +151,8 @@
 "L_NA_GODZ": "at",
 "L_KOSZT_OPAKOWAN": "Packaging cost",
 "L_MUSI_PRZEKRACZAC": "The order value must exceed ",
-"L_PROSIMY_SKLADAC": "Please place online orders within hours "
+"L_PROSIMY_SKLADAC": "Please place online orders within hours ",
+"L_BRAK_INTERNETU": "No Internet",
+"L_URUCHOM_INTERNETU": "Make an Internet connection and try again"
 
 }

@@ -55,7 +55,7 @@
 "L_LOKALIZACJA": "Wählen Sie einen Ort",
 "L_FILTRY": "Filter",
 "L_ANULUJ": "Stornieren",
-"L_MIN": "mindest",
+"L_MIN": "min",
 "L_G": "g",
 "L_KCAL": "kcal",
 "L_PLN": "PLN",
@@ -151,6 +151,8 @@
 "L_NA_GODZ": "beim",
 "L_KOSZT_OPAKOWAN": "Verpackungskosten",
 "L_MUSI_PRZEKRACZAC": "Der Bestellwert muss überschreiten ",
-"L_PROSIMY_SKLADAC": "Bitte geben Sie Online-Bestellungen innerhalb von Stunden auf "
+"L_PROSIMY_SKLADAC": "Bitte geben Sie Online-Bestellungen innerhalb von Stunden auf ",
+"L_BRAK_INTERNETU": "Kein Internet",
+"L_URUCHOM_INTERNETU": "Stellen Sie eine Internetverbindung her und versuchen Sie es erneut"
 
 }
