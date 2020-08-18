@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "cobytu_180_ios-1.jpg",
+      "filename" : "menu_120_online-2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "cobytu_180_ios.jpg",
+      "filename" : "menu_120_online-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "cobytu_1024_@x1.png",
+      "filename" : "menu_120_online.png",
       "scale" : "3x"
     }
   ],
