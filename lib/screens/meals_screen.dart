@@ -47,7 +47,8 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.0.2 22.05.2020 - pierwsza wersja, przegląanie dań, bez zamówień
   //1.0.1.3 28.07.2020 - zamówienia online
   //1.0.2.6 04.08.2020 - zmiana ikon dla iOS, poprawki w tłumaczeniu "g" i "kcal"
-  final wersja = ['1', '0', '1', '6', '04.08.2020', 'nic']; //zamawianie online
+  //1.0.3.7 18.08.2020 - detekcja braku Internetu
+  final wersja = ['1', '0', '3', '7', '18.08.2020', 'nic']; //zamawianie online
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1

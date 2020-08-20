@@ -134,6 +134,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 
             _listDod = List<String>.from(_detailMealData[0]
                 .dodat); //zmiana typu List<dynamic> na List<String>
+            
             globals.wKoszyku = _detailMealData[0].stolik;
             print('ile na stoliku = ${_detailMealData[0].stolik}');
             przelicz();
@@ -183,7 +184,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 
         _listDod = List<String>.from(_detailMealData[0]
             .dodat); //zmiana typu List<dynamic> na List<String>
-
+        
+        globals.wKoszyku = _detailMealData[0].stolik;
+        print('ile na stoliku = ${_detailMealData[0].stolik}');        
         przelicz();
 
         setState(() {
@@ -264,7 +267,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
           dodatCena: mealData['do_dodat_cena'],
         ));
       });
-      //print('pobrane dane dania np. war1 = ${_detailMealData[0].opis}');
+      print('pobrane dane dania np. stolik = ${_detailMealData[0].stolik}');
       return _detailMealData;
     } catch (error) {
       throw (error);
@@ -732,7 +735,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  //=== cena
+//=== cena
                   Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween, //główna oś wyrównywania - odstęp między lewą kolumną z tekstami a zdjęciem
                     children: <Widget>[
