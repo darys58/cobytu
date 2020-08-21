@@ -160,124 +160,138 @@ class _MealsScreenState extends State<MealsScreen> {
           else
             globals.separator = ',';
 
+          //czy trzeba załadować/przeładować z serwera lub czy nie ma zmiennej 'reload'
           if (reloadTemp == 'true' || reload == 'true' || reload == '0') {
-            //jezeli trzeba przeładować lub nie ma zmiennej 'reload'
             print('meals_scerrn: trzeba załadować dane z serwera');
-            if (initAppTemp == 'true' || initApp == 'true' || initApp == '0') {
-              //jezeli pierwsze uruchomienie apki
-              //ładowanie danych domyślnych
-              print('meals_scerrn: pierwsze uruchomienie apki!!!!!!!!');
-              DBHelper.deleteBase().then((_) {
-                //kasowanie całej bazy danych bo będzie nowa
-                Mems.insertMemory('memLok', '14', 'wielkopolskie', '1', 'Konin',
-                    '31', 'Siesta'); //default '27','Borówka'
-                Mems.insertMemory('memVer', wersja[0], wersja[1], wersja[2],
-                    wersja[3], wersja[4], wersja[5]); //default
-                Meals.fetchMealsFromSerwer(
-                        'https://cobytu.com/cbt.php?d=f_dania&uz_id=&dev=${globals.deviceId}&woj_id=14&mia_id=1&rest=31&lang=$language')
-                    .then((_) {
-                  Rests.fetchRestsFromSerwer().then((_) {
-                    Podkategorie.fetchPodkategorieFromSerwer(
-                            'https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language')
+
+            //czy jest Internet
+            _isInternet().then((inter) {
+              if (inter != null && inter) {
+                //jezeli jest Internet
+                //czy jest to pierwsze uruchomienie apki
+                if (initAppTemp == 'true' ||
+                    initApp == 'true' ||
+                    initApp == '0') {
+                  // jezeli pierwsze uruchomienie to ładowanie danych domyślnych
+                  print('meals_scerrn: pierwsze uruchomienie apki!!!!!!!!');
+                  DBHelper.deleteBase().then((_) {
+                    //kasowanie całej bazy danych bo będzie nowa
+                    Mems.insertMemory('memLok', '14', 'wielkopolskie', '1',
+                        'Konin', '31', 'Siesta'); //default '27','Borówka'
+                    Mems.insertMemory('memVer', wersja[0], wersja[1], wersja[2],
+                        wersja[3], wersja[4], wersja[5]); //default
+                    Meals.fetchMealsFromSerwer(
+                            'https://cobytu.com/cbt.php?d=f_dania&uz_id=&dev=${globals.deviceId}&woj_id=14&mia_id=1&rest=31&lang=$language')
                         .then((_) {
-                      Provider.of<Meals>(context).fetchAndSetMeals().then((_) {
-                        //z bazy lokalnej
-                        Provider.of<Podkategorie>(context)
-                            .fetchAndSetPodkategorie()
+                      Rests.fetchRestsFromSerwer().then((_) {
+                        Podkategorie.fetchPodkategorieFromSerwer(
+                                'https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language')
                             .then((_) {
-                          //z bazy lokalnej
-                          DBHelper.getRestWithId(globals.memoryLokE)
-                              .then((restaurant) {
-                            globals.online = restaurant.asMap()[0][
-                                'online']; //'1'  - zamawianie online przez CoByTu.com
-                            globals.dostawy = restaurant.asMap()[0]
-                                ['dostawy']; //'1' - resta dostarcza z dowozem
-                            globals.czyDostawa =
-                                1; //domyślny sposób dostarczenia zamówienia: "1" - dostawa
-                            globals.sposobPlatnosci =
-                                1; //domyślny sposób płatności : "1" - gotówka
-                            globals.cenaOpakowania =
-                                '0.00'; //cena za jedno opakowanie - domyślnie ???
-                            globals.wybranaStrefa = 1; //domyślna strefa
-                            _setPrefers('reload',
-                                'false'); //dane aktualne - nie trzeba przeładować danych
-                            _setPrefers('initApp',
-                                'false'); //inicjalizacja apki przeprowadzona
-                            setState(() {
-                              _tytul =
-                                  'Konin'; //_tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji
-                              _isLoading =
-                                  false; //zatrzymanie wskaznika ładowania danych
+                          Provider.of<Meals>(context)
+                              .fetchAndSetMeals()
+                              .then((_) {
+                            //z bazy lokalnej
+                            Provider.of<Podkategorie>(context)
+                                .fetchAndSetPodkategorie()
+                                .then((_) {
+                              //z bazy lokalnej
+                              DBHelper.getRestWithId(globals.memoryLokE)
+                                  .then((restaurant) {
+                                globals.online = restaurant.asMap()[0][
+                                    'online']; //'1'  - zamawianie online przez CoByTu.com
+                                globals.dostawy = restaurant.asMap()[0][
+                                    'dostawy']; //'1' - resta dostarcza z dowozem
+                                globals.czyDostawa =
+                                    1; //domyślny sposób dostarczenia zamówienia: "1" - dostawa
+                                globals.sposobPlatnosci =
+                                    1; //domyślny sposób płatności : "1" - gotówka
+                                globals.cenaOpakowania =
+                                    '0.00'; //cena za jedno opakowanie - domyślnie ???
+                                globals.wybranaStrefa = 1; //domyślna strefa
+                                _setPrefers('reload',
+                                    'false'); //dane aktualne - nie trzeba przeładować danych
+                                _setPrefers('initApp',
+                                    'false'); //inicjalizacja apki przeprowadzona
+                                setState(() {
+                                  _tytul =
+                                      'Konin'; //_tytul = (_memLok[0].e == '0') ? _memLok[0].d : _memLok[0].f; //nazwa miasta lub restauracji
+                                  _isLoading =
+                                      false; //zatrzymanie wskaznika ładowania danych
+                                });
+                              });
                             });
                           });
                         });
                       });
                     });
+                    //});
+                    //});
+                    //});
                   });
-                });
-                //});
-                //});
-                //});
-              });
-            } else {
-              //przeładowanie danych - z serwera (bo np. zmiana lokalizacji)
-              print(
-                  'meals_scerrn: przeładowanie danych - z serwera (bo np. zmiana lokalizacji)');
-              fetchMemoryLok().then((_) {
-                //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
-                Meals.deleteAllMeals().then((_) {
-                  //kasowanie tabeli dań w bazie lokalnej
-                  Rests.deleteAllRests().then((_) {
-                    //kasowanie tabeli restauracji w bazie lokalnej
-                    Podkategorie.deleteAllPodkategorie().then((_) {
-                      //kasowanie tabeli podkategorii w bazie lokalnej
-                      Meals.fetchMealsFromSerwer(
-                              'https://cobytu.com/cbt.php?d=f_dania&uz_id=&dev=${globals.deviceId}&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language')
-                          .then((_) {
-                        Rests.fetchRestsFromSerwer().then((_) {
-                          Podkategorie.fetchPodkategorieFromSerwer(
-                                  'https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language')
+                } else {
+                  //jezeli przeładowanie danych z serwera (bo np. zmiana lokalizacji)
+                  print(
+                      'meals_scerrn: przeładowanie danych - z serwera (bo np. zmiana lokalizacji)');
+                  fetchMemoryLok().then((_) {
+                    //pobranie aktualnie wybranej lokalizacji z bazy lokalnej
+                    Meals.deleteAllMeals().then((_) {
+                      //kasowanie tabeli dań w bazie lokalnej
+                      Rests.deleteAllRests().then((_) {
+                        //kasowanie tabeli restauracji w bazie lokalnej
+                        Podkategorie.deleteAllPodkategorie().then((_) {
+                          //kasowanie tabeli podkategorii w bazie lokalnej
+                          Meals.fetchMealsFromSerwer(
+                                  'https://cobytu.com/cbt.php?d=f_dania&uz_id=&dev=${globals.deviceId}&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language')
                               .then((_) {
-                            Provider.of<Cart>(context)
-                                .fetchAndSetCartItems(
-                                    'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language')
-                                .then((_) {
-                              //zawartość koszyka z www
-                              Provider.of<Meals>(context)
-                                  .fetchAndSetMeals()
+                            Rests.fetchRestsFromSerwer().then((_) {
+                              Podkategorie.fetchPodkategorieFromSerwer(
+                                      'https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language')
                                   .then((_) {
-                                //z bazy lokalnej
-                                Provider.of<Podkategorie>(context)
-                                    .fetchAndSetPodkategorie()
+                                Provider.of<Cart>(context)
+                                    .fetchAndSetCartItems(
+                                        'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language')
                                     .then((_) {
-                                  //z bazy lokalnej
-                                  if (globals.memoryLokE != '0') {
-                                    //jezeli wybrano restaurację
-                                    DBHelper.getRestWithId(globals.memoryLokE)
-                                        .then((restaurant) {
-                                      globals.online = restaurant.asMap()[0][
-                                          'online']; //'1'  - zamawianie online przez CoByTu.com
-                                      globals.dostawy = restaurant.asMap()[0][
-                                          'dostawy']; //'1' - resta dostarcza z dowozem
-                                      globals.cenaOpakowania = restaurant
-                                              .asMap()[0][
-                                          'opakowanie']; //cena za jedno opakowanie
-                                      globals.wybranaStrefa =
-                                          1; //domyślna strefa
-                                    });
-                                  }
-                                  _setPrefers('reload',
-                                      'false'); //dane aktualne - nie trzeba przeładować danych
-                                  print(
-                                      'https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
+                                  //zawartość koszyka z www
+                                  Provider.of<Meals>(context)
+                                      .fetchAndSetMeals()
+                                      .then((_) {
+                                    //z bazy lokalnej
+                                    Provider.of<Podkategorie>(context)
+                                        .fetchAndSetPodkategorie()
+                                        .then((_) {
+                                      //z bazy lokalnej
+                                      if (globals.memoryLokE != '0') {
+                                        //jezeli wybrano restaurację
+                                        DBHelper.getRestWithId(
+                                                globals.memoryLokE)
+                                            .then((restaurant) {
+                                          globals.online = restaurant.asMap()[0]
+                                              [
+                                              'online']; //'1'  - zamawianie online przez CoByTu.com
+                                          globals.dostawy = restaurant
+                                                  .asMap()[0][
+                                              'dostawy']; //'1' - resta dostarcza z dowozem
+                                          globals.cenaOpakowania = restaurant
+                                                  .asMap()[0][
+                                              'opakowanie']; //cena za jedno opakowanie
+                                          globals.wybranaStrefa =
+                                              1; //domyślna strefa
+                                        });
+                                      }
+                                      _setPrefers('reload',
+                                          'false'); //dane aktualne - nie trzeba przeładować danych
+                                      print(
+                                          'https://cobytu.com/cbt.php?d=f_dania&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language');
 
-                                  setState(() {
-                                    _tytul = (_memLok[0].e == '0')
-                                        ? _memLok[0].d
-                                        : _memLok[0]
-                                            .f; //nazwa miasta lub restauracji
-                                    _isLoading =
-                                        false; //zatrzymanie wskaznika ładowania danych
+                                      setState(() {
+                                        _tytul = (_memLok[0].e == '0')
+                                            ? _memLok[0].d
+                                            : _memLok[0]
+                                                .f; //nazwa miasta lub restauracji
+                                        _isLoading =
+                                            false; //zatrzymanie wskaznika ładowania danych
+                                      });
+                                    });
                                   });
                                 });
                               });
@@ -287,49 +301,59 @@ class _MealsScreenState extends State<MealsScreen> {
                       });
                     });
                   });
-                });
-              });
-            }
+                }
+              } else {
+                print('braaaaaak internetu');
+                _showAlertAnuluj(
+                    context,
+                    allTranslations.text('L_BRAK_INTERNETU'),
+                    allTranslations.text('L_URUCHOM_INTERNETU'));
+              } //if (inter != null && inter) {
+            }); //isInternet
           } else {
-            //załadowanie dań z bazy loklnej - nie było potrzeby przeładowania danych
+            //wystarczy załadowanie dań z bazy loklnej - nie było potrzeby przeładowania danych z serwera
             fetchMemoryLok().then((_) {
-              //pobranie aktualnie wybranej lokalizacji z bazy lokalnej (zeby uzyskać nazwę restacji jako tytuł ekranu)
+              //pobranie aktualnie wybranej lokalizacji z bazy lokalnej (zeby uzyskać nazwę restauracji jako tytuł ekranu)
               print(
                   'meals_scerrn: dane lokalne - załadowanie dań z bazy loklnej');
-              Provider.of<Cart>(context)
-                  .fetchAndSetCartItems(
-                      'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language')
-                  .then((_) {
-                //zawartość koszyka z www
-                Provider.of<Meals>(context).fetchAndSetMeals().then((_) {
+              //             Provider.of<Cart>(context)
+              //                .fetchAndSetCartItems(
+              //                    'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language')
+              //                .then((_) {
+              //zawartość koszyka z www - przeniesiona nizej zeby nie blokować ładowania z bazy gdy nie ma internetu
+              Provider.of<Meals>(context).fetchAndSetMeals().then((_) {
+                //z bazy lokalnej
+                Provider.of<Podkategorie>(context)
+                    .fetchAndSetPodkategorie()
+                    .then((_) {
                   //z bazy lokalnej
-                  Provider.of<Podkategorie>(context)
-                      .fetchAndSetPodkategorie()
-                      .then((_) {
-                    //z bazy lokalnej
-                    if (globals.memoryLokE != '0') {
-                      //jezeli wybrano restaurację
-                      DBHelper.getRestWithId(globals.memoryLokE)
-                          .then((restaurant) {
-                        globals.online = restaurant.asMap()[0][
-                            'online']; //'1'  - zamawianie online przez CoByTu.com
-                        globals.dostawy = restaurant.asMap()[0]
-                            ['dostawy']; //'1' - resta dostarcza z dowozem
-                        globals.cenaOpakowania = restaurant.asMap()[0]
-                            ['opakowanie']; //cena za jedno opakowanie
-                        globals.wybranaStrefa = 1; //domyślna strefa
-                      });
-                    }
-                    setState(() {
-                      _tytul = (_memLok[0].e == '0')
-                          ? _memLok[0].d
-                          : _memLok[0].f; //nazwa miasta lub restauracji
-                      _isLoading = false; //zatrzymanie wskaznika ładowania dań
+                  if (globals.memoryLokE != '0') {
+                    //jezeli wybrano restaurację
+                    DBHelper.getRestWithId(globals.memoryLokE)
+                        .then((restaurant) {
+                      globals.online = restaurant.asMap()[0][
+                          'online']; //'1'  - zamawianie online przez CoByTu.com
+                      globals.dostawy = restaurant.asMap()[0]
+                          ['dostawy']; //'1' - resta dostarcza z dowozem
+                      globals.cenaOpakowania = restaurant.asMap()[0]
+                          ['opakowanie']; //cena za jedno opakowanie
+                      globals.wybranaStrefa = 1; //domyślna strefa
                     });
+                  }
+                  setState(() {
+                    _tytul = (_memLok[0].e == '0')
+                        ? _memLok[0].d
+                        : _memLok[0].f; //nazwa miasta lub restauracji
+                    _isLoading = false; //zatrzymanie wskaznika ładowania dań
                   });
+
+                  //zawartość koszyka z www - tutaj zeby nie blokować ładowania z bazy gdy nie ma internetu
+                  Provider.of<Cart>(context).fetchAndSetCartItems(
+                      'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language');
                 });
               });
             });
+            //        });
           }
         });
       });
@@ -338,13 +362,59 @@ class _MealsScreenState extends State<MealsScreen> {
     super.didChangeDependencies();
   }
 
+  void _showAlertAnuluj(BuildContext context, String nazwa, String text) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(nazwa),
+        content: Column(
+          //zeby tekst był wyśrodkowany w poziomie
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(text),
+          ],
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(allTranslations.text('L_ANULUJ')),
+          ),
+        ],
+        elevation: 24.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+      ),
+      barrierDismissible:
+          false, //zeby zaciemnione tło było zablokowane na kliknięcia
+    );
+  }
+
+  //sprawdzenie czy jest internet
+  Future<bool> _isInternet() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      print("Connected to Mobile Network");
+      return true;
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      print("Connected to WiFi");
+      return true;
+    } else {
+      print("Unable to connect. Please Check Internet Connection");
+      return false;
+    }
+  }
+
   //pobieranie Id telefonu  - do identyfikacji apki jako uzytkownika
   Future<void> _getId() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
       globals.deviceId = 'ios_' +
-          iosDeviceInfo.identifierForVendor;// + '_' + iosDeviceInfo.model; // +'_' + wersja[0] + wersja[1] + wersja[2] + wersja[3]; // + '_' + iosDeviceInfo.model
+          iosDeviceInfo
+              .identifierForVendor; // + '_' + iosDeviceInfo.model; // +'_' + wersja[0] + wersja[1] + wersja[2] + wersja[3]; // + '_' + iosDeviceInfo.model
       //return iosDeviceInfo.identifierForVendor; // unique ID on iOS
     } else {
       AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
@@ -413,16 +483,6 @@ class _MealsScreenState extends State<MealsScreen> {
     globals.memoryLokE =
         _memLok[0].e; //zapisanie id wybranej restauracji do zmiennej globalnej
     return _memLok;
-  }
-
-  //jak nie ma Internetu to komunikat
-  _isInternet() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
-      print('brak Internetu');
-    } else {
-      print('jest Internet');
-    }
   }
 
   @override
@@ -608,8 +668,19 @@ class _MealsScreenState extends State<MealsScreen> {
                                     .shopping_cart, //koszyk - mozna zamawiać online
                               ),
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pushNamed(CartScreen.routeName);
+                                 //czy jest Internet
+                                _isInternet().then((inter) {
+                                  if (inter != null && inter) {
+                                    Navigator.of(context)
+                                        .pushNamed(CartScreen.routeName);
+                                  }else{
+                                    print('braaaaaak internetu');
+                                    _showAlertAnuluj(
+                                      context,
+                                      allTranslations.text('L_BRAK_INTERNETU'),
+                                      allTranslations.text('L_URUCHOM_INTERNETU'));
+                                  } 
+                                });
                               },
                             )
                           : IconButton(
@@ -618,8 +689,19 @@ class _MealsScreenState extends State<MealsScreen> {
                                     .room_service, //stolik - bez zamawiania online
                               ),
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pushNamed(CartScreen.routeName);
+                                //czy jest Internet
+                                _isInternet().then((inter) {
+                                  if (inter != null && inter) {
+                                    Navigator.of(context)
+                                        .pushNamed(CartScreen.routeName);
+                                  }else{
+                                    print('braaaaaak internetu');
+                                    _showAlertAnuluj(
+                                        context,
+                                        allTranslations.text('L_BRAK_INTERNETU'),
+                                        allTranslations.text('L_URUCHOM_INTERNETU'));
+                                  } 
+                                });
                               },
                             ),
                     ),

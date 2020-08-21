@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart'; //pakiet dostawcy
 import 'package:connectivity/connectivity.dart'; //czy jest Internet
 
@@ -27,6 +28,7 @@ class MealItem extends StatelessWidget {
   List<Mem> _memLok; //dane wybranej lokalizacji w tabeli memory - baza lokalna
   final String _currLang = allTranslations.currentLanguage; //aktualny język
   bool _internet = false;
+  var contextx;
 /*
 //funkcja przejścia do ekranu ze szczegółami dania
   void selectMeal(BuildContext context) {
@@ -91,11 +93,13 @@ class MealItem extends StatelessWidget {
       //notifyListeners();
       return _mealRestsData;
     } catch (error) {
-      print('error - Sieć jest niedostępna !!!!!!!!!!!!!!!!!!!!!!!');
-
+      print('$error - Sieć jest niedostępna !!!!!!!!!!!!!!!!!!!!!!!');
+      Scaffold.of(contextx).showSnackBar(snackBar);
       throw (error);
     }
   }
+
+  final snackBar = SnackBar(content: Text('Sieć jest niedostępna'));
 
   /*
   //ustawienianie zmiennych globalnych
@@ -240,10 +244,10 @@ class MealItem extends StatelessWidget {
       onTap: () {
         //czy jest Internet?
         _isInternet().then((inter) {
-          print('inter = $inter');
           if (inter != null && inter) {
             //pobranie danych restauracji z serwera (potrzebne modMenu - info kiedy była modyfikacja menu)
             //print('pobranie danych restauracji z serwera');
+            contextx = context;
             fetchDetailRestsFromSerwer(meal.id).then((_) {
               //print('pobranie mod_menu = ${_mealRestsData[0].modMenu}');
               //pobranie danych restauracji z bazy lokalnej

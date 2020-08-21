@@ -133,6 +133,7 @@ class _CartScreenState extends State<CartScreen> {
       });
       // _items = loadedRests;
       print('cart_screen: numer strefy w order = ${_strefy[0].numer}');
+     
       //notifyListeners();
       return _strefy;
     } catch (error) {

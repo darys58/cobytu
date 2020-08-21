@@ -11,7 +11,8 @@ class CartItem {
   String cena; //ko_cena
   final String waga; //ko_waga
   final String kcal; //ko_kcal
-  final int dodOpak; //dod_opakowanie - ilość dodatkowych opakowań np. na "zupę dnia" kupowaną razem z "daniem dnia" (powtórzona wartośc "ile" jezeli jest dodakowo zupa 1033)
+  final int
+      dodOpak; //dod_opakowanie - ilość dodatkowych opakowań np. na "zupę dnia" kupowaną razem z "daniem dnia" (powtórzona wartośc "ile" jezeli jest dodakowo zupa 1033)
 
   CartItem({
     @required this.id,
@@ -75,6 +76,7 @@ class Cart with ChangeNotifier {
         _items = [];
       notifyListeners();
     } catch (error) {
+      print('pobieranie danych o koszyku - brak sieci !!!!!!!');
       throw (error);
     }
   }

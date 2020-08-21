@@ -10,6 +10,7 @@ import '../models/rests.dart';
 import '../models/mem.dart';
 import '../models/mems.dart';
 import '../globals.dart' as globals;
+import 'package:connectivity/connectivity.dart'; //czy jest Internet
 
 //import '../widgets/main_drawer.dart';
 
@@ -249,6 +250,50 @@ class _LocationScreenState extends State<LocationScreen> {
       return _memLok;
   }
 
+  void _showAlertAnuluj(BuildContext context, String nazwa, String text) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(nazwa),
+        content: Column(
+          //zeby tekst był wyśrodkowany w poziomie
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(text),
+          ],
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(allTranslations.text('L_ANULUJ')),
+          ),
+        ],
+        elevation: 24.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+      ),
+      barrierDismissible:
+          false, //zeby zaciemnione tło było zablokowane na kliknięcia
+    );
+  }
+   //sprawdzenie czy jest internet
+  Future<bool> _isInternet() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      print("Connected to Mobile Network");
+      return true;
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      print("Connected to WiFi");
+      return true;
+    } else {
+      print("Unable to connect. Please Check Internet Connection");
+      return false;
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -264,21 +309,31 @@ class _LocationScreenState extends State<LocationScreen> {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              
-              final _rest = rests.where((re) {return re.id.contains(_currentValue);}).toList();//wybrana restauracja
-              Mems.insertMemory(
-                'memLok',                 //nazwa
-                _selectedWoj.wojId,       //a
-                _selectedWoj.woj,         //b
-                _selectedMiasto.miaId,    //c
-                _selectedMiasto.miasto,   //d
-                _currentValue,            //e - '0' lub id restauracji
-                _rest[0].nazwa,           //f - "Wszystkie" lub nazwa restauracji
-              ); 
-              _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera 
-              globals.wybranaStrefa = 1; //domyślna strefa 
-              globals.cenaOpakowania = _rest[0].opakowanie; //cena za jedno opakowanie
-              Navigator.of(context).pushReplacementNamed(MealsScreen.routeName);   //przejście z usunięciem (wymianą) ostatniego ekranu (ekranu lokalizacji)  
+              //czy jest internet
+              _isInternet().then((inter) {
+                if (inter != null && inter) {
+                  final _rest = rests.where((re) {return re.id.contains(_currentValue);}).toList();//wybrana restauracja
+                  Mems.insertMemory(
+                    'memLok',                 //nazwa
+                    _selectedWoj.wojId,       //a
+                    _selectedWoj.woj,         //b
+                    _selectedMiasto.miaId,    //c
+                    _selectedMiasto.miasto,   //d
+                    _currentValue,            //e - '0' lub id restauracji
+                    _rest[0].nazwa,           //f - "Wszystkie" lub nazwa restauracji
+                  ); 
+                  _setPrefers('reload', 'true');  //konieczne załadowanie danych z serwera 
+                  globals.wybranaStrefa = 1; //domyślna strefa 
+                  globals.cenaOpakowania = _rest[0].opakowanie; //cena za jedno opakowanie
+                  Navigator.of(context).pushReplacementNamed(MealsScreen.routeName);   //przejście z usunięciem (wymianą) ostatniego ekranu (ekranu lokalizacji)  
+                }else{
+                  print('braaaaaak internetu');
+                  _showAlertAnuluj(
+                      context,
+                      allTranslations.text('L_BRAK_INTERNETU'),
+                      allTranslations.text('L_URUCHOM_INTERNETU'));
+                } 
+              }); //czy jest internet
             },
           ),
         ],
