@@ -153,6 +153,9 @@
 "L_MUSI_PRZEKRACZAC": "Ordervärdet måste överskrida ",
 "L_PROSIMY_SKLADAC": "Lägg online-beställningar inom några timmar ",
 "L_BRAK_INTERNETU": "Inget internet",
-"L_URUCHOM_INTERNETU": "Gör en internetanslutning och försök igen"
-
+"L_URUCHOM_INTERNETU": "Gör en internetanslutning och försök igen",
+"L_PROMOCJE": "Befordran",
+"L_PROMOCJE_BRAK": "Ingen kampanj",
+"L_UPS": "oppsan ...",
+"L_DANIE_USUNIETE": "Det finns ingen sådan maträtt"
 }

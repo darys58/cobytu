@@ -10,11 +10,13 @@ import './screens/cart_screen.dart';
 import './screens/order_screen.dart';
 import './screens/orders_screen.dart';
 import './screens/order_detail_screen.dart';
+import './screens/specials_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
 import './models/podkat.dart'; //zaimportowanie klasy dostawcy
 import './models/cart.dart'; //zaimportowanie klasy dostawcy
 import './models/order.dart'; //zaimportowanie klasy dostawcy
+import './models/specials.dart'; //zaimportowanie klasy dostawcy
 import 'screens/languages.dart';
 import 'all_translations.dart';
 
@@ -67,6 +69,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider( //zarejestrowanie dostawcy danych (bez kontekstu)
           create: (ctx) => Orders(), //dla Orders - Zamówienia 
+        ),
+        ChangeNotifierProvider( //zarejestrowanie dostawcy danych (bez kontekstu)
+          create: (ctx) => Specials(), //dla Specials - Promocje
         ),
       ],
        child: MaterialApp(
@@ -138,6 +143,7 @@ class _MyAppState extends State<MyApp> {
           OrderScreen.routeName: (ctx) => OrderScreen(),
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
           OrderDetailScreen.routeName: (ctx) => OrderDetailScreen(),
+          SpecialsScreen.routeName: (ctx) => SpecialsScreen(),
           //FiltersScreen.routeName: (ctx) => FiltersScreen(_filters, _setFilters),
         },
         //onGenerateRoute:  - (kure 168) - jezeli brak zdefiniowanej trasy, wyświetla argumenty, dynamiczne trasy

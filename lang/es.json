@@ -153,5 +153,9 @@
 "L_MUSI_PRZEKRACZAC": "El valor del pedido debe exceder ",
 "L_PROSIMY_SKLADAC": "Realice pedidos en línea en horas ",
 "L_BRAK_INTERNETU": "Sin Internet",
-"L_URUCHOM_INTERNETU": "Establezca una conexión a Internet y vuelva a intentarlo"
+"L_URUCHOM_INTERNETU": "Establezca una conexión a Internet y vuelva a intentarlo",
+"L_PROMOCJE": "Promoción",
+"L_PROMOCJE_BRAK": "Sin promoción",
+"L_UPS": "Vaya ...",
+"L_DANIE_USUNIETE": "No hay tal plato"
 }

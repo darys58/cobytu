@@ -153,5 +153,9 @@
 "L_MUSI_PRZEKRACZAC": "注文値は ",
 "L_PROSIMY_SKLADAC": "時間以内にオンラインでご注文ください ",
 "L_BRAK_INTERNETU": "インターネットがない",
-"L_URUCHOM_INTERNETU": "インターネットに接続して、もう一度お試しください"
+"L_URUCHOM_INTERNETU": "インターネットに接続して、もう一度お試しください",
+"L_PROMOCJE": "昇進",
+"L_PROMOCJE_BRAK": "プロモーションなし",
+"L_UPS": "おっとっと ...",
+"L_DANIE_USUNIETE": "そのような料理はありません"
 }

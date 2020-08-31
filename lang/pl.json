@@ -153,7 +153,11 @@
     "L_MUSI_PRZEKRACZAC": "Wartość zamówienia musi przekraczać ",
     "L_PROSIMY_SKLADAC": "Zamówienia online prosimy składać w godzinach ",
     "L_BRAK_INTERNETU": "Brak Internetu",
-    "L_URUCHOM_INTERNETU": "Uruchom połączenie z Internetem i spróbuj ponownie"
+    "L_URUCHOM_INTERNETU": "Uruchom połączenie z Internetem i spróbuj ponownie",
+    "L_PROMOCJE": "Promocje",
+    "L_PROMOCJE_BRAK": "Brak promocji",
+    "L_UPS": "Ups...",
+    "L_DANIE_USUNIETE": "Nie ma takiego dania"
 
 
 

@@ -47,8 +47,10 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.0.2 22.05.2020 - pierwsza wersja, przegląanie dań, bez zamówień
   //1.0.1.3 28.07.2020 - zamówienia online
   //1.0.2.6 04.08.2020 - zmiana ikon dla iOS, poprawki w tłumaczeniu "g" i "kcal"
-  //1.0.3.7 18.08.2020 - detekcja braku Internetu
-  final wersja = ['1', '0', '3', '7', '18.08.2020', 'nic']; //zamawianie online
+  //1.0.3.7 18.08.2020 - detekcja braku Internetu dla szczegółów dania
+  //1.0.3.8 21.08.2020 - detekcja braku Internetu dla Regulamin, Polityka prywatnosci, Zamówienia 
+  //1.0.4.9 31.09.2020 - promocje, odpowiednie typy klawiatur przy wprowadzaniu danych, API 29 (w build.gradle)
+  final wersja = ['1', '0', '4', '9', '31.09.2020', 'nic']; //zamawianie online
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
@@ -482,6 +484,8 @@ class _MealsScreenState extends State<MealsScreen> {
         .toList();
     globals.memoryLokE =
         _memLok[0].e; //zapisanie id wybranej restauracji do zmiennej globalnej
+    globals.memoryLokC =
+        _memLok[0].c; //zapisanie id wybranego miasta do zmiennej globalnej
     return _memLok;
   }
 

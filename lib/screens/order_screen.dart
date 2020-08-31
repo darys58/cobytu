@@ -326,13 +326,14 @@ class _OrderState extends State<OrderScreen> {
           cart.items[i].dodOpak * double.parse(globals.cenaOpakowania);
       //(ilość dań * cena opakowania) + (ilość dodatkowych opakowań dla "zup dnia" * cena opakowania)
 
-      print(kosztMenu);
+  /*    print(kosztMenu);
       print('koszt menu = ');
       print(double.parse(cart.items[i].cena));
       print('+');
       print(cart.items[i].dodOpak);
       print('*');
       print(double.parse(globals.cenaOpakowania));
+    */
     }
 
     return Scaffold(
@@ -754,11 +755,12 @@ class _OrderState extends State<OrderScreen> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  //Adres
+//Adres
                                   Visibility(
                                     visible: _czyDostawa == 1,
                                     child: TextFormField(
                                         initialValue: globals.adres,
+                                        keyboardType: TextInputType.streetAddress,
                                         decoration: InputDecoration(
                                           labelText:
                                               allTranslations.text('L_ADRES'),
@@ -781,6 +783,7 @@ class _OrderState extends State<OrderScreen> {
                                     visible: _czyDostawa == 1,
                                     child: TextFormField(
                                         initialValue: globals.numer,
+                                        keyboardType: TextInputType.streetAddress,
                                         decoration: InputDecoration(
                                           labelText:
                                               allTranslations.text('L_NUMER'),
@@ -804,6 +807,7 @@ class _OrderState extends State<OrderScreen> {
                                     visible: _czyDostawa == 1,
                                     child: TextFormField(
                                         initialValue: globals.kod,
+                                        keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
                                           labelText: allTranslations
                                               .text('L_KOD_POCZTOWY'),
@@ -828,6 +832,7 @@ class _OrderState extends State<OrderScreen> {
                                     visible: _czyDostawa == 1,
                                     child: TextFormField(
                                         initialValue: globals.miasto,
+                                        keyboardType: TextInputType.name,
                                         decoration: InputDecoration(
                                           labelText:
                                               allTranslations.text('L_MIASTO'),
@@ -867,9 +872,10 @@ class _OrderState extends State<OrderScreen> {
                                         ]),
                                   ),
 
-                                  //Imię
+//Imię
                                   TextFormField(
                                       initialValue: globals.imie,
+                                      keyboardType: TextInputType.name,
                                       decoration: InputDecoration(
                                         labelText:
                                             allTranslations.text('L_IMIE'),
@@ -889,6 +895,7 @@ class _OrderState extends State<OrderScreen> {
 //Nazwisko
                                   TextFormField(
                                       initialValue: globals.nazwisko,
+                                      keyboardType: TextInputType.name,
                                       decoration: InputDecoration(
                                         labelText:
                                             allTranslations.text('L_NAZWISKO'),
@@ -905,6 +912,7 @@ class _OrderState extends State<OrderScreen> {
 //Telefon
                                   TextFormField(
                                       initialValue: globals.telefon,
+                                      keyboardType: TextInputType.phone,
                                       decoration: InputDecoration(
                                         labelText:
                                             allTranslations.text('L_TELEFON'),
@@ -924,6 +932,7 @@ class _OrderState extends State<OrderScreen> {
 //Email
                                   TextFormField(
                                       initialValue: globals.email,
+                                      keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration(
                                         labelText:
                                             allTranslations.text('L_EMAIL'),

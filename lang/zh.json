@@ -153,5 +153,9 @@
 "L_MUSI_PRZEKRACZAC": "訂單價值必須超過 ",
 "L_PROSIMY_SKLADAC": "請在數小時內下訂單 ",
 "L_BRAK_INTERNETU": "沒有網路",
-"L_URUCHOM_INTERNETU": "建立互聯網連接，然後重試"
+"L_URUCHOM_INTERNETU": "建立互聯網連接，然後重試",
+"L_PROMOCJE": "晉升",
+"L_PROMOCJE_BRAK": "沒有晉升",
+"L_UPS": "糟糕...",
+"L_DANIE_USUNIETE": "沒有這樣的菜"
 }

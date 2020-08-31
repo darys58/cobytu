@@ -153,6 +153,9 @@
 "L_MUSI_PRZEKRACZAC": "The order value must exceed ",
 "L_PROSIMY_SKLADAC": "Please place online orders within hours ",
 "L_BRAK_INTERNETU": "No Internet",
-"L_URUCHOM_INTERNETU": "Make an Internet connection and try again"
-
+"L_URUCHOM_INTERNETU": "Make an Internet connection and try again",
+"L_PROMOCJE": "Specials",
+"L_PROMOCJE_BRAK": "No promotion",
+"L_UPS": "Oops ...",
+"L_DANIE_USUNIETE": "There is no such dish"
 }

@@ -3,12 +3,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../all_translations.dart';
 import 'languages.dart';
 import 'orders_screen.dart';
+import 'specials_screen.dart';
 import 'package:connectivity/connectivity.dart'; //czy jest Internet
 
-
 class SettingsScreen extends StatelessWidget {
-  static const routeName = '/settings'; 
-
+  static const routeName = '/settings';
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -17,8 +16,7 @@ class SettingsScreen extends StatelessWidget {
       throw 'Could not launch $url';
     }
   }
-  
-  
+
   void _showAlertAnuluj(BuildContext context, String nazwa, String text) {
     showDialog(
       context: context,
@@ -48,7 +46,8 @@ class SettingsScreen extends StatelessWidget {
           false, //zeby zaciemnione tło było zablokowane na kliknięcia
     );
   }
-   //sprawdzenie czy jest internet
+
+  //sprawdzenie czy jest internet
   Future<bool> _isInternet() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
@@ -62,24 +61,19 @@ class SettingsScreen extends StatelessWidget {
       return false;
     }
   }
-  
-  
-  
+
   @override
   Widget build(BuildContext context) {
-    
-
-     
-      return Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: Text(allTranslations.text('L_WIECEJ')), 
+          title: Text(allTranslations.text('L_WIECEJ')),
         ),
         body: ListView(
-          children:  <Widget>[           
+          children: <Widget>[
 //język
             GestureDetector(
-              onTap: (){
-                Navigator.of(context).pushNamed(LanguagesScreen.routeName); 
+              onTap: () {
+                Navigator.of(context).pushNamed(LanguagesScreen.routeName);
               },
               child: Card(
                 child: ListTile(
@@ -89,19 +83,20 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
+
 //zamówienia
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 //czy jest internet
                 _isInternet().then((inter) {
                   if (inter != null && inter) {
-                    Navigator.of(context).pushNamed(OrdersScreen.routeName); 
-                  }else{
+                    Navigator.of(context).pushNamed(OrdersScreen.routeName);
+                  } else {
                     print('braaaaaak internetu');
                     _showAlertAnuluj(
-                      context,
-                      allTranslations.text('L_BRAK_INTERNETU'),
-                      allTranslations.text('L_URUCHOM_INTERNETU'));
+                        context,
+                        allTranslations.text('L_BRAK_INTERNETU'),
+                        allTranslations.text('L_URUCHOM_INTERNETU'));
                   }
                 });
               },
@@ -113,22 +108,49 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
-//polityka prywatności
+
+//promocje
             GestureDetector(
-              onTap: (){ 
-                 //czy jest internet
+              onTap: () {
+                //czy jest internet
                 _isInternet().then((inter) {
-                  if (inter != null && inter) {            
-                    _launchURL('https://www.cobytu.com/index.php?d=polityka&mobile=1');
-                    // Navigator.of(context).pushNamed(LanguagesScreen.routeName); 
-                  }else{
+                  if (inter != null && inter) {
+                    print('wiecej - specialsScreen');
+                    Navigator.of(context).pushNamed(SpecialsScreen.routeName);
+                  } else {
                     print('braaaaaak internetu');
                     _showAlertAnuluj(
-                      context,
-                      allTranslations.text('L_BRAK_INTERNETU'),
-                      allTranslations.text('L_URUCHOM_INTERNETU'));
+                        context,
+                        allTranslations.text('L_BRAK_INTERNETU'),
+                        allTranslations.text('L_URUCHOM_INTERNETU'));
                   }
-                });         
+                });
+              },
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.notifications),
+                  title: Text(allTranslations.text('L_PROMOCJE')),
+                  trailing: Icon(Icons.chevron_right),
+                ),
+              ),
+            ),
+//polityka prywatności
+            GestureDetector(
+              onTap: () {
+                //czy jest internet
+                _isInternet().then((inter) {
+                  if (inter != null && inter) {
+                    _launchURL(
+                        'https://www.cobytu.com/index.php?d=polityka&mobile=1');
+                    // Navigator.of(context).pushNamed(LanguagesScreen.routeName);
+                  } else {
+                    print('braaaaaak internetu');
+                    _showAlertAnuluj(
+                        context,
+                        allTranslations.text('L_BRAK_INTERNETU'),
+                        allTranslations.text('L_URUCHOM_INTERNETU'));
+                  }
+                });
               },
               child: Card(
                 child: ListTile(
@@ -141,20 +163,21 @@ class SettingsScreen extends StatelessWidget {
 
 //regulamin
             GestureDetector(
-              onTap: (){ 
+              onTap: () {
                 //czy jest internet
                 _isInternet().then((inter) {
-                  if (inter != null && inter) {                
-                  _launchURL('https://www.cobytu.com/index.php?d=regulamin&mobile=1');
-                  // Navigator.of(context).pushNamed(LanguagesScreen.routeName); 
-                  }else{
+                  if (inter != null && inter) {
+                    _launchURL(
+                        'https://www.cobytu.com/index.php?d=regulamin&mobile=1');
+                    // Navigator.of(context).pushNamed(LanguagesScreen.routeName);
+                  } else {
                     print('braaaaaak internetu');
                     _showAlertAnuluj(
-                      context,
-                      allTranslations.text('L_BRAK_INTERNETU'),
-                      allTranslations.text('L_URUCHOM_INTERNETU'));
+                        context,
+                        allTranslations.text('L_BRAK_INTERNETU'),
+                        allTranslations.text('L_URUCHOM_INTERNETU'));
                   }
-                });      
+                });
               },
               child: Card(
                 child: ListTile(
@@ -164,7 +187,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
-           
+
             /* Card(child: ListTile(title: Text('One-line ListTile'))),
             Card(
               child: ListTile(
@@ -204,10 +227,9 @@ class SettingsScreen extends StatelessWidget {
                 isThreeLine: true,
               ),
            ),
-       */ 
+       */
           ],
-        )
-      );
+        ));
   }
 }
 /*

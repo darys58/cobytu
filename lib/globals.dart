@@ -4,6 +4,7 @@ library cobytu.globals;
 int wKoszyku = 0; //ile razy wybrane danie znajduje się w koszyku w koszyku
 String deviceId; //Id telefonu - identyfikator apki/uzytkownika
 String memoryLokE = '31'; //id wybranej restauracji
+String memoryLokC = '1'; //id miasta
 String language; //język
 String separator; // '.' lub ',' ustawiany w meal_item.dart
 String cenaOpakowania; //cena jednego opakowania
@@ -19,5 +20,4 @@ String miasto;
 String imie;
 String nazwisko;
 String telefon;
-String email;
-
+String email; //email dostawy
