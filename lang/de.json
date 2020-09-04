@@ -157,5 +157,7 @@
 "L_PROMOCJE": "Verkauf",
 "L_PROMOCJE_BRAK": "Keine Werbung",
 "L_UPS": "Hoppla ...",
-"L_DANIE_USUNIETE": "Es gibt kein solches Gericht"
+"L_DANIE_USUNIETE": "Es gibt kein solches Gericht",
+"L_BRAK_WYNIKOW": "Keine Suchergebnisse",
+"L_SZUKAJ": "Suche"
 }

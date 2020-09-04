@@ -157,5 +157,7 @@
 "L_PROMOCJE": "Promotion",
 "L_PROMOCJE_BRAK": "Aucune promotion",
 "L_UPS": "Oups ...",
-"L_DANIE_USUNIETE": "Il n'y a pas de tel plat"
+"L_DANIE_USUNIETE": "Il n'y a pas de tel plat",
+"L_BRAK_WYNIKOW": "Aucun résultat trouvé",
+"L_SZUKAJ": "Chercher"
 }

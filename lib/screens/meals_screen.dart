@@ -48,7 +48,7 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.1.3 28.07.2020 - zamówienia online
   //1.0.2.6 04.08.2020 - zmiana ikon dla iOS, poprawki w tłumaczeniu "g" i "kcal"
   //1.0.3.7 18.08.2020 - detekcja braku Internetu dla szczegółów dania
-  //1.0.3.8 21.08.2020 - detekcja braku Internetu dla Regulamin, Polityka prywatnosci, Zamówienia 
+  //1.0.3.8 21.08.2020 - detekcja braku Internetu dla Regulamin, Polityka prywatnosci, Zamówienia
   //1.0.4.9 31.09.2020 - promocje, odpowiednie typy klawiatur przy wprowadzaniu danych, API 29 (w build.gradle)
   final wersja = ['1', '0', '4', '9', '31.09.2020', 'nic']; //zamawianie online
 
@@ -657,6 +657,12 @@ class _MealsScreenState extends State<MealsScreen> {
             //ikona koszyka na pasku górnym
             actions: globals.memoryLokE != '0'
                 ? <Widget>[
+                    IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          showSearch(
+                              context: context, delegate: FootItemsSearch());
+                        }),
                     //id restauracji = '0' - tzn. Wszystkie w mieście
                     Consumer<Cart>(
                       builder: (_, cart, ch) => Badge(
@@ -672,18 +678,20 @@ class _MealsScreenState extends State<MealsScreen> {
                                     .shopping_cart, //koszyk - mozna zamawiać online
                               ),
                               onPressed: () {
-                                 //czy jest Internet
+                                //czy jest Internet
                                 _isInternet().then((inter) {
                                   if (inter != null && inter) {
                                     Navigator.of(context)
                                         .pushNamed(CartScreen.routeName);
-                                  }else{
+                                  } else {
                                     print('braaaaaak internetu');
                                     _showAlertAnuluj(
-                                      context,
-                                      allTranslations.text('L_BRAK_INTERNETU'),
-                                      allTranslations.text('L_URUCHOM_INTERNETU'));
-                                  } 
+                                        context,
+                                        allTranslations
+                                            .text('L_BRAK_INTERNETU'),
+                                        allTranslations
+                                            .text('L_URUCHOM_INTERNETU'));
+                                  }
                                 });
                               },
                             )
@@ -698,13 +706,15 @@ class _MealsScreenState extends State<MealsScreen> {
                                   if (inter != null && inter) {
                                     Navigator.of(context)
                                         .pushNamed(CartScreen.routeName);
-                                  }else{
+                                  } else {
                                     print('braaaaaak internetu');
                                     _showAlertAnuluj(
                                         context,
-                                        allTranslations.text('L_BRAK_INTERNETU'),
-                                        allTranslations.text('L_URUCHOM_INTERNETU'));
-                                  } 
+                                        allTranslations
+                                            .text('L_BRAK_INTERNETU'),
+                                        allTranslations
+                                            .text('L_URUCHOM_INTERNETU'));
+                                  }
                                 });
                               },
                             ),
@@ -1434,5 +1444,81 @@ class _MealsScreenState extends State<MealsScreen> {
         ),
       ),
     );
+  }
+}
+
+class FootItemsSearch extends SearchDelegate<Meals> {
+  @override
+  String get searchFieldLabel => allTranslations.text('L_SZUKAJ');
+  @override
+ 
+  @override
+  TextStyle get searchFieldStyle => TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal);
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = "";
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    var myList = query.isEmpty
+        ? Provider.of<Meals>(context).items.toList()
+        : Provider.of<Meals>(context)
+            .items
+            .where((p) =>
+                p.nazwa.toLowerCase().contains(query.toLowerCase()) ||
+                p.opis.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+    return myList.isEmpty
+        ? Center( 
+          child:Column(
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.only(top: 50),
+                child: Text(
+                  allTranslations.text('L_BRAK_WYNIKOW'),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) 
+        : Expanded(
+            child: ListView.builder(
+              itemCount: myList.length,
+              //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+              itemBuilder: (context, index) => ChangeNotifierProvider.value(
+                value: myList[index],
+                child: MealItem(),
+              ),
+            ),
+          );
   }
 }

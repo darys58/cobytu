@@ -157,5 +157,7 @@
 "L_PROMOCJE": "Specials",
 "L_PROMOCJE_BRAK": "No promotion",
 "L_UPS": "Oops ...",
-"L_DANIE_USUNIETE": "There is no such dish"
+"L_DANIE_USUNIETE": "There is no such dish",
+"L_BRAK_WYNIKOW": "No search results",
+"L_SZUKAJ": "Search"
 }

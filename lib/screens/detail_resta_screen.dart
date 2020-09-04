@@ -221,7 +221,7 @@ Future<void> _launchURL(String url) async {
                                 Icons.phone
                               ),
                               onPressed: (){
-                                _launchURL('tel:${_mealRestsData[index].tel1}');
+                                _launchURL('tel:${_mealRestsData[index].tel1}');//numer bez spacji !!!
                                 //launch('tel:${_mealRestsData[index].tel1}');
                               },
                             ),

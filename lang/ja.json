@@ -157,5 +157,7 @@
 "L_PROMOCJE": "昇進",
 "L_PROMOCJE_BRAK": "プロモーションなし",
 "L_UPS": "おっとっと ...",
-"L_DANIE_USUNIETE": "そのような料理はありません"
+"L_DANIE_USUNIETE": "そのような料理はありません",
+"L_BRAK_WYNIKOW": "検索結果なし",
+"L_SZUKAJ": "探す"
 }

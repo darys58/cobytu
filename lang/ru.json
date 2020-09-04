@@ -157,5 +157,7 @@
 "L_PROMOCJE": "Продвижение",
 "L_PROMOCJE_BRAK": "Нет продвижения",
 "L_UPS": "Ой ...",
-"L_DANIE_USUNIETE": "Такого блюда нет"
+"L_DANIE_USUNIETE": "Такого блюда нет",
+"L_BRAK_WYNIKOW": "Нет Результатов Поиска",
+"L_SZUKAJ": "Поиск"
 }
