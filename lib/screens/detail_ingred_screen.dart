@@ -240,9 +240,9 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
                 ],
               )
             ),
-
-
-            Expanded(
+            
+            _detailIngredData[0].doId != 'brak'  //jezeli nie ma dodatków podstawowych
+            ? Expanded(
               child: ListView.separated(
                 scrollDirection: Axis.vertical,
                 //shrinkWrap: true,
@@ -296,9 +296,20 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
                 },
                 separatorBuilder: (BuildContext context, int index) => const Divider(),
               ),
-            ),
-
-
+              )
+            : Column(children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Text(
+                    allTranslations.text('L_BRAK_DANYCH'),                                    
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+              ])
+            ,
 
 
 

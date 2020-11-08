@@ -22,6 +22,8 @@ class OrderMeal {
   });
 }
 
+//ekran szczegółów zamówienia (Więcej/Zamówienia/>)
+
 class OrderDetailScreen extends StatefulWidget {
   static const routeName = '/order_detail'; //nazwa trasy do tego ekranu
 
@@ -429,7 +431,7 @@ class _OrderDetailState extends State<OrderDetailScreen> {
                                           ),
                                         ),
                                         Text(
-                                          order[0].miasto,
+                                          order[0].kod + ' ' + order[0].miasto,
                                           style: TextStyle(
                                             fontSize: 15,
                                             color: Colors.black,

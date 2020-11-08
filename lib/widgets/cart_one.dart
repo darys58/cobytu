@@ -208,9 +208,13 @@ class _CartOneState extends State<CartOne> {
                             SizedBox(
                               width: 2,
                             ), //odległość miedzy ikoną i tekstem
-                            Text(
-                              widget.waga + ' ' + allTranslations.text('L_G'),
-                            ), 
+                            int.parse(widget.waga) > 0 //jezeli są wprowadzone składniki podstawowe dania
+                            ? Text(
+                                widget.waga + ' ' + allTranslations.text('L_G'),
+                              )
+                            : Text(
+                                'n/a ' + allTranslations.text('L_G'),
+                              ), 
                             SizedBox(
                               width: 25,
                             ),//interpolacja ciągu znaków
@@ -225,9 +229,13 @@ class _CartOneState extends State<CartOne> {
                             SizedBox(
                               width: 2,
                             ), //odległość miedzy ikoną i tekstem
-                            Text(
-                              widget.kcal + ' ' + allTranslations.text('L_KCAL'),
-                            ), //interpolacja ciągu znaków
+                            int.parse(widget.waga) > 0 //jezeli są wprowadzone składniki podstawowe dania
+                            ? Text(
+                                widget.kcal + ' ' + allTranslations.text('L_KCAL'),
+                              )
+                            : Text(
+                                'n/a ' + allTranslations.text('L_KCAL'),
+                              ), //interpolacja ciągu znaków
                             SizedBox(
                               width: 25,
                             ),

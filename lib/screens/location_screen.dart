@@ -424,10 +424,12 @@ class _LocationScreenState extends State<LocationScreen> {
                             )
                             : SizedBox(width: 1),
                            */ 
+                            //re_online: 0-brak, 1-zakupy online (koszyk), 
                             item.online == '1' ? Image.asset('assets/images/cart.png') : SizedBox(width: 1),
                             SizedBox(width: 5), 
                             //Image.asset('assets/images/phone.png'),
                             //SizedBox(width: 3),
+                            //re_tel_dos: jezeli jest numer to dostawy=='1', tzn. ze jest dostawa do domu (samochód)
                             item.dostawy == '1' ? Image.asset('assets/images/dostawa.png') : SizedBox(width: 1),
                             
                           ]

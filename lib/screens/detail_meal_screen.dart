@@ -504,9 +504,13 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                           SizedBox(
                             width: 3,
                           ), //odległość miedzy ikoną i tekstem
-                          Text(
-                            '$_waga ' + allTranslations.text('L_G'),
-                          ),
+                          _waga > 0 //jezeli są wprowadzone składniki podstawowe dania
+                            ? Text(
+                              '$_waga ' + allTranslations.text('L_G'),
+                              )
+                            :Text(
+                              'n/a ' + allTranslations.text('L_G'),
+                              ),
                         ],
                       ),
                       SizedBox(
@@ -520,9 +524,13 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                           SizedBox(
                             width: 3,
                           ), //odległość miedzy ikoną i tekstem
-                          Text(
-                            '$_kcal ' + allTranslations.text('L_KCAL'),
-                          ), //interpolacja ciągu znaków
+                          _waga > 0 //jezeli są wprowadzone składniki podstawowe dania
+                          ? Text(
+                              '$_kcal ' + allTranslations.text('L_KCAL'),
+                            )
+                          : Text(
+                              'n/a ' + allTranslations.text('L_KCAL'),
+                            ), //interpolacja ciągu znaków
                           SizedBox(
                             width: 20,
                           ),

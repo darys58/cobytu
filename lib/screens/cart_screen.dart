@@ -358,18 +358,30 @@ class _CartScreenState extends State<CartScreen> {
                                                   SizedBox(
                                                     width: 2,
                                                   ), //odległość miedzy ikoną i tekstem
-                                                  Text(
-                                                    _wagaRazem +
-                                                        ' ' +
-                                                        allTranslations
-                                                            .text('L_G'),
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 15,
-                                                      color: Colors.black,
+                                                  int.parse(_wagaRazem) > 0 //jezeli są wprowadzone składniki podstawowe dania
+                                                  ? Text(
+                                                      _wagaRazem +
+                                                          ' ' +
+                                                          allTranslations
+                                                              .text('L_G'),
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 15,
+                                                        color: Colors.black,
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      'n/a ' +
+                                                          allTranslations
+                                                              .text('L_G'),
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 15,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
                                                   SizedBox(
                                                     width: 25,
                                                   ), //interpolacja ciągu znaków
@@ -381,9 +393,21 @@ class _CartScreenState extends State<CartScreen> {
                                                   SizedBox(
                                                     width: 2,
                                                   ), //odległość miedzy ikoną i tekstem
-                                                  Text(
-                                                    _kcalRazem +
-                                                        ' ' +
+                                                  int.parse(_wagaRazem) > 0 //jezeli są wprowadzone składniki podstawowe dania
+                                                  ? Text(
+                                                      _kcalRazem +
+                                                          ' ' +
+                                                          allTranslations
+                                                              .text('L_KCAL'),
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 15,
+                                                        color: Colors.black,
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                    'n/a ' +
                                                         allTranslations
                                                             .text('L_KCAL'),
                                                     style: TextStyle(
@@ -571,7 +595,9 @@ class _CartScreenState extends State<CartScreen> {
                                 Container(
                                   padding: const EdgeInsets.only(top: 50),
                                   child: Text(
-                                    allTranslations.text('L_KOSZYK_PUSTY'),
+                                    globals.dostawy == '1' //jezeli dostawy
+                                    ? allTranslations.text('L_KOSZYK_PUSTY')
+                                    : allTranslations.text('L_STOLIK_PUSTY'),                                    
                                     style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.grey,

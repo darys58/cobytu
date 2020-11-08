@@ -50,7 +50,8 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.3.7 18.08.2020 - detekcja braku Internetu dla szczegółów dania
   //1.0.3.8 21.08.2020 - detekcja braku Internetu dla Regulamin, Polityka prywatnosci, Zamówienia
   //1.0.4.9 31.09.2020 - promocje, odpowiednie typy klawiatur przy wprowadzaniu danych, API 29 (w build.gradle)
-  final wersja = ['1', '0', '4', '9', '31.09.2020', 'nic']; //zamawianie online
+  //1.0.5.10 04.09.2020 - wyszukiwarka, teksty celu w Info.plist
+  final wersja = ['1', '0', '5', '10', '04.09.2020', 'nic']; //zamawianie online
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
@@ -658,11 +659,11 @@ class _MealsScreenState extends State<MealsScreen> {
             actions: globals.memoryLokE != '0'
                 ? <Widget>[
                     IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () {
-                          showSearch(
-                              context: context, delegate: FootItemsSearch());
-                        }),
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        showSearch(
+                            context: context, delegate: FootItemsSearch());
+                      }),
                     //id restauracji = '0' - tzn. Wszystkie w mieście
                     Consumer<Cart>(
                       builder: (_, cart, ch) => Badge(
@@ -720,7 +721,14 @@ class _MealsScreenState extends State<MealsScreen> {
                             ),
                     ),
                   ]
-                : <Widget>[],
+                : <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      showSearch(
+                          context: context, delegate: FootItemsSearch());
+                    }),
+                ],
 
             bottom: TabBar(
               isScrollable: true,
@@ -1480,7 +1488,7 @@ class FootItemsSearch extends SearchDelegate<Meals> {
   @override
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
-    throw UnimplementedError();
+    return null;
   }
 
   @override
@@ -1510,15 +1518,23 @@ class FootItemsSearch extends SearchDelegate<Meals> {
             ],
           ),
         ) 
-        : Expanded(
-            child: ListView.builder(
-              itemCount: myList.length,
-              //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-              itemBuilder: (context, index) => ChangeNotifierProvider.value(
-                value: myList[index],
-                child: MealItem(),
-              ),
+        : Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Expanded(
+                  child: ListView.builder(
+                    itemCount: myList.length,
+                    //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                    itemBuilder: (context, index) => ChangeNotifierProvider.value(
+                      value: myList[index],
+                      child: MealItem(),
+                    ),
+                  ),
+                ),
             ),
-          );
+          ],
+        );
   }
 }
