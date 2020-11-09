@@ -835,17 +835,33 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals9[index],
-                            child: MealItem(),
+                      meals9.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals9[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals9.length,
                           ),
-                          itemCount: meals9.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
 
@@ -910,17 +926,33 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals1[index],
-                            child: MealItem(),
+                      meals1.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals1[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals1.length,
                           ),
-                          itemCount: meals1.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
 
@@ -985,17 +1017,33 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals2[index],
-                            child: MealItem(),
+                      meals2.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals2[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals2.length,
                           ),
-                          itemCount: meals2.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
 
@@ -1060,17 +1108,36 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals3[index],
-                            child: MealItem(),
+                      meals3.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals3[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals3.length,
                           ),
-                          itemCount: meals3.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 150,
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                              softWrap: true, //zawijanie tekstu
+                              maxLines:  5,
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
 
@@ -1135,17 +1202,33 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals4[index],
-                            child: MealItem(),
+                      meals4.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals4[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals4.length,
                           ),
-                          itemCount: meals4.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
 
@@ -1210,17 +1293,33 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals5[index],
-                            child: MealItem(),
+                      meals5.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals5[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals1.length,
                           ),
-                          itemCount: meals5.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
 
@@ -1285,17 +1384,33 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals6[index],
-                            child: MealItem(),
+                      meals6.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals6[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals6.length,
                           ),
-                          itemCount: meals6.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
 
@@ -1360,17 +1475,33 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals7[index],
-                            child: MealItem(),
+                      meals7.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals7[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals7.length,
                           ),
-                          itemCount: meals7.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
 
@@ -1435,17 +1566,33 @@ class _MealsScreenState extends State<MealsScreen> {
                             }),
                       ),
                       //lista dań
-                      Expanded(
-                        child: ListView.builder(
-                          //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                          itemBuilder: (ctx, index) =>
-                              ChangeNotifierProvider.value(
-                            value: meals8[index],
-                            child: MealItem(),
+                      meals8.length > 0 //jezeli są dania w tej kategorii
+                      ? Expanded(
+                          child: ListView.builder(
+                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                            itemBuilder: (ctx, index) =>
+                                ChangeNotifierProvider.value(
+                              value: meals8[index],
+                              child: MealItem(),
+                            ),
+                            itemCount: meals8.length,
                           ),
-                          itemCount: meals8.length,
-                        ),
-                      ),
+                        )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              allTranslations.text('L_BRAK_DAN'),                                    
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ])
+                      ,
                     ],
                   ),
                 ]),

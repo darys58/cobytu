@@ -814,14 +814,12 @@ class _OrderState extends State<OrderScreen> {
                                           labelStyle:
                                               TextStyle(color: Colors.black),
                                           hintText: allTranslations
-                                                  .text('L_WPISZ_KOD') +
-                                              ' (XX-XXX)',
+                                                  .text('L_WPISZ_KOD'),
                                         ),
                                         validator: (value) {
                                           if (value.isEmpty) {
                                             return allTranslations
-                                                    .text('L_WPISZ_KOD') +
-                                                ' (XX-XXX)';
+                                                    .text('L_WPISZ_KOD');
                                           }
                                           globals.kod = value;
                                           return null;
