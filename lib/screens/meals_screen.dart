@@ -51,7 +51,8 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.3.8 21.08.2020 - detekcja braku Internetu dla Regulamin, Polityka prywatnosci, Zamówienia
   //1.0.4.9 31.09.2020 - promocje, odpowiednie typy klawiatur przy wprowadzaniu danych, API 29 (w build.gradle)
   //1.0.5.10 04.09.2020 - wyszukiwarka, teksty celu w Info.plist
-  final wersja = ['1', '0', '5', '10', '04.09.2020', 'nic']; //zamawianie online
+  //1.0.6.11 09.11.2020 - oznaczenie n/a dla wagi i kcal gdy nie ma składników podstawowych, "Brak dań w tej kategorii",
+  final wersja = ['1', '0', '6', '11', '09.11.2020', 'nic']; //zamawianie online
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
@@ -659,11 +660,11 @@ class _MealsScreenState extends State<MealsScreen> {
             actions: globals.memoryLokE != '0'
                 ? <Widget>[
                     IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        showSearch(
-                            context: context, delegate: FootItemsSearch());
-                      }),
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          showSearch(
+                              context: context, delegate: FootItemsSearch());
+                        }),
                     //id restauracji = '0' - tzn. Wszystkie w mieście
                     Consumer<Cart>(
                       builder: (_, cart, ch) => Badge(
@@ -722,13 +723,13 @@ class _MealsScreenState extends State<MealsScreen> {
                     ),
                   ]
                 : <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-                      showSearch(
-                          context: context, delegate: FootItemsSearch());
-                    }),
-                ],
+                    IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          showSearch(
+                              context: context, delegate: FootItemsSearch());
+                        }),
+                  ],
 
             bottom: TabBar(
               isScrollable: true,
@@ -774,827 +775,821 @@ class _MealsScreenState extends State<MealsScreen> {
                 )
               : TabBarView(children: <Widget>[
                   //wyświetlenie listy dań
+
                   //ŚNIADANIA
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat9.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria9 = podkat9[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat9[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria9 == podkat9[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat9[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat9[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals9.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals9[index],
-                              child: MealItem(),
+                  meals9.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat9.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria9 = podkat9[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat9[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria9 ==
+                                                podkat9[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat9[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat9[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals9.length,
-                          ),
+                            //lista dań
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals9[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals9.length,
+                              ),
+                            )
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
 
                   //PRZYSTAWKI
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat1.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria1 = podkat1[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat1[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria1 == podkat1[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat1[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat1[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals1.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals1[index],
-                              child: MealItem(),
+                  meals1.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat1.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria1 = podkat1[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat1[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria1 ==
+                                                podkat1[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat1[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat1[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals1.length,
-                          ),
+                            //lista dań
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals1[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals1.length,
+                              ),
+                            )
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
 
                   //ZUPY
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat2.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria2 = podkat2[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat2[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria2 == podkat2[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat2[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat2[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals2.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals2[index],
-                              child: MealItem(),
+                  meals2.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat2.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria2 = podkat2[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat2[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria2 ==
+                                                podkat2[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat2[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat2[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals2.length,
-                          ),
+                            //lista dań
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals2[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals2.length,
+                              ),
+                            )
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
 
                   //SAŁATKI
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat3.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria3 = podkat3[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat3[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria3 == podkat3[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat3[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat3[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals3.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals3[index],
-                              child: MealItem(),
+                  meals3.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat3.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria3 = podkat3[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat3[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria3 ==
+                                                podkat3[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat3[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat3[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals3.length,
-                          ),
+                            //lista dań
+
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals3[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals3.length,
+                              ),
+                            )
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             height: 150,
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                               softWrap: true, //zawijanie tekstu
-                              maxLines:  5,
+                              maxLines: 5,
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
 
                   //DANIA GŁOWNE
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat4.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria4 = podkat4[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat4[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria4 == podkat4[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat4[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat4[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals4.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals4[index],
-                              child: MealItem(),
+                  meals4.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat4.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria4 = podkat4[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat4[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria4 ==
+                                                podkat4[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat4[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat4[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals4.length,
-                          ),
+                            //lista dań
+
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals4[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals4.length,
+                              ),
+                            )
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
 
                   // DLA DZIECI
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat5.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria5 = podkat5[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat5[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria5 == podkat5[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat5[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat5[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals5.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals5[index],
-                              child: MealItem(),
+                  meals5.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat5.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria5 = podkat5[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat5[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria5 ==
+                                                podkat5[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat5[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat5[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals1.length,
-                          ),
+                            //lista dań
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals5[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals5.length,
+                              ),
+                            ),
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
 
                   //DESERY
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat6.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria6 = podkat6[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat6[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria6 == podkat6[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat6[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat6[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals6.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals6[index],
-                              child: MealItem(),
+                  meals6.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat6.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria6 = podkat6[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat6[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria6 ==
+                                                podkat6[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat6[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat6[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals6.length,
-                          ),
+                            //lista dań
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals6[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals6.length,
+                              ),
+                            )
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
 
                   //NAPOJE
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat7.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria7 = podkat7[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat7[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria7 == podkat7[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat7[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat7[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals7.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals7[index],
-                              child: MealItem(),
+                  meals7.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat7.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria7 = podkat7[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat7[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria7 ==
+                                                podkat7[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat7[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat7[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals7.length,
-                          ),
+                            //lista dań
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals7[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals7.length,
+                              ),
+                            )
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
 
                   //ALKOHOLE
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //podkategorie
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 1.0),
-                        height: 46, //MediaQuery.of(context).size.height * 0.35,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: podkat8.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                //width: MediaQuery.of(context).size.width * 0.6,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      podkategoria8 = podkat8[index]
-                                          .id; //dla filtrowania po podkategorii
-                                      rodzaj = podkat8[index]
-                                          .nazwa; //dla filtrowania po rodzaju dania
-                                    });
-                                  },
-                                  child: podkategoria8 == podkat8[index].id
-                                      ? Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat8[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            )),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: Colors.white,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1.0),
-                                            child: Center(
-                                                child: Text(
-                                              podkat8[index].nazwa,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16.0),
-                                            )),
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      //lista dań
-                      meals8.length > 0 //jezeli są dania w tej kategorii
-                      ? Expanded(
-                          child: ListView.builder(
-                            //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                            itemBuilder: (ctx, index) =>
-                                ChangeNotifierProvider.value(
-                              value: meals8[index],
-                              child: MealItem(),
+                  meals8.length > 0 //jezeli są dania w tej kategorii
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //podkategorie
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.0, vertical: 1.0),
+                              height:
+                                  46, //MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: podkat8.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      //width: MediaQuery.of(context).size.width * 0.6,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            podkategoria8 = podkat8[index]
+                                                .id; //dla filtrowania po podkategorii
+                                            rodzaj = podkat8[index]
+                                                .nazwa; //dla filtrowania po rodzaju dania
+                                          });
+                                        },
+                                        child: podkategoria8 ==
+                                                podkat8[index].id
+                                            ? Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat8[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                  )),
+                                                ),
+                                              )
+                                            : Card(
+                                                color: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 1.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                    podkat8[index].nazwa,
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 16.0),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                            itemCount: meals8.length,
-                          ),
+                            //lista dań
+                            Expanded(
+                              child: ListView.builder(
+                                //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                                itemBuilder: (ctx, index) =>
+                                    ChangeNotifierProvider.value(
+                                  value: meals8[index],
+                                  child: MealItem(),
+                                ),
+                                itemCount: meals8.length,
+                              ),
+                            )
+                          ],
                         )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                      : Column(children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
-                              allTranslations.text('L_BRAK_DAN'),                                    
+                              allTranslations.text('L_BRAK_DAN'),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                             ),
                           )
-                        ])
-                      ,
-                    ],
-                  ),
+                        ]),
                 ]),
         ),
       ),
@@ -1606,9 +1601,9 @@ class FootItemsSearch extends SearchDelegate<Meals> {
   @override
   String get searchFieldLabel => allTranslations.text('L_SZUKAJ');
   @override
- 
   @override
-  TextStyle get searchFieldStyle => TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal);
+  TextStyle get searchFieldStyle =>
+      TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.normal);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -1634,8 +1629,52 @@ class FootItemsSearch extends SearchDelegate<Meals> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    return null;
+    //powtórzony kod z "buildSuggestions" zeby nie ginął wynik po naciśnięciu lupy na wyświetlonej klawiaturze telefonu
+    var myList = query.isEmpty
+        ? Provider.of<Meals>(context).items.toList()
+        : Provider.of<Meals>(context)
+            .items
+            .where((p) =>
+                p.nazwa.toLowerCase().contains(query.toLowerCase()) ||
+                p.opis.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+    
+      return myList.isEmpty
+        ? Center(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Text(
+                    allTranslations.text('L_BRAK_WYNIKOW'),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Expanded(
+                  child: ListView.builder(
+                    itemCount: myList.length,
+                    //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
+                    itemBuilder: (context, index) =>
+                        ChangeNotifierProvider.value(
+                      value: myList[index],
+                      child: MealItem(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
   }
 
   @override
@@ -1649,39 +1688,40 @@ class FootItemsSearch extends SearchDelegate<Meals> {
                 p.opis.toLowerCase().contains(query.toLowerCase()))
             .toList();
     return myList.isEmpty
-        ? Center( 
-          child:Column(
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(top: 50),
-                child: Text(
-                  allTranslations.text('L_BRAK_WYNIKOW'),
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
+        ? Center(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Text(
+                    allTranslations.text('L_BRAK_WYNIKOW'),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ) 
+              ],
+            ),
+          )
         : Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              child: Expanded(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Expanded(
                   child: ListView.builder(
                     itemCount: myList.length,
                     //ładowane są te elementy listy które widać na ekranie - lepsza wydajność
-                    itemBuilder: (context, index) => ChangeNotifierProvider.value(
+                    itemBuilder: (context, index) =>
+                        ChangeNotifierProvider.value(
                       value: myList[index],
                       child: MealItem(),
                     ),
                   ),
                 ),
-            ),
-          ],
-        );
+              ),
+            ],
+          );
   }
 }
