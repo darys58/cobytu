@@ -66,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(allTranslations.text('L_WIECEJ')),
+          title: Text(allTranslations.text('L_WIECEJ_M')),
         ),
         body: ListView(
           children: <Widget>[

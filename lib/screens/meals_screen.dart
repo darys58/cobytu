@@ -52,7 +52,8 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.4.9 31.09.2020 - promocje, odpowiednie typy klawiatur przy wprowadzaniu danych, API 29 (w build.gradle)
   //1.0.5.10 04.09.2020 - wyszukiwarka, teksty celu w Info.plist
   //1.0.6.11 09.11.2020 - oznaczenie n/a dla wagi i kcal gdy nie ma składników podstawowych, "Brak dań w tej kategorii",
-  final wersja = ['1', '0', '6', '11', '09.11.2020', 'nic']; //zamawianie online
+  //1.0.7.12 13.11.2020 - poprawki do 1.0.6.11, obsługa lupy na klawiaturze w wyszukiwarce, poprawki tłumaczeń
+  final wersja = ['1', '0', '7', '12', '13.11.2020', 'nic']; //zamawianie online
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
