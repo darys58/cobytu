@@ -347,7 +347,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     ), //interpolacja ciągu znaków
                                                   ),
                                                   SizedBox(
-                                                    width: 25,
+                                                    width: 18,
                                                   ),
                                                 ],
                                               ),
@@ -365,9 +365,9 @@ class _CartScreenState extends State<CartScreen> {
                                                           allTranslations
                                                               .text('L_G'),
                                                       style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15,
+                                                        //fontWeight:
+                                                            //FontWeight.bold,
+                                                        //fontSize: 15,
                                                         color: Colors.black,
                                                       ),
                                                     )
@@ -376,14 +376,14 @@ class _CartScreenState extends State<CartScreen> {
                                                           allTranslations
                                                               .text('L_G'),
                                                       style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15,
+                                                        //fontWeight:
+                                                            //FontWeight.bold,
+                                                        //fontSize: 15,
                                                         color: Colors.black,
                                                       ),
                                                     ),
                                                   SizedBox(
-                                                    width: 25,
+                                                    width: 18,
                                                   ), //interpolacja ciągu znaków
                                                 ],
                                               ),
@@ -400,9 +400,9 @@ class _CartScreenState extends State<CartScreen> {
                                                           allTranslations
                                                               .text('L_KCAL'),
                                                       style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15,
+                                                        //fontWeight:
+                                                            //FontWeight.bold,
+                                                        //fontSize: 15,
                                                         color: Colors.black,
                                                       ),
                                                     )
@@ -411,9 +411,9 @@ class _CartScreenState extends State<CartScreen> {
                                                         allTranslations
                                                             .text('L_KCAL'),
                                                     style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 15,
+                                                      //fontWeight:
+                                                          //FontWeight.bold,
+                                                      //fontSize: 15,
                                                       color: Colors.black,
                                                     ),
                                                   ), //interpolacja ciągu znaków
@@ -437,7 +437,9 @@ class _CartScreenState extends State<CartScreen> {
                                               height: 2,
                                             )
                                           : Container(
-                                              height: 40,
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10.0, vertical: 0.0),
+                                              height: 55,
                                               child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -498,7 +500,7 @@ class _CartScreenState extends State<CartScreen> {
                                       globals.online ==
                                               '1' //jezeli zamawianie online przez CoByTu.com
                                           ? Container(
-                                              height: 90,
+                                              height: 70,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
