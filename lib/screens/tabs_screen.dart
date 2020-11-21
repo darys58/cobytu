@@ -75,7 +75,7 @@ void _selectPage(int index){
         unselectedItemColor: Colors.white,
         selectedItemColor: Theme.of(context).accentColor,
         currentIndex: _selectedPageIndex, //informuje tabbar któty tab jest wybrany
-        //type: BottomNavigationBarType.shifting, //lub fixed   //rózne typy tabBara
+        type: BottomNavigationBarType.fixed ,//shifting, //lub fixed   //rózne typy tabBara
         items: [
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
