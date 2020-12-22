@@ -344,7 +344,7 @@ class _LocationScreenState extends State<LocationScreen> {
           child: CircularProgressIndicator(), //kółko ładowania danych
         )
       : Container( 
-        padding: EdgeInsets.all(20.00),      
+        //padding: EdgeInsets.all(20.00),      
         child: Center(
           child: Column(
             children: <Widget>[
@@ -354,7 +354,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 children: <Widget>[
                   Expanded( //rozszerzona kolumna z tekstami  - cała dostępna przestrzeń (poza zdjęciem)
                     child: Container( //zeby zrobić margines wokół części tekstowej
-                      padding: EdgeInsets.all(8.00),
+                      padding: EdgeInsets.only(left: 25, top: 25, bottom: 20, right:10),
                       child: Column( //ustawienie elementów jeden pod drugim
                         mainAxisSize:MainAxisSize.min, 
                         crossAxisAlignment: CrossAxisAlignment.start, 
@@ -376,7 +376,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                   Expanded( //rozszerzona kolumna z tekstami  - cała dostępna przestrzeń (poza zdjęciem)
                     child: Container( //zeby zrobić margines wokół części tekstowej
-                      padding: EdgeInsets.all(8.00),
+                      padding: EdgeInsets.only(left: 10, top: 25, bottom: 20, right:20),
                       child: Column( //ustawienie elementów jeden pod drugim
                         mainAxisSize:MainAxisSize.min, 
                         crossAxisAlignment: CrossAxisAlignment.start, 
@@ -408,7 +408,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       title: Text(item.nazwa),
                       subtitle: Text(item.adres),
                       secondary: Container(
-                        width: 120,
+                        width: 80,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
@@ -431,7 +431,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             //SizedBox(width: 3),
                             //re_tel_dos: jezeli jest numer to dostawy=='1', tzn. ze jest dostawa do domu (samochód)
                             item.dostawy == '1' ? Image.asset('assets/images/dostawa.png') : SizedBox(width: 1),
-                            
+                            SizedBox(width: 10),
                           ]
                         ),
                       ),

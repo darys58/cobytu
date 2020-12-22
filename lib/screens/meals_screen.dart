@@ -53,7 +53,9 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.5.10 04.09.2020 - wyszukiwarka, teksty celu w Info.plist
   //1.0.6.11 09.11.2020 - oznaczenie n/a dla wagi i kcal gdy nie ma składników podstawowych, "Brak dań w tej kategorii",
   //1.0.7.12 13.11.2020 - poprawki do 1.0.6.11, obsługa lupy na klawiaturze w wyszukiwarce, poprawki tłumaczeń
-  final wersja = ['1', '0', '7', '12', '13.11.2020', 'nic']; //zamawianie online
+  //1.0.8.13 27.11.2020 - poprawki tłumaczeń gkategorii menu - promocji, taby menu na dole z nazwami, podkategoria "Promocje", wielkość RAZEM w koszyku
+  //1.0.9.14   - usunięty "Sposób zapłaty" przy odbiorze własnym, w szczegółach restauracji usunięte powielanie przy obracaniu telefonu, zmiany odstępów w "location", usunięcie czasu oczekiwania,
+  final wersja = ['1', '0', '8', '13', '27.11.2020', 'nic']; //zamawianie online
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1

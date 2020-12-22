@@ -16,6 +16,8 @@ class DetailRestaScreen extends StatefulWidget {
 }
 
 class _DetailRestaScreenState extends State<DetailRestaScreen> {
+  var _isInit = true; //czy inicjowanie ekranu?
+  var _isLoading = false; //czy ładowanie danych?
 List<DetailRest> _mealRestsData = []; //szczegóły restauracji
 bool _isVisible = false;
 String _currLang = allTranslations.currentLanguage; //aktualny język
@@ -28,14 +30,20 @@ void showToast() {
 
 @override
   void didChangeDependencies() {
-    final mealId = ModalRoute.of(context).settings.arguments as String; //id posiłku pobrany z argumentów trasy
-      fetchDetailRestsFromSerwer(mealId).then((_) { 
-        print('pobranie szczegółów');
+    if (_isInit) {
         setState(() {
-         // _mealRestsData  = _mealRestsData ;
+          _isLoading = true; //uruchomienie wskaznika ładowania danych
         });
-      });
-
+      final mealId = ModalRoute.of(context).settings.arguments as String; //id posiłku pobrany z argumentów trasy
+        fetchDetailRestsFromSerwer(mealId).then((_) { 
+          print('pobranie szczegółów');
+          setState(() {
+            _isLoading = false; //zatrzymanie wskaznika ładowania dań
+          // _mealRestsData  = _mealRestsData ;
+          });
+        });
+    }
+    _isInit = false;
     super.didChangeDependencies();  
   }
   
@@ -125,7 +133,11 @@ Future<void> _launchURL(String url) async {
       appBar: AppBar(
         title: Text(loadedMeal.nazwa),
       ),
-       body: Column(
+       body:  _isLoading 
+      ? Center(
+          child: CircularProgressIndicator(), //kółko ładowania danych
+        ) 
+      : Column(
           children: <Widget>[
 //tekst na szarym tle - Danie dostępne w restauracji:         
             Container(

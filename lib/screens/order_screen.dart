@@ -1024,65 +1024,99 @@ class _OrderState extends State<OrderScreen> {
                                     maxLines: null,
                                   ),
 //informacje dodatkowe sposób zapłaty
-                                  Container(
-                                    margin: EdgeInsets.only(top: 15),
-                                    padding: EdgeInsets.only(left: 20),
-                                    //color: Colors.grey[300],
-                                    height: 38,
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            allTranslations
-                                                .text('L_SPOSOB_ZAPLATY'),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                              color: Colors.black,
+                                  Visibility(
+                                    visible: _czyDostawa == 1,
+                                    child: Container(
+                                      margin: EdgeInsets.only(top: 15),
+                                      padding: EdgeInsets.only(left: 20),
+                                      //color: Colors.grey[300],
+                                      height: 38,
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              allTranslations
+                                                  .text('L_SPOSOB_ZAPLATY'),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                                color: Colors.black,
+                                              ),
                                             ),
-                                          ),
-                                        ]),
+                                          ]),
+                                    ),
                                   ),
 //wybór sposobu zapłaty
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
+                                  Visibility(
+                                    visible: _czyDostawa == 1,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
 //musi być conajmniej płatność gotówką więc:
-                                      FlatButton.icon(
-                                          onPressed: () {
-                                            setState(() {
-                                              _sposobPlatnosci = 1;
-                                              globals.sposobPlatnosci = 1;
-                                            });
-                                          },
-                                          icon: Radio(
-                                              value: 1,
-                                              groupValue: _sposobPlatnosci,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _sposobPlatnosci = value;
-                                                  globals.sposobPlatnosci =
-                                                      value;
-                                                });
-                                              }),
-                                          label: Text(allTranslations.text(
-                                              'L_GOTOWKA_PRZY_ODBIORZE'))),
-
-//jezeli platne (tzn. re_platne_dos) =  3 lub 7 to opócz gotówki jest karta
-                                      Visibility(
-                                        visible: _strefy[_wybranaStrefa - 1]
-                                                    .platne ==
-                                                '3' ||
-                                            _strefy[_wybranaStrefa - 1]
-                                                    .platne ==
-                                                '7',
-                                        child: FlatButton.icon(
+                                        FlatButton.icon(
                                             onPressed: () {
                                               setState(() {
-                                                _sposobPlatnosci = 2;
-                                                globals.sposobPlatnosci = 2;
+                                                _sposobPlatnosci = 1;
+                                                globals.sposobPlatnosci = 1;
+                                              });
+                                            },
+                                            icon: Radio(
+                                                value: 1,
+                                                groupValue: _sposobPlatnosci,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _sposobPlatnosci = value;
+                                                    globals.sposobPlatnosci =
+                                                        value;
+                                                  });
+                                                }),
+                                            label: Text(allTranslations.text(
+                                                'L_GOTOWKA_PRZY_ODBIORZE'))),
+
+//jezeli platne (tzn. re_platne_dos) =  3 lub 7 to opócz gotówki jest karta
+                                        Visibility(
+                                          visible: _strefy[_wybranaStrefa - 1]
+                                                      .platne ==
+                                                  '3' ||
+                                              _strefy[_wybranaStrefa - 1]
+                                                      .platne ==
+                                                  '7',
+                                          child: FlatButton.icon(
+                                              onPressed: () {
+                                                setState(() {
+                                                  _sposobPlatnosci = 2;
+                                                  globals.sposobPlatnosci = 2;
+                                                });
+                                              },
+                                              icon: Radio(
+                                                  value: 2,
+                                                  groupValue: _sposobPlatnosci,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _sposobPlatnosci = value;
+                                                      globals.sposobPlatnosci =
+                                                          value;
+                                                    });
+                                                  }),
+                                              label: Text(allTranslations.text(
+                                                  'L_KARTA_PRZY_ODBIORZE'))),
+                                        ),
+
+//jezeli platne (tzn. re_platne_dos) =  5 lub 7 to opócz gotówki i/lub karta jest online
+                                        Visibility(
+                                          visible: _strefy[_wybranaStrefa - 1]
+                                                      .platne ==
+                                                  '5' ||
+                                              _strefy[_wybranaStrefa - 1]
+                                                      .platne ==
+                                                  '7',
+                                          child: FlatButton.icon(
+                                            onPressed: () {
+                                              setState(() {
+                                                _sposobPlatnosci = 3;
+                                                globals.sposobPlatnosci = 3;
                                               });
                                             },
                                             icon: Radio(
@@ -1095,40 +1129,12 @@ class _OrderState extends State<OrderScreen> {
                                                         value;
                                                   });
                                                 }),
-                                            label: Text(allTranslations.text(
-                                                'L_KARTA_PRZY_ODBIORZE'))),
-                                      ),
-
-//jezeli platne (tzn. re_platne_dos) =  5 lub 7 to opócz gotówki i/lub karta jest online
-                                      Visibility(
-                                        visible: _strefy[_wybranaStrefa - 1]
-                                                    .platne ==
-                                                '5' ||
-                                            _strefy[_wybranaStrefa - 1]
-                                                    .platne ==
-                                                '7',
-                                        child: FlatButton.icon(
-                                          onPressed: () {
-                                            setState(() {
-                                              _sposobPlatnosci = 3;
-                                              globals.sposobPlatnosci = 3;
-                                            });
-                                          },
-                                          icon: Radio(
-                                              value: 2,
-                                              groupValue: _sposobPlatnosci,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _sposobPlatnosci = value;
-                                                  globals.sposobPlatnosci =
-                                                      value;
-                                                });
-                                              }),
-                                          label: Text(allTranslations
-                                              .text('L_ONLINE_M')),
-                                        ),
-                                      )
-                                    ],
+                                            label: Text(allTranslations
+                                                .text('L_ONLINE_M')),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ])),
                       ),
