@@ -3,6 +3,7 @@ library cobytu.globals;
 //int wKoszykuAll = 0;//ilość wsystkich dań w koszyku
 int wKoszyku = 0; //ile razy wybrane danie znajduje się w koszyku w koszyku
 String deviceId; //Id telefonu - identyfikator apki/uzytkownika
+String wersja; //wersja apki
 String memoryLokE = '31'; //id wybranej restauracji
 String memoryLokC = '1'; //id miasta
 String language; //język
@@ -21,3 +22,4 @@ String imie;
 String nazwisko;
 String telefon;
 String email; //email dostawy
+String kodMobile; //kod wysyłany do połączenia konta na www.cobytu.com z apką

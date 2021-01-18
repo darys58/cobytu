@@ -54,8 +54,9 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.6.11 09.11.2020 - oznaczenie n/a dla wagi i kcal gdy nie ma składników podstawowych, "Brak dań w tej kategorii",
   //1.0.7.12 13.11.2020 - poprawki do 1.0.6.11, obsługa lupy na klawiaturze w wyszukiwarce, poprawki tłumaczeń
   //1.0.8.13 27.11.2020 - poprawki tłumaczeń gkategorii menu - promocji, taby menu na dole z nazwami, podkategoria "Promocje", wielkość RAZEM w koszyku
-  //1.0.9.14   - usunięty "Sposób zapłaty" przy odbiorze własnym, w szczegółach restauracji usunięte powielanie przy obracaniu telefonu, zmiany odstępów w "location", usunięcie czasu oczekiwania,
-  final wersja = ['1', '0', '8', '13', '27.11.2020', 'nic']; //zamawianie online
+  //1.0.9.14 22.12.2020 - usunięty "Sposób zapłaty" przy odbiorze własnym, w szczegółach restauracji usunięte powielanie przy obracaniu telefonu, zmiany odstępów w "location", usunięcie czasu oczekiwania,
+  //1.0.10.15  -
+  final wersja = ['1', '0', '9', '14', '22.12.2020', 'nic']; //wersja aplikacji
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
@@ -499,6 +500,8 @@ class _MealsScreenState extends State<MealsScreen> {
     //final snackBar = SnackBar(content: Text('Zapisano nową lokalizację'));
     //Scaffold.of(context).showSnackBar(snackBar);
     print('meals_scerrn: globals.deviceId = ${globals.deviceId}');
+    globals.wersja =
+        wersja[0] + '.' + wersja[1] + '.' + wersja[2] + '.' + wersja[3];
     //podkategorie + rodzaje
     var podkatData = Provider.of<Podkategorie>(context);
     final podkat1 = podkatData.items.where((podk) {
@@ -1641,8 +1644,8 @@ class FootItemsSearch extends SearchDelegate<Meals> {
                 p.nazwa.toLowerCase().contains(query.toLowerCase()) ||
                 p.opis.toLowerCase().contains(query.toLowerCase()))
             .toList();
-    
-      return myList.isEmpty
+
+    return myList.isEmpty
         ? Center(
             child: Column(
               children: <Widget>[

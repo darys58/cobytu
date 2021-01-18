@@ -307,7 +307,7 @@ class _CartScreenState extends State<CartScreen> {
                                             allTranslations.text('L_RAZEM'),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 18,
+                                              fontSize: 15,
                                               color: Colors.black,
                                             ),
                                           ),

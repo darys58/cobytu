@@ -238,7 +238,7 @@ class MealItem extends StatelessWidget {
       globals.separator = '.'; //separator w cenie
     else
       globals.separator = ',';
-
+    print('danie lubi !!!!!!!!!!!!! = ${meal.lubi}');
     return InkWell(
       //element klikalny
       onTap: () {
@@ -419,7 +419,7 @@ class MealItem extends StatelessWidget {
                                 ],
                               ),
 
-  /*      Row(
+                              /*      Row(
           //polubienie - Kazdy element wiersz jest wierszemonym z ikony i tekstu
           children: <Widget>[
             Consumer<Meal>(
@@ -438,9 +438,9 @@ class MealItem extends StatelessWidget {
             
           ],
         ),
-  */     
-       
-       /*                       if(meal.stolik !=
+  */
+
+                              /*                       if(meal.stolik !=
                                       '0') //jezeli danie dodano do koszyka
                                    Row(
                                       // ile- Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
@@ -458,9 +458,9 @@ class MealItem extends StatelessWidget {
                                         ), //interpolacja ciągu znaków
                                       ],
                                     ),
-         */                         
+         */
 
-                                  /*           Row(
+                              /*           Row(
                                 // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
                                 children: <Widget>[
                                   Image.asset('assets/images/czas.png',
@@ -475,9 +475,9 @@ class MealItem extends StatelessWidget {
                                   ), //interpolacja ciągu znaków
                                 ],
                               ),
-       */ 
-      
-      /*          if(meal.foto.substring(27) == '/co.jpg')
+       */
+
+                              /*          if(meal.foto.substring(27) == '/co.jpg')
                               Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                                 children: <Widget>[
                                   Icon(
@@ -492,28 +492,28 @@ class MealItem extends StatelessWidget {
                                 ],
                               ),
                        */
-                                  Row(
-                                      //polubienie - Kazdy element wiersz jest wierszemonym z ikony i tekstu
-                                      children: <Widget>[
-                                        Consumer<Meal>(
-                                          // słuchacz na wybranym widzecie (kurs sklep  197)
-                                          builder: (context, meal, child) =>
-                                              GestureDetector(
-                                            child: Icon(
-                                              meal.fav == '1'
-                                                  ? Icons.favorite
-                                                  : Icons.favorite_border,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                            ), //zmiana ikony
-                                            onTap: () {
-                                              meal.toggleFavoriteStatus(meal
-                                                  .id); //przekazane id dania
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                              Row(
+                                //polubienie - Kazdy element wiersz jest wierszem złozonym z ikony i tekstu
+                                children: <Widget>[
+                                  Consumer<Meal>(
+                                    // słuchacz na wybranym widzecie (kurs sklep  197)
+                                    builder: (context, meal, child) =>
+                                        GestureDetector(
+                                      child: Icon(
+                                        meal.fav == '1'
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: Theme.of(context).primaryColor,
+                                      ), //zmiana ikony
+                                      onTap: () {
+                                        
+                                        meal.toggleFavoriteStatus(
+                                            meal.id); //przekazane id dania
+                                      },
                                     ),
+                                  ),
+                                ],
+                              ),
                               //zamiast zaślepki foto
                               if (meal.foto.substring(27) ==
                                   '/co.jpg') //jezeli zaślepka

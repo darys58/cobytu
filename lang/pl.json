@@ -162,7 +162,21 @@
     "L_UPS": "Ups...",
     "L_DANIE_USUNIETE": "Nie ma takiego dania",
     "L_BRAK_WYNIKOW": "Brak wyników wyszukiwania",
-    "L_SZUKAJ": "Szukaj"
+    "L_SZUKAJ": "Szukaj",
+    "L_USTAWIENIA": "Ustawienia",
+    "L_POLACZENIE_APKA_KONTO": "Połączenie z www.cobytu.com",
+    "L_BRAK_POLACZENIA": "Jeżeli masz utworzone konto na www.cobytu.com, to możesz je połączyć z tą aplikacją. \n\nW tym celu wpisz w polu poniżej kod, który znajdziesz w zakładce PROFIL, dostępnej po zalogowaniu się w serwisie www.cobytu.com.",
+    "L_KOD_POLACZ": "Kod do połączenia",
+    "L_WPISZ_KOD_POLACZ": "Wpisz kod z www.cobytu.com",
+    "L_WYSLIJ_KOD": "Wyślij kod",
+    "L_POLACZENIE_ERROR": "Nie można wykonać połączenia konta. Wprowadź poprawny kod i wyślij ponownie.",
+    "L_POLACZENIE_OK": "Aplikacja została połączona z kontem: ",
+    "L_JEST_POLACZENIE": "Ta aplikacja jest połączona z kontem ",
+    "L_CZY_ROZLACZYC": " na cobytu.com. \n\nJeżeli chcesz rozłączyć - naciśnik przycisk poniżej.",
+    "L_ROZLACZ": "Rozłącz",
+    "L_ROZLOCZENIE_OK": "Aplikacja została rozłączona z kontem: "
+
+
 
 
 

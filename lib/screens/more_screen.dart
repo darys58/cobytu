@@ -4,10 +4,11 @@ import '../all_translations.dart';
 import 'languages.dart';
 import 'orders_screen.dart';
 import 'specials_screen.dart';
+import 'settings_screen.dart';
 import 'package:connectivity/connectivity.dart'; //czy jest Internet
 
-class SettingsScreen extends StatelessWidget {
-  static const routeName = '/settings';
+class MoreScreen extends StatelessWidget {
+  static const routeName = '/more';
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -134,6 +135,21 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
+
+//ustawienia
+            GestureDetector(
+              onTap: () {                
+                Navigator.of(context).pushNamed(SettingsScreen.routeName);
+              },
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text(allTranslations.text('L_USTAWIENIA')),
+                  trailing: Icon(Icons.chevron_right),
+                ),
+              ),
+            ),
+
 //polityka prywatności
             GestureDetector(
               onTap: () {

@@ -56,7 +56,6 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   List<Mem> _memLok; //dane wybranej restauracji w tabeli memory - baza lokalna
   var detailMealData;
   String _currLang = allTranslations.currentLanguage; //aktualny język
-  
 
   List<DropdownMenuItem<String>>
       _dropdownMenuItemsWer; ////lista wersji dania dla buttona wyboru
@@ -134,7 +133,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 
             _listDod = List<String>.from(_detailMealData[0]
                 .dodat); //zmiana typu List<dynamic> na List<String>
-            
+
             globals.wKoszyku = _detailMealData[0].stolik;
             print('ile na stoliku = ${_detailMealData[0].stolik}');
             przelicz();
@@ -184,9 +183,9 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
 
         _listDod = List<String>.from(_detailMealData[0]
             .dodat); //zmiana typu List<dynamic> na List<String>
-        
+
         globals.wKoszyku = _detailMealData[0].stolik;
-        print('ile na stoliku = ${_detailMealData[0].stolik}');        
+        print('ile na stoliku = ${_detailMealData[0].stolik}');
         przelicz();
 
         setState(() {
@@ -415,7 +414,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
         Provider.of<Cart>(context, listen: false); //dostęp do danych koszyka
     print('cart ========== $cart');
     //!_isLoading ? print('dane dania opis = ${detailMealData[0].opis}') : print('nic - jeszcze nie ma dania');
-
+    //print('dane dania lubi!!!!!!!!! = ${detailMealData[0].lubi}');
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedMeal.nazwa),
@@ -482,7 +481,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       Row(
                         // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
                         children: <Widget>[
-                          Image.asset('assets/images/czas.png',height: 15),
+                          Image.asset('assets/images/czas.png', height: 15),
                           SizedBox(
                             width: 3,
                           ), //odległość miedzy ikoną i tekstem
@@ -500,17 +499,17 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       Row(
                         // czas
                         children: <Widget>[
-                          Image.asset('assets/images/waga.png',height: 15),
+                          Image.asset('assets/images/waga.png', height: 15),
                           SizedBox(
                             width: 3,
                           ), //odległość miedzy ikoną i tekstem
                           _waga > 0 //jezeli są wprowadzone składniki podstawowe dania
-                            ? Text(
-                              '$_waga ' + allTranslations.text('L_G'),
-                              )
-                            :Text(
-                              'n/a ' + allTranslations.text('L_G'),
-                              ),
+                              ? Text(
+                                  '$_waga ' + allTranslations.text('L_G'),
+                                )
+                              : Text(
+                                  'n/a ' + allTranslations.text('L_G'),
+                                ),
                         ],
                       ),
                       SizedBox(
@@ -520,17 +519,17 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                       Row(
                         // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
                         children: <Widget>[
-                          Image.asset('assets/images/energia.png',height: 15),
+                          Image.asset('assets/images/energia.png', height: 15),
                           SizedBox(
                             width: 3,
                           ), //odległość miedzy ikoną i tekstem
                           _waga > 0 //jezeli są wprowadzone składniki podstawowe dania
-                          ? Text(
-                              '$_kcal ' + allTranslations.text('L_KCAL'),
-                            )
-                          : Text(
-                              'n/a ' + allTranslations.text('L_KCAL'),
-                            ), //interpolacja ciągu znaków
+                              ? Text(
+                                  '$_kcal ' + allTranslations.text('L_KCAL'),
+                                )
+                              : Text(
+                                  'n/a ' + allTranslations.text('L_KCAL'),
+                                ), //interpolacja ciągu znaków
                           SizedBox(
                             width: 20,
                           ),

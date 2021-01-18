@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:meals/all_translations.dart';
 
-import './more.dart';
+import 'more_screen.dart';
 import './favorites_screen.dart';
 import './location_screen.dart';
 import './meals_screen.dart';
@@ -43,7 +43,7 @@ class _TabsScreenState extends State<TabsScreen> {
     MealsScreen(),
     FavoritesScreen(),
     LocationScreen(),
-    SettingsScreen(),
+    MoreScreen(),
     ];
     super.initState();
   }
