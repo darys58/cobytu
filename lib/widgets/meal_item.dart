@@ -1,7 +1,7 @@
 //widget pojedynczego elementu listy dań (165)
 
 import 'dart:io';
-
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart'; //pakiet dostawcy
@@ -477,21 +477,27 @@ class MealItem extends StatelessWidget {
                               ),
        */
 
-                              /*          if(meal.foto.substring(27) == '/co.jpg')
+                                  //      if(meal.foto.substring(27) == '/co.jpg')
                               Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
                                 children: <Widget>[
-                                  Icon(
-                                    Icons.battery_alert, color: Theme.of(context).primaryColor,
+                                  CircularPercentIndicator(
+                                    radius: 30.0,
+                                    animation: true,
+                                    animationDuration: 2200,
+                                    lineWidth: 4.0,
+                                    percent: int.parse(meal.lubi)/100,
+                                    center: new Text(
+                                      meal.lubi=="100" ? '' : meal.lubi,
+                                      style:
+                                          new TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
+                                    ),
+                                    circularStrokeCap: CircularStrokeCap.butt,
+                                    backgroundColor: Colors.grey,
+                                    progressColor: Theme.of(context).primaryColor,
                                   ),
-                                  SizedBox(
-                                    width: 2,
-                                  ), //odległość miedzy ikoną i tekstem
-                                  Text(
-                                    meal.kcal + ' kcal',
-                                  ), //interpolacja ciągu znaków
                                 ],
                               ),
-                       */
+                       
                               Row(
                                 //polubienie - Kazdy element wiersz jest wierszem złozonym z ikony i tekstu
                                 children: <Widget>[
