@@ -91,6 +91,7 @@ flutter:
     - assets/images/czas.png
     - assets/images/energia.png
     - assets/images/waga.png
+    - assets/images/uwaga.png
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

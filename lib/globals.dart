@@ -23,3 +23,4 @@ String nazwisko;
 String telefon;
 String email; //email dostawy
 String kodMobile; //kod wysyłany do połączenia konta na www.cobytu.com z apką
+String uzLogin; //login uzytkownika - jezeli jest połączenie apki z kontem na www.cobytu.com

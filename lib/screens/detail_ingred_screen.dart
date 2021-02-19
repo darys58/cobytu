@@ -54,8 +54,9 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
   }
 
 
-//pobranie (z serwera www) szczegółów dania - dla szczegółów dania
-//!!!!! potrzebne tylko dla listy alergrnów - moze lepiej zapamitywać alergeny w zmiennej globalnej !!!!!!!! 
+//pobranie (z serwera www) szczegółów dania - dla szczegółów dania (bez &dev czyli dla niezalogowanego/niepołączonego)
+//!!!!! potrzebne tylko dla listy alergenów - moze lepiej zapamitywać alergeny w zmiennej globalnej !!!!!!!! 
+//pobrane wszystkie alergeny dania
 
   Future<List<DetailMeal>> fetchDetailMealFromSerwer() async {
     var url = 'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&rest=${_memLok[0].e}&lang=$_currLang';
@@ -211,13 +212,17 @@ class _DetailIngredientsScreenState extends State<DetailIngredientsScreen> {
               width: MediaQuery.of(context).size.width,
               child: Row(             
                 children: <Widget>[
-                  SizedBox(width: 15,),             
+                  SizedBox(width: 16,),             
                   Text(
                   allTranslations.text('L_ALERGENY') + ': ' + '${detailMealData[0].alergeny.join(', ')}', //join łączy argumenty z listy w jeden string
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       color: Colors.black,
                     ),
+                    softWrap: true, //zawijanie tekstu
+                    maxLines: 2, //ilość wierszy opisu
+                    overflow: TextOverflow
+                                .ellipsis, //skracanie tekstu zeby zmieścił sie        
                   ),
                 ],
               )

@@ -66,22 +66,27 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
           _showAlert(context, allTranslations.text('L_KOMUNIKAT'),
               allTranslations.text('L_POLACZENIE_ERROR'));
         } else {
+          globals.uzLogin = ''; //kasowanie loginu bo nie wiadomo czy jest połączenie
           print('brak połączenie tej apki z kontem na cobytu.com');
         }
       } else {
         //jezeli odpowiedz "ok"
         if (kod == 'test_deviceId') {
-          _uzLogin = odpPost['uz_login']; //jest połączenie i zostanie wybrana część mówiąca o połaczeniu        
-        } 
-        else if (kod == 'rozlacz') {
+          _uzLogin = odpPost[
+              'uz_login']; //jest połączenie i zostanie wybrana część mówiąca o połaczeniu
+          globals.uzLogin =
+              _uzLogin; //zapamiętanie (przeładowanie) loginu uzytkownika
+        } else if (kod == 'rozlacz') {
           //jezeli było to rozłaczenie
           _showAlertOK(context, allTranslations.text('L_KOMUNIKAT'),
               allTranslations.text('L_ROZLOCZENIE_OK') + odpPost['uz_login']);
-        }
-        else {
+          globals.uzLogin = ''; //kasowanie loginu w zmiennej globalnej
+        } else {
           //jezeli nie był to test połączenia ani rozłaczenie (tylko połączenie i to udane)
           _showAlertOK(context, allTranslations.text('L_KOMUNIKAT'),
               allTranslations.text('L_POLACZENIE_OK') + odpPost['uz_login']);
+          globals.uzLogin =
+              odpPost['uz_login']; //zapisanie loginu do zmiannej globalnej
         }
         //Navigator.of(context).pushNamed(OrderScreen.routeName);
       }

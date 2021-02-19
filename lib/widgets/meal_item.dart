@@ -477,27 +477,33 @@ class MealItem extends StatelessWidget {
                               ),
        */
 
-                                  //      if(meal.foto.substring(27) == '/co.jpg')
-                              Row(// czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu                               
-                                children: <Widget>[
-                                  CircularPercentIndicator(
-                                    radius: 30.0,
-                                    animation: true,
-                                    animationDuration: 2200,
-                                    lineWidth: 4.0,
-                                    percent: int.parse(meal.lubi)/100,
-                                    center: new Text(
-                                      meal.lubi=="100" ? '' : meal.lubi,
-                                      style:
-                                          new TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
+                            //poziom lubienia
+                            globals.uzLogin != '' //jezeli jest login uzytkownika tzn ze jest połączenie
+                              ? Row(  //poziom lubienia                           
+                                  children: <Widget>[
+                                    CircularPercentIndicator(
+                                      radius: 30.0,
+                                      animation: true,
+                                      animationDuration: 2200,
+                                      lineWidth: 4.0,
+                                      percent: int.parse(meal.lubi)/100,
+                                      center: new Text(
+                                        meal.lubi=="100" ? '' : meal.lubi,
+                                        style:
+                                            new TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
+                                      ),
+                                      circularStrokeCap: CircularStrokeCap.butt,
+                                      backgroundColor: Colors.grey,
+                                      progressColor: Theme.of(context).primaryColor,
                                     ),
-                                    circularStrokeCap: CircularStrokeCap.butt,
-                                    backgroundColor: Colors.grey,
-                                    progressColor: Theme.of(context).primaryColor,
+                                  ],
+                                )
+                              :Row(children: [
+                                SizedBox(
+                                    width: 1,
                                   ),
-                                ],
-                              ),
-                       
+                              ],),
+                              
                               Row(
                                 //polubienie - Kazdy element wiersz jest wierszem złozonym z ikony i tekstu
                                 children: <Widget>[

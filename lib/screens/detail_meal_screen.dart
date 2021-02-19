@@ -139,8 +139,8 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
             przelicz();
 
             setState(() {
-              _isLoading = false; //zatrzymanie wskaznika ładowania dań
               detailMealData = _detailMealData;
+              _isLoading = false; //zatrzymanie wskaznika ładowania dań    
             });
           });
         });
@@ -213,6 +213,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
   }
 
   //pobranie (z serwera www) szczegółów dania - dla szczegółów dania
+  //jezeli konto połaczone tzn. jest &dev - dane są spersonalizowane kontem zalogowanego
   Future<List<DetailMeal>> fetchDetailMealFromSerwer() async {
     var url =
         'https://cobytu.com/cbt.php?d=f_danie&danie=${_memMeal[0].a}&uz_id=&dev=${globals.deviceId}&rest=${_memLok[0].e}&lang=$_currLang';
@@ -266,7 +267,7 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
           dodatCena: mealData['do_dodat_cena'],
         ));
       });
-      print('pobrane dane dania np. stolik = ${_detailMealData[0].stolik}');
+      print('pobrane dane dania np. alergeny = ${_detailMealData[0].alergeny}');
       return _detailMealData;
     } catch (error) {
       throw (error);
@@ -472,70 +473,93 @@ class _DetailMealScreenState extends State<DetailMealScreen> {
                 //odstępy dla wiersza z ikonami
                 padding: EdgeInsets.only(top: 15),
                 child: Row(
-                    //rząd z informacjami o posiłku
-                    mainAxisAlignment: MainAxisAlignment
-                        .end, //główna oś wyrównywania - do prawej
-                    children: <Widget>[
-                      //elementy rzędu które sa widzetami
-//=== czas
-                      Row(
-                        // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
-                        children: <Widget>[
-                          Image.asset('assets/images/czas.png', height: 15),
+                  //rząd z informacjami o posiłku - cały
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceBetween, //główna oś wyrównywania - dodstęp pomidzy
+                  children: [
+                    detailMealData[0].alergeny.isNotEmpty 
+                    ? Row(//rząd z informacjami o posiłku - po lewej
+                        children: [
                           SizedBox(
-                            width: 3,
-                          ), //odległość miedzy ikoną i tekstem
-                          Text(
-                            detailMealData[0].czas +
-                                ' ' +
-                                allTranslations.text('L_MIN'),
-                          ), //interpolacja ciągu znaków
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-//=== waga
-                      Row(
-                        // czas
-                        children: <Widget>[
-                          Image.asset('assets/images/waga.png', height: 15),
-                          SizedBox(
-                            width: 3,
-                          ), //odległość miedzy ikoną i tekstem
-                          _waga > 0 //jezeli są wprowadzone składniki podstawowe dania
-                              ? Text(
-                                  '$_waga ' + allTranslations.text('L_G'),
-                                )
-                              : Text(
-                                  'n/a ' + allTranslations.text('L_G'),
-                                ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-//=== kcal
-                      Row(
-                        // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
-                        children: <Widget>[
-                          Image.asset('assets/images/energia.png', height: 15),
-                          SizedBox(
-                            width: 3,
-                          ), //odległość miedzy ikoną i tekstem
-                          _waga > 0 //jezeli są wprowadzone składniki podstawowe dania
-                              ? Text(
-                                  '$_kcal ' + allTranslations.text('L_KCAL'),
-                                )
-                              : Text(
-                                  'n/a ' + allTranslations.text('L_KCAL'),
-                                ), //interpolacja ciągu znaków
+                            width: 20,
+                          ), 
+                          Image.asset('assets/images/uwaga.png', height: 21), //ostrzezenie o alergenach (jakichkolwiek dla niezalogowanego lub tylko wskazanych dla zalogowanego np. przez połaczenie z kontem)
+                         ])  
+                    : Row(
+                        children: [
                           SizedBox(
                             width: 20,
                           ),
-                        ],
-                      ),
                     ]),
+                    Row(
+                        //rząd z informacjami o posiłku - po prawej
+                        mainAxisAlignment: MainAxisAlignment
+                            .end, //główna oś wyrównywania - do prawej
+                        children: <Widget>[
+                          //elementy rzędu które sa widzetami
+//=== czas
+                          Row(
+                            // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
+                            children: <Widget>[
+                              Image.asset('assets/images/czas.png', height: 15),
+                              SizedBox(
+                                width: 3,
+                              ), //odległość miedzy ikoną i tekstem
+                              Text(
+                                detailMealData[0].czas +
+                                    ' ' +
+                                    allTranslations.text('L_MIN'),
+                              ), //interpolacja ciągu znaków
+                            ],
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+//=== waga
+                          Row(
+                            // czas
+                            children: <Widget>[
+                              Image.asset('assets/images/waga.png', height: 15),
+                              SizedBox(
+                                width: 3,
+                              ), //odległość miedzy ikoną i tekstem
+                              _waga > 0 //jezeli są wprowadzone składniki podstawowe dania
+                                  ? Text(
+                                      '$_waga ' + allTranslations.text('L_G'),
+                                    )
+                                  : Text(
+                                      'n/a ' + allTranslations.text('L_G'),
+                                    ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+//=== kcal
+                          Row(
+                            // czas - Kazdy element wiersza jest wierszem zlozonym z ikony i tekstu
+                            children: <Widget>[
+                              Image.asset('assets/images/energia.png',
+                                  height: 15),
+                              SizedBox(
+                                width: 3,
+                              ), //odległość miedzy ikoną i tekstem
+                              _waga > 0 //jezeli są wprowadzone składniki podstawowe dania
+                                  ? Text(
+                                      '$_kcal ' +
+                                          allTranslations.text('L_KCAL'),
+                                    )
+                                  : Text(
+                                      'n/a ' + allTranslations.text('L_KCAL'),
+                                    ), //interpolacja ciągu znaków
+                              SizedBox(
+                                width: 20,
+                              ),
+                            ],
+                          ),
+                        ]),
+                  ],
+                ),
               ),
 //=== opis
               Row(
