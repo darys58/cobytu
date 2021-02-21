@@ -478,7 +478,7 @@ class MealItem extends StatelessWidget {
        */
 
                             //poziom lubienia
-                            globals.uzLogin != '' //jezeli jest login uzytkownika tzn ze jest połączenie
+                            globals.uzLogin != null //jezeli jest login uzytkownika tzn ze jest połączenie
                               ? Row(  //poziom lubienia                           
                                   children: <Widget>[
                                     CircularPercentIndicator(

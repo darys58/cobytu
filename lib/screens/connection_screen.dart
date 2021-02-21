@@ -66,7 +66,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
           _showAlert(context, allTranslations.text('L_KOMUNIKAT'),
               allTranslations.text('L_POLACZENIE_ERROR'));
         } else {
-          globals.uzLogin = ''; //kasowanie loginu bo nie wiadomo czy jest połączenie
+          globals.uzLogin = null; //kasowanie loginu bo nie wiadomo czy jest połączenie
           print('brak połączenie tej apki z kontem na cobytu.com');
         }
       } else {
@@ -80,7 +80,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
           //jezeli było to rozłaczenie
           _showAlertOK(context, allTranslations.text('L_KOMUNIKAT'),
               allTranslations.text('L_ROZLOCZENIE_OK') + odpPost['uz_login']);
-          globals.uzLogin = ''; //kasowanie loginu w zmiennej globalnej
+          globals.uzLogin = null; //kasowanie loginu w zmiennej globalnej
         } else {
           //jezeli nie był to test połączenia ani rozłaczenie (tylko połączenie i to udane)
           _showAlertOK(context, allTranslations.text('L_KOMUNIKAT'),

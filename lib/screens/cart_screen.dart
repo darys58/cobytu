@@ -541,7 +541,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     },
                                                     child: Text(
                                                         allTranslations.text(
-                                                            'L_ZAMAWIAM_Z_DOSTAWA')),
+                                                            'L_ZAMAWIAM')),
                                                     color: Theme.of(context)
                                                         .primaryColor,
                                                     textColor: Colors.white,

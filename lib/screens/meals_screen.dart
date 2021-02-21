@@ -55,8 +55,8 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.7.12 13.11.2020 - poprawki do 1.0.6.11, obsługa lupy na klawiaturze w wyszukiwarce, poprawki tłumaczeń
   //1.0.8.13 27.11.2020 - poprawki tłumaczeń gkategorii menu - promocji, taby menu na dole z nazwami, podkategoria "Promocje", wielkość RAZEM w koszyku
   //1.0.9.14 22.12.2020 - usunięty "Sposób zapłaty" przy odbiorze własnym, w szczegółach restauracji usunięte powielanie przy obracaniu telefonu, zmiany odstępów w "location", usunięcie czasu oczekiwania,
-  //1.0.10.15  - połączenie konta z apką, zapis ulubionych na serwerze 
-  final wersja = ['1', '0', '9', '14', '22.12.2020', 'nic']; //wersja aplikacji
+  //1.0.10.15 21.02.2021 - połączenie konta z apką, zapis ulubionych na serwerze, ostrzeganie o alergenach 
+  final wersja = ['1', '0', '10', '15', '21.02.2021', 'nic']; //wersja aplikacji
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1
@@ -653,7 +653,7 @@ class _MealsScreenState extends State<MealsScreen> {
       meals9 = mealsData.items.where((meal) {
         return meal.rodzaj.contains(rodzaj);
       }).toList();
-
+ print('uzLogin=${globals.uzLogin}');
     return Scaffold(
       //strona główna - menu
       body: DefaultTabController(
