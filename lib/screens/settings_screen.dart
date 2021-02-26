@@ -117,7 +117,7 @@ class SettingsScreen extends StatelessWidget {
               child: Card(
                 child: ListTile(
                   //leading: Icon(Icons.list),
-                  title: Text('Wersja aplikacji: ' + globals.wersja),
+                  title: Text(allTranslations.text('L_WERSJA_APLIKACJI') + globals.wersja),
                   //subtitle: Text('123'),
                   //title: Text(allTranslations.text('L_ZAMOWIENIA')),
                  // trailing: Icon(Icons.chevron_right),

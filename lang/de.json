@@ -174,5 +174,6 @@
 "L_JEST_POLACZENIE": "Diese App ist mit einem Konto verknüpft ",
 "L_CZY_ROZLACZYC": " auf cobytu.com. \n\nWenn Sie die Verbindung trennen möchten, drücken Sie die Taste unten.",
 "L_ROZLACZ": "Trennen",
-"L_ROZLOCZENIE_OK": "Die Anwendung wurde vom Konto getrennt: "
+"L_ROZLOCZENIE_OK": "Die Anwendung wurde vom Konto getrennt: ",
+"L_WERSJA_APLIKACJI": "Anwendungsversion: "
 }

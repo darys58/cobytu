@@ -174,5 +174,6 @@
 "L_JEST_POLACZENIE": "This app is linked to an account ",
 "L_CZY_ROZLACZYC": " on cobytu.com. \n\nIf you want to disconnect - press the button below.",
 "L_ROZLACZ": "Disconnect",
-"L_ROZLOCZENIE_OK": "The application has been disconnected from the account: "
+"L_ROZLOCZENIE_OK": "The application has been disconnected from the account: ",
+"L_WERSJA_APLIKACJI": "Application version: "
 }
