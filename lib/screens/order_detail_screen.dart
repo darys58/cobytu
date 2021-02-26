@@ -238,31 +238,31 @@ class _OrderDetailState extends State<OrderDetailScreen> {
       case '0':
         kolor = const Color.fromRGBO(214, 234, 248, 1);
         break;
-      case '1':
+      case '10':
         kolor = const Color.fromRGBO(252, 243, 207, 1);
         break;
-      case '2':
+      case '20':
         kolor = const Color.fromRGBO(209, 242, 235, 1);
         break;
-      case '3':
+      case '30':
         kolor = const Color.fromRGBO(209, 242, 235, 1);
         break;
       case '31':
         kolor = const Color.fromRGBO(209, 242, 235, 1);
         break;
-      case '4':
+      case '40':
         kolor = const Color.fromRGBO(250, 219, 216, 1);
         break;
-      case '5':
+      case '50':
         kolor = const Color.fromRGBO(250, 219, 216, 1);
         break;
       case '51':
         kolor = const Color.fromRGBO(250, 219, 216, 1);
         break;
-      case '6':
+      case '60':
         kolor = const Color.fromRGBO(255, 255, 255, 1);
         break;
-      case '7':
+      case '70':
         kolor = const Color.fromRGBO(255, 255, 255, 1);
         break;
       case '71':
@@ -777,7 +777,7 @@ class _OrderDetailState extends State<OrderDetailScreen> {
 */
                               Visibility(
                                 visible: order[0].statusId == '0' ||
-                                    order[0].statusId == '1',
+                                    order[0].statusId == '10',
                                 child: Container(
                                   height: 70,
                                   child: Row(

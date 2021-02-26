@@ -43,7 +43,7 @@ class _MealsScreenState extends State<MealsScreen> {
   String language; //skrót aktualnego języka np. pl
   String reloadTemp = 'false';
   String initAppTemp = 'false';
-  //final wersja = ['1','0','0','2','22.05.2020','nic']; //major, minor - wersja(zmiana w bazie), kolejna wersja bo wymaga tegi iOS, numer wydania
+  //final wersja = ['1','0','0','2','22.05.2020','nic']; //major, minor - wersja(zmiana w bazie), kolejna wersja bo wymaga tego iOS, numer wydania
   //1.0.0.2 22.05.2020 - pierwsza wersja, przegląanie dań, bez zamówień
   //1.0.1.3 28.07.2020 - zamówienia online
   //1.0.2.6 04.08.2020 - zmiana ikon dla iOS, poprawki w tłumaczeniu "g" i "kcal"
@@ -56,7 +56,8 @@ class _MealsScreenState extends State<MealsScreen> {
   //1.0.8.13 27.11.2020 - poprawki tłumaczeń gkategorii menu - promocji, taby menu na dole z nazwami, podkategoria "Promocje", wielkość RAZEM w koszyku
   //1.0.9.14 22.12.2020 - usunięty "Sposób zapłaty" przy odbiorze własnym, w szczegółach restauracji usunięte powielanie przy obracaniu telefonu, zmiany odstępów w "location", usunięcie czasu oczekiwania,
   //1.0.10.15 21.02.2021 - połączenie konta z apką, zapis ulubionych na serwerze, ostrzeganie o alergenach 
-  final wersja = ['1', '0', '10', '15', '21.02.2021', 'nic']; //wersja aplikacji
+  //1.0.11.16 26.02.2021 - zmiana wartości statusów zamówienia na dwucyfrowe - zapomniałem to zrobić w poprzedniej wersji
+  final wersja = ['1', '0', '11', '16', '26.02.2021', 'nic']; //wersja aplikacji
 
   String podkategoria1 =
       '291'; //wybrana podkategoria, domyślnie 291 czyli "Wszystkie" w kategorii 1

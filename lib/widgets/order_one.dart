@@ -15,15 +15,15 @@ class OrderOne extends StatelessWidget {
     Color kolor = Color.fromRGBO(252, 255, 255, 1);
     switch (zamowienie.statusId) {
       case '0': kolor = const Color.fromRGBO(214, 234, 248, 1); break;
-      case '1': kolor = const Color.fromRGBO(252, 243, 207, 1); break; 
-      case '2': kolor = const Color.fromRGBO(209, 242, 235, 1); break;
-      case '3': kolor = const Color.fromRGBO(209, 242, 235, 1); break; 
+      case '10': kolor = const Color.fromRGBO(252, 243, 207, 1); break; 
+      case '20': kolor = const Color.fromRGBO(209, 242, 235, 1); break;
+      case '30': kolor = const Color.fromRGBO(209, 242, 235, 1); break; 
       case '31': kolor = const Color.fromRGBO(209, 242, 235, 1); break;
-      case '4': kolor = const Color.fromRGBO(250, 219, 216, 1); break; 
-      case '5': kolor = const Color.fromRGBO(250, 219, 216, 1); break;
+      case '40': kolor = const Color.fromRGBO(250, 219, 216, 1); break; 
+      case '50': kolor = const Color.fromRGBO(250, 219, 216, 1); break;
       case '51': kolor = const Color.fromRGBO(250, 219, 216, 1); break; 
-      case '6': kolor = const Color.fromRGBO(255, 255, 255, 1); break;
-      case '7': kolor = const Color.fromRGBO(255, 255, 255, 1); break; 
+      case '60': kolor = const Color.fromRGBO(255, 255, 255, 1); break;
+      case '70': kolor = const Color.fromRGBO(255, 255, 255, 1); break; 
       case '71': kolor = const Color.fromRGBO(255, 255, 255, 1); break;
       case '80': kolor = const Color.fromRGBO(100, 100, 100, 1); break;
       case '90': kolor = const Color.fromRGBO(255, 255, 255, 1); break;
