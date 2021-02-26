@@ -162,5 +162,17 @@
 "L_UPS": "oppsan ...",
 "L_DANIE_USUNIETE": "Det finns ingen sådan maträtt",
 "L_BRAK_WYNIKOW": "Inga sökresultat",
-"L_SZUKAJ": "Sök"
+"L_SZUKAJ": "Sök",
+"L_USTAWIENIA": "Inställningar",
+"L_POLACZENIE_APKA_KONTO": "Anslutning till www.cobytu.com",
+"L_BRAK_POLACZENIA": "Om du har skapat ett konto på www.cobytu.com kan du länka det till den här applikationen. \n\n För att göra detta, ange i fältet nedanför koden som du hittar på fliken PROFIL, tillgänglig efter inloggning på webbplatsen www.cobytu.com.",
+"L_KOD_POLACZ": "Kod för att ansluta",
+"L_WPISZ_KOD_POLACZ": "Ange koden från www.cobytu.com",
+"L_WYSLIJ_KOD": "Skicka koden",
+"L_POLACZENIE_ERROR": "Kontoanslutning kan inte göras. Ange rätt kod och skicka igen.",
+"L_POLACZENIE_OK": "Ansökan har länkats till kontot: ",
+"L_JEST_POLACZENIE": "Den här appen är länkad till ett konto ",
+"L_CZY_ROZLACZYC": " på cobytu.com. \n\nOm du vill koppla bort - tryck på knappen nedan.",
+"L_ROZLACZ": "Koppla ifrån",
+"L_ROZLOCZENIE_OK": "Ansökan har kopplats bort från kontot: "
 }

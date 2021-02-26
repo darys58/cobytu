@@ -162,5 +162,17 @@
 "L_UPS": "おっとっと ...",
 "L_DANIE_USUNIETE": "そのような料理はありません",
 "L_BRAK_WYNIKOW": "検索結果なし",
-"L_SZUKAJ": "探す"
+"L_SZUKAJ": "探す",
+"L_USTAWIENIA": "設定",
+"L_POLACZENIE_APKA_KONTO": "www.cobytu.comとの接続",
+"L_BRAK_POLACZENIA": "www.cobytu.comでアカウントを作成している場合は、このアプリケーションにリンクできます。 \n\nこれを行うには、www.cobytu.comWebサイトにログインした後に利用できる[プロファイル]タブにあるコードの下のフィールドに入力します。",
+"L_KOD_POLACZ": "接続するコード",
+"L_WPISZ_KOD_POLACZ": "www.cobytu.comからコードを入力してください",
+"L_WYSLIJ_KOD": "コードを送信する",
+"L_POLACZENIE_ERROR": "アカウント接続できません。 正しいコードを入力して、再送信してください。",
+"L_POLACZENIE_OK": "アプリケーションはアカウントにリンクされています：",
+"L_JEST_POLACZENIE": "このアプリはアカウントにリンクされています ",
+"L_CZY_ROZLACZYC": " cobytu.comで。 \n\n切断する場合-下のボタンを押します。",
+"L_ROZLACZ": "切断する",
+"L_ROZLOCZENIE_OK": "アプリケーションがアカウントから切断されました："
 }

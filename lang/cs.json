@@ -162,5 +162,17 @@
 "L_UPS": "Jejda ...",
 "L_DANIE_USUNIETE": "Takové jídlo neexistuje",
 "L_BRAK_WYNIKOW": "Žádné výsledky vyhledávání",
-"L_SZUKAJ": "Vyhledávání"
+"L_SZUKAJ": "Vyhledávání",
+"L_USTAWIENIA": "Nastavení",
+"L_POLACZENIE_APKA_KONTO": "Spojení s www.cobytu.com",
+"L_BRAK_POLACZENIA": "Pokud jste si vytvořili účet na www.cobytu.com, můžete jej propojit s touto aplikací. \n\nChcete-li to provést, zadejte do pole pod kódem, který najdete na kartě PROFIL, který je k dispozici po přihlášení na web www.cobytu.com.",
+"L_KOD_POLACZ": "Kód pro připojení",
+"L_WPISZ_KOD_POLACZ": "Zadejte kód z www.cobytu.com",
+"L_WYSLIJ_KOD": "Odešlete kód",
+"L_POLACZENIE_ERROR": "Nelze provést připojení k účtu. Zadejte správný kód a odešlete znovu.",
+"L_POLACZENIE_OK": "Aplikace byla propojena s účtem: ",
+"L_JEST_POLACZENIE": "Tato aplikace je propojena s účtem ",
+"L_CZY_ROZLACZYC": " na cobytu.com. \n\nChcete-li se odpojit - stiskněte tlačítko níže.",
+"L_ROZLACZ": "Odpojit",
+"L_ROZLOCZENIE_OK": "Aplikace byla odpojena od účtu: "
 }

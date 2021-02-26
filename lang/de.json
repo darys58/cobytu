@@ -162,5 +162,17 @@
 "L_UPS": "Hoppla ...",
 "L_DANIE_USUNIETE": "Es gibt kein solches Gericht",
 "L_BRAK_WYNIKOW": "Keine Suchergebnisse",
-"L_SZUKAJ": "Suche"
+"L_SZUKAJ": "Suche",
+"L_USTAWIENIA": "Einstellungen",
+"L_POLACZENIE_APKA_KONTO": "Verbindung mit www.cobytu.com",
+"L_BRAK_POLACZENIA": "Wenn Sie auf www.cobytu.com ein Konto erstellt haben, können Sie es mit dieser Anwendung verknüpfen. \n\nGeben Sie dazu in das Feld unter dem Code ein, den Sie auf der Registerkarte PROFIL finden, der nach der Anmeldung auf der Website www.cobytu.com verfügbar ist.",
+"L_KOD_POLACZ": "Code zum Verbinden",
+"L_WPISZ_KOD_POLACZ": "Geben Sie den Code von www.cobytu.com ein",
+"L_WYSLIJ_KOD": "Senden Sie den Code",
+"L_POLACZENIE_ERROR": "Eine Kontoverbindung kann nicht hergestellt werden. Geben Sie den richtigen Code ein und senden Sie ihn erneut.",
+"L_POLACZENIE_OK": "Die Anwendung wurde mit dem Konto verknüpft: ",
+"L_JEST_POLACZENIE": "Diese App ist mit einem Konto verknüpft ",
+"L_CZY_ROZLACZYC": " auf cobytu.com. \n\nWenn Sie die Verbindung trennen möchten, drücken Sie die Taste unten.",
+"L_ROZLACZ": "Trennen",
+"L_ROZLOCZENIE_OK": "Die Anwendung wurde vom Konto getrennt: "
 }

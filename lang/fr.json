@@ -162,5 +162,17 @@
 "L_UPS": "Oups ...",
 "L_DANIE_USUNIETE": "Il n'y a pas de tel plat",
 "L_BRAK_WYNIKOW": "Aucun résultat trouvé",
-"L_SZUKAJ": "Chercher"
+"L_SZUKAJ": "Chercher",
+"L_USTAWIENIA": "Réglages",
+"L_POLACZENIE_APKA_KONTO": "Connexion avec www.cobytu.com",
+"L_BRAK_POLACZENIA": "Si vous avez créé un compte sur www.cobytu.com, vous pouvez le lier à cette application. \n\nPour ce faire, saisissez dans le champ ci-dessous le code que vous trouverez dans l'onglet PROFIL, disponible après la connexion au site www.cobytu.com.",
+"L_KOD_POLACZ": "Code pour se connecter",
+"L_WPISZ_KOD_POLACZ": "Entrez le code de www.cobytu.com",
+"L_WYSLIJ_KOD": "Envoyez le code",
+"L_POLACZENIE_ERROR": "La connexion au compte ne peut pas être établie. Entrez le code correct et renvoyez-le.",
+"L_POLACZENIE_OK": "L'application a été liée au compte: ",
+"L_JEST_POLACZENIE": "Cette application est liée à un compte ",
+"L_CZY_ROZLACZYC": " sur cobytu.com. \n\nSi vous souhaitez vous déconnecter, appuyez sur le bouton ci-dessous.",
+"L_ROZLACZ": "Déconnecter",
+"L_ROZLOCZENIE_OK": "L'application a été déconnectée du compte: "
 }

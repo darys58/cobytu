@@ -162,5 +162,17 @@
 "L_UPS": "Vaya ...",
 "L_DANIE_USUNIETE": "No hay tal plato",
 "L_BRAK_WYNIKOW": "Sin resultados de búsqueda",
-"L_SZUKAJ": "Buscar"
+"L_SZUKAJ": "Buscar",
+"L_USTAWIENIA": "Ajustes",
+"L_POLACZENIE_APKA_KONTO": "Conexión con www.cobytu.com",
+"L_BRAK_POLACZENIA": "Si ha creado una cuenta en www.cobytu.com, puede vincularla a esta aplicación. \n\nPara hacer esto, ingrese en el campo debajo el código que encontrará en la pestaña PERFIL, disponible después de iniciar sesión en el sitio web www.cobytu.com.",
+"L_KOD_POLACZ": "Código para conectar",
+"L_WPISZ_KOD_POLACZ": "Ingrese el código de www.cobytu.com",
+"L_WYSLIJ_KOD": "Envíe el código",
+"L_POLACZENIE_ERROR": "No se puede establecer la conexión de la cuenta. Ingrese el código correcto y envíelo nuevamente.",
+"L_POLACZENIE_OK": "La aplicación se ha vinculado a la cuenta: ",
+"L_JEST_POLACZENIE": "Esta aplicación está vinculada a una cuenta ",
+"L_CZY_ROZLACZYC": " en cobytu.com. \n\nSi desea desconectarse, presione el botón de abajo.",
+"L_ROZLACZ": "Desconectar",
+"L_ROZLOCZENIE_OK": "La aplicación se ha desconectado de la cuenta: "
 }

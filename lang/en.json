@@ -162,5 +162,17 @@
 "L_UPS": "Oops ...",
 "L_DANIE_USUNIETE": "There is no such dish",
 "L_BRAK_WYNIKOW": "No search results",
-"L_SZUKAJ": "Search"
+"L_SZUKAJ": "Search",
+"L_USTAWIENIA": "Settings",
+"L_POLACZENIE_APKA_KONTO": "Connection with www.cobytu.com",
+"L_BRAK_POLACZENIA": "If you have created an account on www.cobytu.com, you can link it to this application. \n\nTo do this, enter in the field below the code that you will find in the PROFILE tab, available after logging in to the www.cobytu.com website.",
+"L_KOD_POLACZ": "Code to connect",
+"L_WPISZ_KOD_POLACZ": "Enter the code from www.cobytu.com",
+"L_WYSLIJ_KOD": "Send the code",
+"L_POLACZENIE_ERROR": "Account connection cannot be made. Enter the correct code and send again.",
+"L_POLACZENIE_OK": "This app is linked to an account: ",
+"L_JEST_POLACZENIE": "This app is linked to an account ",
+"L_CZY_ROZLACZYC": " on cobytu.com. \n\nIf you want to disconnect - press the button below.",
+"L_ROZLACZ": "Disconnect",
+"L_ROZLOCZENIE_OK": "The application has been disconnected from the account: "
 }

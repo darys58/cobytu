@@ -162,5 +162,17 @@
 "L_UPS": "糟糕...",
 "L_DANIE_USUNIETE": "沒有這樣的菜",
 "L_BRAK_WYNIKOW": "沒有搜尋結果",
-"L_SZUKAJ": "搜索"
+"L_SZUKAJ": "搜索",
+"L_USTAWIENIA": "設定值",
+"L_POLACZENIE_APKA_KONTO": "與www.cobytu.com的連接",
+"L_BRAK_POLACZENIA": "如果您已經在www.cobytu.com上創建了一個帳戶，則可以將其鏈接到此應用程序。 \n\n為此，請在登錄www.cobytu.com網站後在PROFILE選項卡中找到的代碼下方輸入字段。",
+"L_KOD_POLACZ": "連接代碼",
+"L_WPISZ_KOD_POLACZ": "輸入來自www.cobytu.com的代碼",
+"L_WYSLIJ_KOD": "發送驗證碼",
+"L_POLACZENIE_ERROR": "無法建立帳戶連接。 輸入正確的密碼，然後再次發送。",
+"L_POLACZENIE_OK": "該應用程序已鏈接到該帳戶：",
+"L_JEST_POLACZENIE": "這個應用程式已連結至帳戶 ",
+"L_CZY_ROZLACZYC": " 在cobytu.com上。 \n\n如果要斷開連接-按下下面的按鈕。",
+"L_ROZLACZ": "斷開",
+"L_ROZLOCZENIE_OK": "該應用程序已與帳戶斷開連接："
 }
