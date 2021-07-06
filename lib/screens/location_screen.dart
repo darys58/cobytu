@@ -5,6 +5,7 @@ import 'package:meals/all_translations.dart';
 
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../screens/meals_screen.dart';
+import '../screens/maps_screen.dart';
 import '../models/rest.dart';
 import '../models/rests.dart';
 import '../models/mem.dart';
@@ -306,6 +307,13 @@ class _LocationScreenState extends State<LocationScreen> {
       appBar :AppBar( 
         title: Text(allTranslations.text('L_LOKALIZACJA')),
         actions: <Widget>[
+          
+          IconButton(
+            icon: Icon(Icons.map),
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed(MapsScreen.routeName); 
+            }),
+          
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {

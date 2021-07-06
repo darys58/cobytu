@@ -13,6 +13,7 @@ import './screens/order_detail_screen.dart';
 import './screens/specials_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/connection_screen.dart';
+import './screens/maps_screen.dart';
 import './models/rests.dart'; //zaimportowanie klasy dostawcy
 import './models/meals.dart'; //zaimportowanie klasy dostawcy
 import './models/podkat.dart'; //zaimportowanie klasy dostawcy
@@ -148,6 +149,7 @@ class _MyAppState extends State<MyApp> {
           SpecialsScreen.routeName: (ctx) => SpecialsScreen(),
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
           ConnectionScreen.routeName: (ctx) => ConnectionScreen(),
+          MapsScreen.routeName: (ctx) => MapsScreen(),
           //FiltersScreen.routeName: (ctx) => FiltersScreen(_filters, _setFilters),
         },
         //onGenerateRoute:  - (kure 168) - jezeli brak zdefiniowanej trasy, wyświetla argumenty, dynamiczne trasy
