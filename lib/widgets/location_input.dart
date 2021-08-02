@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import '../helpers/location_helper.dart';
+import '../screens/map_screen.dart';
+
+//DO USUNIĘCIA!!! widget ekranu z kawałkiem mapy na której mozna pokazać "Moją lokalizację"  - nie uzywane!
+
 
 class LocationInput extends StatefulWidget {
   @override
@@ -10,9 +15,27 @@ class _LocationInputState extends State<LocationInput> {
   String _previewImageUrl; //adres URL wskazujący podgląd migawki mapy z Google
 
   Future<void> _getCurrentUserLocation() async {
+    //kurs lekcja 305
     final locData = await Location().getLocation();
-    print(locData.latitude);
-    print(locData.longitude);
+    final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
+        latitude: locData.latitude, longitude: locData.longitude);
+    setState(() {
+      _previewImageUrl = staticMapImageUrl;
+    });
+    //print(locData.latitude);
+    //print(locData.longitude);
+  }
+
+  Future<void> _selectOnMap() async {
+    final selectedLocation = await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (ctx) => MapScreen(
+                isSelecting: true,
+              )),
+    );
+    if (selectedLocation == null) {
+      return;
+    }
   }
 
   @override
@@ -46,7 +69,7 @@ class _LocationInputState extends State<LocationInput> {
               ),
               label: Text('Moja lokalizacja'),
               textColor: Theme.of(context).primaryColor,
-              onPressed: _getCurrentUserLocation,
+              onPressed: _selectOnMap, //_getCurrentUserLocation,
             )
           ],
         )

@@ -5,6 +5,8 @@ import '../models/meals.dart';
 import '../widgets/meal_item.dart';
 import '../all_translations.dart';
 
+//DO USUNIĘCIA - nie uzywane! ekran kawałka mapy z moją lokalizacją
+
 class MapsScreen extends StatelessWidget {
   static const routeName = '/maps'; 
   

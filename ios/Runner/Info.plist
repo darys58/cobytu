@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Lokalizacja jest potrzebna do sprawdzenia dostępności Internetu</string>
+	<string>Lokalizacja jest potrzebna do przetestowania funkcji lokalizacji wtyczki Google Maps</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Lokalizacja jest potrzebna do sprawdzenia dostępności Internetu</string>
 	<key>UILaunchStoryboardName</key>
@@ -45,5 +45,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>
