@@ -35,24 +35,50 @@ class _MapScreenState extends State<MapScreen> {
           ),
           markers: {
             Marker(
-                markerId: MarkerId('m1'),
-                position: LatLng(
-                  widget.initalLocation.latitude,
-                  widget.initalLocation.longitude,
-                ),
-                infoWindow: InfoWindow(
-                    title: 'Rogatka',
-                    onTap: () {
-                      var bottomSheetController = scaffoldKey.currentState
-                          .showBottomSheet((context) => Container(
-                                child:
-                                    getBottomSheet("52.21383443, 18.25481668"),
-                                height: 250,
-                                color: Colors.transparent,
-                              ));
-                      print(bottomSheetController);
-                    },
-                    snippet: "dodatkowy text")),
+              markerId: MarkerId('m1'),
+              position: LatLng(
+                widget.initalLocation.latitude,
+                widget.initalLocation.longitude,
+              ),
+              infoWindow: InfoWindow(
+                  title: 'Rogatka',
+                  onTap: () {
+                    var bottomSheetController = scaffoldKey.currentState
+                        .showBottomSheet((context) => Container(
+                              child:
+                                  getBottomSheet("52.21383443, 18.25481668"),
+                              height: 250,
+                              color: Colors.transparent,
+                            ));
+                    print(bottomSheetController);
+                  },
+                  snippet: "dodatkowy text"
+                )
+              ),
+
+              Marker(
+              markerId: MarkerId('m2'),
+              position: LatLng(
+                52.23383443,
+                widget.initalLocation.longitude,
+              ),
+              infoWindow: InfoWindow(
+                  title: 'Borówka',
+                  onTap: () {
+                    var bottomSheetController = scaffoldKey.currentState
+                        .showBottomSheet((context) => Container(
+                              child:
+                                  getBottomSheet("52.20649828, 18.25458093"),
+                              height: 250,
+                              color: Colors.transparent,
+                            ));
+                    print(bottomSheetController);
+                  },
+                  snippet: "dodatkowy text"
+                )
+              ),
+
+              
           },
         ));
   }

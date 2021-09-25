@@ -1,23 +1,25 @@
 import 'package:flutter/foundation.dart'; //zeby mozna było ustawić ze argumenty są wymagane (dekorator @required)
 
-//dane restauracji dla "Location" - wybór restauracji, "Koszyk/Stolik" - zamawianie dań
+//dane restauracji dla "Location" - wybór restauracji, "Koszyk/Stolik" - zamawianie dań, "Mapa" - restauracje na mapie
 
-class Rest{
-  final String id;             //re_id
-  final String nazwa;          //re_nazwa
-  final String obiekt;         //re_obiekt
-  final String adres;          //re_adres
-  final String miaId;          //re_mia_id
-  final String miasto;         //re_miasto
-  String wojId;                //re_woj_id
-  String woj;                  //re_woj
-  final String online;        //re_online
-  final String dostawy;        //re_dostawy
-  final String opakowanie;     //re_opakowanie
-  final String doStolika;      //re_do_stolika
-  final String rezerwacje;     //re_rezerwacje
-  final String mogeJesc;       //re_moge_jesc
-  final String modMenu;        //re_mod_menu
+class Rest {
+  final String id; //re_id
+  final String nazwa; //re_nazwa
+  final String obiekt; //re_obiekt
+  final String adres; //re_adres
+  final String miaId; //re_mia_id
+  final String miasto; //re_miasto
+  String wojId; //re_woj_id
+  String woj; //re_woj
+  final String latitude; //re_latitude
+  final String longitude; //longitude
+  final String online; //re_online
+  final String dostawy; //re_dostawy
+  final String opakowanie; //re_opakowanie
+  final String doStolika; //re_do_stolika
+  final String rezerwacje; //re_rezerwacje
+  final String mogeJesc; //re_moge_jesc
+  final String modMenu; //re_mod_menu
 
   Rest({
     @required this.id,
@@ -28,6 +30,8 @@ class Rest{
     @required this.miasto,
     @required this.wojId,
     @required this.woj,
+    @required this.latitude,
+    @required this.longitude,
     @required this.online,
     @required this.dostawy,
     @required this.opakowanie,
@@ -37,4 +41,3 @@ class Rest{
     @required this.modMenu,
   });
 }
-

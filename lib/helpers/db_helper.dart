@@ -44,7 +44,7 @@ class DBHelper {
       await db.execute(
           'CREATE TABLE dania(id TEXT PRIMARY KEY, nazwa TEXT, opis TEXT, idwer TEXT, wersja TEXT, foto TEXT, gdzie TEXT, kategoria TEXT, podkat TEXT, rodzaj TEXT, srednia TEXT, alergeny TEXT, cena TEXT, czas TEXT, waga TEXT, kcal TEXT, lubi TEXT, fav TEXT, stolik TEXT)');
       await db.execute(
-          'CREATE TABLE restauracje(id TEXT PRIMARY KEY, nazwa TEXT, obiekt TEXT, adres TEXT, miaId TEXT, miasto TEXT, wojId TEXT, woj TEXT, online TEXT, dostawy TEXT, opakowanie TEXT, doStolika TEXT, rezerwacje TEXT, mogeJesc TEXT, modMenu TEXT)');
+          'CREATE TABLE restauracje(id TEXT PRIMARY KEY, nazwa TEXT, obiekt TEXT, adres TEXT, miaId TEXT, miasto TEXT, wojId TEXT, woj TEXT, latitude TEXT, longitude TEXT, online TEXT, dostawy TEXT, opakowanie TEXT, doStolika TEXT, rezerwacje TEXT, mogeJesc TEXT, modMenu TEXT)');
       await db.execute(
           'CREATE TABLE memory(nazwa TEXT PRIMARY KEY, a TEXT, b TEXT, c TEXT, d TEXT, e TEXT, f TEXT)');
       await db.execute(
