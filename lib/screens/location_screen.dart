@@ -5,7 +5,6 @@ import 'package:meals/all_translations.dart';
 
 import '../helpers/db_helper.dart'; //dostęp do bazy lokalnej
 import '../screens/meals_screen.dart';
-import '../screens/maps_screen.dart';
 import '../models/rest.dart';
 import '../models/rests.dart';
 import '../models/mem.dart';
@@ -88,7 +87,10 @@ class _LocationScreenState extends State<LocationScreen> {
                     _selectedMiasto.miasto; //miasto jako adres dla "Wszystkie"
               }
             }
+            globals.miastoDlaMapy =
+                _selectedMiasto.miasto; //domyślne miasto (dla mapy)
             _currentValue = _memLok[0].e; //e:restId  domyślna restauracja
+            globals.restauracjaDlaMapy = _currentValue;
             Provider.of<Rests>(context)
                 .fetchAndSetRests(_selectedMiasto.miasto)
                 .then((_) {
@@ -167,6 +169,9 @@ class _LocationScreenState extends State<LocationScreen> {
             _selectedMiasto.miasto; //miasto jako adres dla "Wszystkie"
       });
 
+      globals.miastoDlaMapy =
+          _selectedMiasto.miasto; //domyślne miasto (dla mapy)
+
       Provider.of<Rests>(context)
           .fetchAndSetRests(_selectedMiasto.miasto)
           .then((_) {
@@ -175,6 +180,7 @@ class _LocationScreenState extends State<LocationScreen> {
         setState(() {
           _isLoading = false; //zatrzymanie wskaznika ładowania dań
           _currentValue = '0'; //ustawienie "Wszystkie" restauracje
+          globals.restauracjaDlaMapy = _currentValue;
         });
       }); //dostawca restauracji
     });
@@ -189,6 +195,8 @@ class _LocationScreenState extends State<LocationScreen> {
       _isLoading = true;
     });
 
+    globals.miastoDlaMapy = _selectedMiasto.miasto; //wybrane miasto (dla mapy)
+
     Provider.of<Rests>(context)
         .fetchAndSetRests(_selectedMiasto.miasto)
         .then((_) {
@@ -197,6 +205,7 @@ class _LocationScreenState extends State<LocationScreen> {
       setState(() {
         _isLoading = false; //zatrzymanie wskaznika ładowania dań
         _currentValue = '0'; //ustawienie "Wszystkie" restauracje
+        globals.restauracjaDlaMapy = _currentValue;
       });
     }); //dostawca restauracji
   }
@@ -361,16 +370,33 @@ class _LocationScreenState extends State<LocationScreen> {
         mogeJesc: '0',
         modMenu: '0')); //ten wpis zastąpił parametr memLok.f
 
+    //id pierwszej restauracji z listy jezeli wybrane jest "Wszystkie"
+    if (globals.restauracjaDlaMapy == "0") {
+      globals.restauracjaDlaMapy = rests[0].id;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(allTranslations.text('L_LOKALIZACJA')),
         actions: <Widget>[
+          //ikona przejścia do mapy
           IconButton(
               icon: Icon(Icons.map),
               onPressed: () {
-                _selectOnMap();
-                //Navigator.of(context).pushReplacementNamed(MapsScreen.routeName);
+                //czy jest internet
+                _isInternet().then((inter) {
+                  if (inter != null && inter) {
+                    _selectOnMap(); //przejście do ekranu mapy
+                  } else {
+                    print('braaaaaak internetu');
+                    _showAlertAnuluj(
+                        context,
+                        allTranslations.text('L_BRAK_INTERNETU'),
+                        allTranslations.text('L_URUCHOM_INTERNETU'));
+                  }
+                });
               }),
+          //ikona zapisania ustawień
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
@@ -523,6 +549,8 @@ class _LocationScreenState extends State<LocationScreen> {
                                   onChanged: (val) {
                                     setState(() {
                                       _currentValue = val;
+                                      globals.restauracjaDlaMapy =
+                                          _currentValue;
                                     });
                                   },
                                 ))

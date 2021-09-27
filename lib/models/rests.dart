@@ -12,6 +12,11 @@ class Rests with ChangeNotifier{
     return [..._items]; //... - operator rozprzestrzeniania
   }
 
+   //metoda szukająca restauracji o danym id - z map_screen
+  Rest findById(String id) {
+    return _items.firstWhere((ml) => ml.id ==  id);
+  }
+
   //pobranie restauracji dla wybranego miasta z bazy lokalnej
   Future<void> fetchAndSetRests(String miasto)async{
     final dataList = await DBHelper.getRests(miasto);

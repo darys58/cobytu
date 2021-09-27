@@ -102,6 +102,8 @@ void showToast() {
     }
   }
   
+  
+
 //wywoływanie połączeń uruchamianych ikonami
 Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
