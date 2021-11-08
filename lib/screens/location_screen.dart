@@ -398,7 +398,7 @@ class _LocationScreenState extends State<LocationScreen> {
               }),
           //ikona zapisania ustawień
           IconButton(
-            icon: Icon(Icons.save),
+            icon: Icon(Icons.navigation),
             onPressed: () {
               //czy jest internet
               _isInternet().then((inter) {

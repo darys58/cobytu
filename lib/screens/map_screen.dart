@@ -237,7 +237,8 @@ class _MapScreenState extends State<MapScreen> {
   //szuflada wysuwana od dołu
   Widget getBottomSheet(String s) {
     print("*****dane restauracji********");
-    print(_mealRestsData[0].nazwa);
+    print(_mealRestsData[0].dostawy);
+    print(_mealRestsData[0].online);
     print(s);
     return Stack(
       children: <Widget>[
@@ -295,6 +296,8 @@ class _MapScreenState extends State<MapScreen> {
                         ),
                       ),
                       //SizedBox(height: 5,),
+                      Row(
+                children: <Widget>[
                       Text(
                         _mealRestsData[0].otwarteB,
                         style: TextStyle(
@@ -305,6 +308,21 @@ class _MapScreenState extends State<MapScreen> {
                           //color: Theme.of(context).primaryColor,
                         ),
                       ),
+
+                      SizedBox(
+                          width: 20,
+                        ),
+              
+                      _mealRestsData[0].dostawy == '1'
+                        ? Image.asset('assets/images/dostawa.png')
+                        : SizedBox(width: 20),
+    
+                      SizedBox(width: 15),    
+                        
+                      _mealRestsData[0].online == '1'
+                        ? Image.asset('assets/images/cart.png')
+                        : SizedBox(width: 20),
+
                       //SizedBox(height: 5,),
                       /*    if(_mealRestsData[0].otwarteC != '')
                           Text(_mealRestsData[0].otwarteC,
@@ -316,7 +334,7 @@ class _MapScreenState extends State<MapScreen> {
                             ),
                           ),
                       */
-
+                      ]),
                       //Text("Memorial Park",
                       //style: TextStyle(color: Colors.white, fontSize: 14)),
                     ],
@@ -324,8 +342,10 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
+
+              //gps
               Row(
                 children: <Widget>[
                   SizedBox(
@@ -342,8 +362,37 @@ class _MapScreenState extends State<MapScreen> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
+/*
+              //dostawa
+              _mealRestsData[0].dostawy == '1'
+                  ? Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Image.asset('assets/images/dostawa.png'),
+                        SizedBox(width: 20),
+                        Text("dostawa dań do klienta")
+                      ],
+                    )
+                  : SizedBox(width: 1),
+
+              //on-line
+              _mealRestsData[0].online == '1'
+                  ? Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Image.asset('assets/images/cart.png'),
+                        SizedBox(width: 20),
+                        Text("zamawianie on-line przez CoByTu.com")
+                      ],
+                    )
+                  : SizedBox(width: 1),
+*/
               Row(
                 children: <Widget>[
                   SizedBox(
@@ -356,6 +405,13 @@ class _MapScreenState extends State<MapScreen> {
                   SizedBox(
                     width: 20,
                   ),
+
+                  /*    TextButton(
+                   child: const Text('Enabled'),
+                    onPressed: () {},
+                    
+                  ),
+             */
                   Text(_mealRestsData[0].tel1 + "   " + _mealRestsData[0].tel2)
                 ],
               )
@@ -391,8 +447,7 @@ class _MapScreenState extends State<MapScreen> {
                       globals.wybranaStrefa = 1; //domyślna strefa
                       globals.cenaOpakowania =
                           _selRest.opakowanie; //cena za jedno opakowanie
-                      Navigator.of(context).pushReplacementNamed(MealsScreen
-                          .routeName); //przejście z usunięciem (wymianą) ostatniego ekranu (ekranu lokalizacji)
+                      Navigator.of(context).pushNamedAndRemoveUntil(MealsScreen.routeName,ModalRoute.withName(MealsScreen.routeName)); //przejście z usunięciem wszystkich wczesniejszych tras i ekranów
                     } else {
                       print('braaaaaak internetu');
                       _showAlertAnuluj(
@@ -437,14 +492,40 @@ class _MapScreenState extends State<MapScreen> {
                         print(
                             'pobranie szczegółów dla restauracji o id pobranym ze markera - ${restsData.items[i].id}');
 
-                        var bottomSheetController = scaffoldKey.currentState
-                            .showBottomSheet((context) => Container(
-                                  child:
-                                      getBottomSheet(restsData.items[i].nazwa),
-                                  height: 250,
-                                  color: Colors.transparent,
-                                ));
-                        print(bottomSheetController);
+                  /*      if ((restsData.items[i].dostawy == "1") &&
+                            (restsData.items[i].online == "1")) {
+                          var bottomSheetController = scaffoldKey.currentState
+                              .showBottomSheet((context) => Container(
+                                    child: getBottomSheet(
+                                        restsData.items[i].nazwa),
+                                    height: 300,
+                                    color: Colors.transparent,
+                                  ));
+                          print(bottomSheetController);
+                        } else {
+                          if ((restsData.items[i].dostawy == "1") ||
+                              (restsData.items[i].online == "1")) {
+                            var bottomSheetController = scaffoldKey.currentState
+                                .showBottomSheet((context) => Container(
+                                      child: getBottomSheet(
+                                          restsData.items[i].nazwa),
+                                      height: 275,
+                                      color: Colors.transparent,
+                                    ));
+                            print(bottomSheetController);
+                          }
+                        }
+*/
+
+                          var bottomSheetController = scaffoldKey.currentState
+                              .showBottomSheet((context) => Container(
+                                    child: getBottomSheet(
+                                        restsData.items[i].nazwa),
+                                    height: 250,
+                                    color: Colors.transparent,
+                                  ));
+                          print(bottomSheetController);
+                        
 
                         setState(() {
                           _isLoading =
