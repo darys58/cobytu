@@ -62,7 +62,7 @@ class _CartOneState extends State<CartOne> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context); 
+    final cart = Provider.of<Cart>(context, listen: false);
 
     return Dismissible( //przesuwanie karty w celu usuniecia
       key: ValueKey(widget.id),

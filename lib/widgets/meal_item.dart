@@ -295,11 +295,11 @@ class MealItem extends StatelessWidget {
                               Podkategorie.fetchPodkategorieFromSerwer(
                                       'https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$_currLang')
                                   .then((_) {
-                                Provider.of<Meals>(context)
+                                Provider.of<Meals>(context, listen: false)
                                     .fetchAndSetMeals()
                                     .then((_) {
                                   //z bazy lokalnej
-                                  Provider.of<Podkategorie>(context)
+                                  Provider.of<Podkategorie>(context, listen: false)
                                       .fetchAndSetPodkategorie()
                                       .then((_) {
                                     //z bazy lokalnej

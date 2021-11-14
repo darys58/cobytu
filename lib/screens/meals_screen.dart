@@ -197,11 +197,11 @@ class _MealsScreenState extends State<MealsScreen> {
                         Podkategorie.fetchPodkategorieFromSerwer(
                                 'https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=14&mia_id=1&rest=31&lang=$language')
                             .then((_) {
-                          Provider.of<Meals>(context)
+                          Provider.of<Meals>(context, listen: false)
                               .fetchAndSetMeals()
                               .then((_) {
                             //z bazy lokalnej
-                            Provider.of<Podkategorie>(context)
+                            Provider.of<Podkategorie>(context, listen: false)
                                 .fetchAndSetPodkategorie()
                                 .then((_) {
                               //z bazy lokalnej
@@ -257,16 +257,16 @@ class _MealsScreenState extends State<MealsScreen> {
                               Podkategorie.fetchPodkategorieFromSerwer(
                                       'https://cobytu.com/cbt.php?d=f_podkategorie&uz_id=&woj_id=${_memLok[0].a}&mia_id=${_memLok[0].c}&rest=${_memLok[0].e}&lang=$language')
                                   .then((_) {
-                                Provider.of<Cart>(context)
+                                Provider.of<Cart>(context, listen: false)
                                     .fetchAndSetCartItems(
                                         'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language')
                                     .then((_) {
                                   //zawartość koszyka z www
-                                  Provider.of<Meals>(context)
+                                  Provider.of<Meals>(context, listen: false)
                                       .fetchAndSetMeals()
                                       .then((_) {
                                     //z bazy lokalnej
-                                    Provider.of<Podkategorie>(context)
+                                    Provider.of<Podkategorie>(context, listen: false)
                                         .fetchAndSetPodkategorie()
                                         .then((_) {
                                       //z bazy lokalnej
@@ -331,9 +331,9 @@ class _MealsScreenState extends State<MealsScreen> {
               //                    'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language')
               //                .then((_) {
               //zawartość koszyka z www - przeniesiona nizej zeby nie blokować ładowania z bazy gdy nie ma internetu
-              Provider.of<Meals>(context).fetchAndSetMeals().then((_) {
+              Provider.of<Meals>(context, listen: false).fetchAndSetMeals().then((_) {
                 //z bazy lokalnej
-                Provider.of<Podkategorie>(context)
+                Provider.of<Podkategorie>(context, listen: false)
                     .fetchAndSetPodkategorie()
                     .then((_) {
                   //z bazy lokalnej
@@ -358,7 +358,7 @@ class _MealsScreenState extends State<MealsScreen> {
                   });
 
                   //zawartość koszyka z www - tutaj zeby nie blokować ładowania z bazy gdy nie ma internetu
-                  Provider.of<Cart>(context).fetchAndSetCartItems(
+                  Provider.of<Cart>(context, listen: false).fetchAndSetCartItems(
                       'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${_memLok[0].e}&lang=$language');
                 });
               });
@@ -505,7 +505,7 @@ class _MealsScreenState extends State<MealsScreen> {
     globals.wersja =
         wersja[0] + '.' + wersja[1] + '.' + wersja[2] + '.' + wersja[3];
     //podkategorie + rodzaje
-    var podkatData = Provider.of<Podkategorie>(context);
+    var podkatData = Provider.of<Podkategorie>(context, listen: false);
     final podkat1 = podkatData.items.where((podk) {
       return podk.kaId.contains('1');
     }).toList();
@@ -536,7 +536,7 @@ class _MealsScreenState extends State<MealsScreen> {
     //print('podk ${podkat4[0].nazwa}');
 
     //dania
-    var mealsData = Provider.of<Meals>(context);
+    var mealsData = Provider.of<Meals>(context, listen: false);
 
     if (podkategoria1 == '291')
       meals1 = mealsData.items.where((meal) {
@@ -1639,8 +1639,8 @@ class FootItemsSearch extends SearchDelegate<Meals> {
   Widget buildResults(BuildContext context) {
     //powtórzony kod z "buildSuggestions" zeby nie ginął wynik po naciśnięciu lupy na wyświetlonej klawiaturze telefonu
     var myList = query.isEmpty
-        ? Provider.of<Meals>(context).items.toList()
-        : Provider.of<Meals>(context)
+        ? Provider.of<Meals>(context, listen: false).items.toList()
+        : Provider.of<Meals>(context, listen: false)
             .items
             .where((p) =>
                 p.nazwa.toLowerCase().contains(query.toLowerCase()) ||
@@ -1688,8 +1688,8 @@ class FootItemsSearch extends SearchDelegate<Meals> {
   @override
   Widget buildSuggestions(BuildContext context) {
     var myList = query.isEmpty
-        ? Provider.of<Meals>(context).items.toList()
-        : Provider.of<Meals>(context)
+        ? Provider.of<Meals>(context, listen: false).items.toList()
+        : Provider.of<Meals>(context, listen: false)
             .items
             .where((p) =>
                 p.nazwa.toLowerCase().contains(query.toLowerCase()) ||

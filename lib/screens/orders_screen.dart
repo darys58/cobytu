@@ -25,7 +25,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
 
-      Provider.of<Orders>(context).fetchOrdersFromSerwer().then((_) {
+      Provider.of<Orders>(context, listen: false).fetchOrdersFromSerwer().then((_) {
         //pobranie zamówień z serwera www
 
         setState(() {

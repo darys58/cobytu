@@ -188,7 +188,7 @@ class _OrderState extends State<OrderScreen> {
       //Meal.changeStolik(odpPost['ko_da_id'], odpPost['ko_ile'].toString());
       //Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); //aktualizacja ilości dania w koszyku w danych on daniu
 
-      Provider.of<Cart>(context).fetchAndSetCartItems(
+      Provider.of<Cart>(context, listen: false).fetchAndSetCartItems(
           'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}'); //aktualizacja zawartości koszyka z www
 
       // _setPrefers('reload', 'true');
@@ -313,7 +313,7 @@ class _OrderState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context);
+    final cart = Provider.of<Cart>(context, listen: false);
     //print('platne ${_strefy[_wybranaStrefa - 1].platne}');
 
     //obliczenie wartości menu + opakowania

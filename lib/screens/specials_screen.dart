@@ -25,7 +25,7 @@ class _SpecialsScreenState extends State<SpecialsScreen> {
         _isLoading = true; //uruchomienie wskaznika ładowania danych
       });
 
-      Provider.of<Specials>(context).fetchSpecialsFromSerwer().then((_) {
+      Provider.of<Specials>(context, listen: false).fetchSpecialsFromSerwer().then((_) {
         //pobranie promocji z serwera www
 
         setState(() {

@@ -1,13 +1,5 @@
 package pl.cobytu
 
-import android.os.Bundle
+class MainActivity: io.flutter.embedding.android.FlutterActivity() {
 
-import io.flutter.app.FlutterActivity
-import io.flutter.plugins.GeneratedPluginRegistrant
-
-class MainActivity: FlutterActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    GeneratedPluginRegistrant.registerWith(this)
-  }
 }

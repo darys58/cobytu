@@ -53,7 +53,7 @@ class _MapScreenState extends State<MapScreen> {
         //pobranie ustawień  memLok z "memory"
 
         //pobranie restauracji dla miasta wybranego w location_screen
-        Provider.of<Rests>(context)
+        Provider.of<Rests>(context, listen: false)
             .fetchAndSetRests(
                 globals.miastoDlaMapy) // miasto wybrane w "location_screen"
             .then((_) {
@@ -467,7 +467,7 @@ class _MapScreenState extends State<MapScreen> {
   Set<Marker> getmarkers() {
     //markers to place on map
     final restsData =
-        Provider.of<Rests>(context); //dane wszystkich restauracji w mieście
+        Provider.of<Rests>(context, listen: false); //dane wszystkich restauracji w mieście
     //List<Rest> rests = restsData.items.toList();
 
     setState(() {

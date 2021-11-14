@@ -91,7 +91,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 _selectedMiasto.miasto; //domyślne miasto (dla mapy)
             _currentValue = _memLok[0].e; //e:restId  domyślna restauracja
             globals.restauracjaDlaMapy = _currentValue;
-            Provider.of<Rests>(context)
+            Provider.of<Rests>(context, listen: false)
                 .fetchAndSetRests(_selectedMiasto.miasto)
                 .then((_) {
               //z bazy lokalnej
@@ -172,7 +172,7 @@ class _LocationScreenState extends State<LocationScreen> {
       globals.miastoDlaMapy =
           _selectedMiasto.miasto; //domyślne miasto (dla mapy)
 
-      Provider.of<Rests>(context)
+      Provider.of<Rests>(context, listen: false)
           .fetchAndSetRests(_selectedMiasto.miasto)
           .then((_) {
         //z bazy lokalnej
@@ -197,7 +197,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
     globals.miastoDlaMapy = _selectedMiasto.miasto; //wybrane miasto (dla mapy)
 
-    Provider.of<Rests>(context)
+    Provider.of<Rests>(context, listen: false)
         .fetchAndSetRests(_selectedMiasto.miasto)
         .then((_) {
       //z bazy lokalnej
@@ -349,7 +349,7 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     print('location budowanie ekranu');
-    final restsData = Provider.of<Rests>(context);
+    final restsData = Provider.of<Rests>(context, listen: false);
     List<Rest> rests = restsData.items.toList();
     rests.add(Rest(
         id: '0',

@@ -42,7 +42,7 @@ class _CartScreenState extends State<CartScreen> {
         if (_wybranaStrefa == null) _wybranaStrefa = 1;
 
         //pobieranie dań w koszyku z serwera www
-        Provider.of<Cart>(context)
+        Provider.of<Cart>(context, listen: false)
             .fetchAndSetCartItems(
                 'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}')
             .then((_) {
@@ -92,7 +92,7 @@ class _CartScreenState extends State<CartScreen> {
       //Meals.updateKoszyk(odpPost['ko_da_id'], odpPost['ko_ile'].toString()); //aktualizacja ilości dania w koszyku w danych on daniu
 
       //aktualizacja zawartości koszyka z www
-      Provider.of<Cart>(context).fetchAndSetCartItems(
+      Provider.of<Cart>(context, listen: false).fetchAndSetCartItems(
           'https://cobytu.com/cbt.php?d=f_koszyk&uz_id=&dev=${globals.deviceId}&re=${globals.memoryLokE}&lang=${globals.language}');
 
       // _setPrefers('reload', 'true');
@@ -224,7 +224,7 @@ class _CartScreenState extends State<CartScreen> {
     //final rest = Provider.of<Rests>(context);
     //print('rest===');
     //print (rest.items);
-    final cart = Provider.of<Cart>(context);
+    final cart = Provider.of<Cart>(context, listen: false);
     double razemC = 0;
     int razemW = 0;
     int razemK = 0;

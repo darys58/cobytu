@@ -19,7 +19,7 @@ class _DetailOpinionScreenState extends State<DetailOpinionScreen> {
 @override
   Widget build(BuildContext context) {
     final mealId = ModalRoute.of(context).settings.arguments as String; //id posiłku pobrany z argumentów trasy
-    final loadedMeal = Provider.of<Meals>(context).items.firstWhere((ml) => ml.id == mealId);//dla uproszczenia kodu przeniesiona do meals.dart i wtedy jak nizej
+    final loadedMeal = Provider.of<Meals>(context, listen: false).items.firstWhere((ml) => ml.id == mealId);//dla uproszczenia kodu przeniesiona do meals.dart i wtedy jak nizej
     //final loadedMeal = Provider.of<Meals>(context, listen: false).findById(mealId);
 
     //print('mealRestsData w szczegółach = ${_mealRestsData[0].nazwa}');

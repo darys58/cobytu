@@ -201,7 +201,7 @@ class _OrderDetailState extends State<OrderDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final orderData = Provider.of<Orders>(context);
+    final orderData = Provider.of<Orders>(context, listen: false);
     final zamId = ModalRoute.of(context).settings.arguments
         as String; //id zamówienia pobrany z argumentów trasy
     List<OrderItem> order = orderData.items.where((ord) {
